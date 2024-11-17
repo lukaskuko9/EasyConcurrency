@@ -9,5 +9,10 @@ public static class DiConfig
     public static void RegisterExternalRefundServiceClient(IServiceCollection services, IConfiguration config)
     {
         services.AddScoped<IExternalRefundServiceClient, ExternalRefundServiceClient>();
+
+        services.AddOptions<ExternalRefundServiceOptions>(nameof(ExternalRefundServiceOptions));
+        services.Configure<ExternalRefundServiceOptions>(
+            config.GetSection(nameof(ExternalRefundServiceOptions))
+        );
     }
 }

@@ -15,21 +15,21 @@ BenchmarkRunner.Run<Benchmark>();
 */
 public class Benchmark
 {
-    private record DummyLockableEntity : LockableEntity;
+    private record DummyConcurrentEntity : ConcurrentEntity;
 
     private static class Methods
     {
-        public static bool IsNotLockedRaw<T>(T entity) where T : LockableEntity
+        public static bool IsNotLockedRaw<T>(T entity) where T : ConcurrentEntity
         {
             return entity.LockedUntil == null || entity.LockedUntil < DateTimeOffset.Now;
         }
         
-        public static bool IsNotLocked<T>(T entity) where T : LockableEntity
+        public static bool IsNotLocked<T>(T entity) where T : ConcurrentEntity
         {
             return IsNotLocked<T>().Compile().Invoke(entity);
         }
 
-        private static Expression<Func<T, bool>> IsNotLocked<T>() where T : LockableEntity
+        private static Expression<Func<T, bool>> IsNotLocked<T>() where T : ConcurrentEntity
         {
             return entity => IsNotLockedRaw(entity);
         }
@@ -38,15 +38,15 @@ public class Benchmark
     [Benchmark]
     public void IsNotLockedRaw()
     {
-        var lockableEntity = new DummyLockableEntity();
-        _ = Methods.IsNotLockedRaw(lockableEntity);
+        var concurrentEntity = new DummyConcurrentEntity();
+        _ = Methods.IsNotLockedRaw(concurrentEntity);
     }
     
     [Benchmark]
     public void IsNotLocked()
     {
-        var lockableEntity = new DummyLockableEntity();
-        _ = Methods.IsNotLocked(lockableEntity);
+        var concurrentEntity = new DummyConcurrentEntity();
+        _ = Methods.IsNotLocked(concurrentEntity);
     }
     
 }

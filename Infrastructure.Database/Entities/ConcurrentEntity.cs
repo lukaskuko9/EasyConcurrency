@@ -3,7 +3,7 @@ using Core.PrimitiveTypeObsession;
 
 namespace Infrastructure.Database.Entities;
 
-public abstract record LockableEntity
+public abstract record ConcurrentEntity
 {
     public TimeLock? LockedUntil { get; set; }
 

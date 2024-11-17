@@ -1,5 +1,5 @@
 ﻿using Core.Refund;
-using Infrastructure.Database.Storage;
+using Infrastructure.Database.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +16,6 @@ public static class DiConfig
             options.UseSqlServer(connectionString);
         });
         
-        services.AddScoped<IRefundStorage, RefundStorage>();
+        services.AddTransient<IRefundProcessingRepository, RefundProcessingRepository>();
     }
 }
