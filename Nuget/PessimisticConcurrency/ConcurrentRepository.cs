@@ -1,8 +1,9 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Public.EntityFramework;
+namespace EntityFrameworkCore.PessimisticConcurrency;
 
 public abstract class ConcurrentRepository<TContext>(TContext databaseContext) where TContext: DbContext
 {

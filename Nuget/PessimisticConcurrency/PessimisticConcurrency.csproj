@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>0.0.1</Version>
+        <Authors>Lukáš Machajdík</Authors>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <RootNamespace>EntityFrameworkCore.PessimisticConcurrency</RootNamespace>
+        <PackageId>PessimisticConcurrency</PackageId>
+        <Title>EntityFrameworkCore.PessimisticConcurrency</Title>
+        <PackageProjectUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PessimisticConcurrency.Abstractions\PessimisticConcurrency.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.6" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    </ItemGroup>
+
+</Project>

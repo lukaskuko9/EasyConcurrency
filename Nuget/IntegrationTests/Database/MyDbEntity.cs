@@ -1,6 +1,6 @@
-﻿using Public;
+﻿using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
 
-namespace UnitTests.Database;
+namespace IntegrationTests.Database;
 
 public class MyDbEntity : LockableEntity
 {

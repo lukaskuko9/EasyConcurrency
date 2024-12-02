@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Public;
-using Public.EntityFramework;
+﻿using EntityFrameworkCore.PessimisticConcurrency;
+using Microsoft.EntityFrameworkCore;
 
-namespace UnitTests.Database;
+namespace IntegrationTests.Database;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {

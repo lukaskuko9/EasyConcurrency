@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>0.0.1</Version>
+        <Authors>Lukáš Machajdík</Authors>
+        <RootNamespace>EntityFrameworkCore.PessimisticConcurrency.Abstractions</RootNamespace>
+        <PackageId>PessimisticConcurrency.Abstractions</PackageId>
+        <Title>EntityFrameworkCore.PessimisticConcurrency.Abstractions</Title>
+        <PackageProjectUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+</Project>

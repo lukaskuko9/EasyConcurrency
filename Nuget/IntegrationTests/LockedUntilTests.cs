@@ -1,9 +1,9 @@
+using IntegrationTests.Database;
 using Microsoft.EntityFrameworkCore;
-using UnitTests.Database;
 using Xunit;
 using Xunit.Sdk;
 
-namespace UnitTests;
+namespace IntegrationTests;
 
 public class LockedUntilTests : TestClass
 {

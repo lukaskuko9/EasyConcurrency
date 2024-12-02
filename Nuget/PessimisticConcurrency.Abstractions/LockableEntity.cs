@@ -1,4 +1,4 @@
-﻿namespace Public;
+﻿namespace EntityFrameworkCore.PessimisticConcurrency.Abstractions;
 
 public abstract class LockableEntity : ConcurrentEntity
 {

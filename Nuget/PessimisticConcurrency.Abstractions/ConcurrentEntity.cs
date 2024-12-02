@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Public;
+namespace EntityFrameworkCore.PessimisticConcurrency.Abstractions;
 
 public abstract class ConcurrentEntity
 {
