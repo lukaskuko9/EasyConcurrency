@@ -1,8 +1,7 @@
 ﻿using Core.PrimitiveTypeObsession;
+using EntityFrameworkCore.PessimisticConcurrency;
 using Infrastructure.Database.Entities;
-using Infrastructure.Database.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Infrastructure.Database;
 
@@ -29,13 +28,8 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
                     longId => new DatabaseId(longId)
                 )
                 .UseIdentityColumn();
-            
-            b.Property(refundEntity => refundEntity.LockedUntil)
-                .HasConversion(
-                    timeLock => timeLock == null ? null : timeLock.Value.Value,
-                    dateTimeOffset => new TimeLock(dateTimeOffset)
-                )
-                .IsRequired(false);
+
+            b.Property(refundEntity => refundEntity.LockedUntil).AddTimeLockConversion();
 
            // b.HasQueryFilter(x=>x.LockedUntil == null || x.LockedUntil < DateTimeOffset.Now);
             b.Property(refundEntity=>refundEntity.Amount).HasColumnType("decimal(18,2)");

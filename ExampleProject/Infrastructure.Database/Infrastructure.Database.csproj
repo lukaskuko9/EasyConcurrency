@@ -9,12 +9,13 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0"/>
+        <PackageReference Include="PessimisticConcurrency" Version="0.0.1" />
     </ItemGroup>
     
     <ItemGroup>

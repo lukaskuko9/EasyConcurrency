@@ -7,7 +7,7 @@
         <Authors>Lukáš Machajdík</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <RootNamespace>EntityFrameworkCore.PessimisticConcurrency</RootNamespace>
-        <PackageId>PessimisticConcurrency</PackageId>
+        <PackageId>EntityFrameworkCore.PessimisticConcurrency</PackageId>
         <Title>EntityFrameworkCore.PessimisticConcurrency</Title>
         <PackageProjectUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</PackageProjectUrl>
         <RepositoryUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</RepositoryUrl>

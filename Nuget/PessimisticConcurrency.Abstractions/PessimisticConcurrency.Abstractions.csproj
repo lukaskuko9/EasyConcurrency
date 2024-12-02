@@ -7,7 +7,7 @@
         <Version>0.0.1</Version>
         <Authors>Lukáš Machajdík</Authors>
         <RootNamespace>EntityFrameworkCore.PessimisticConcurrency.Abstractions</RootNamespace>
-        <PackageId>PessimisticConcurrency.Abstractions</PackageId>
+        <PackageId>EntityFrameworkCore.PessimisticConcurrency.Abstractions</PackageId>
         <Title>EntityFrameworkCore.PessimisticConcurrency.Abstractions</Title>
         <PackageProjectUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</PackageProjectUrl>
         <RepositoryUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</RepositoryUrl>

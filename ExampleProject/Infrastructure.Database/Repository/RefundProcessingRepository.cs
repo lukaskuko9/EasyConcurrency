@@ -1,10 +1,11 @@
 ﻿using Core.Refund;
-using Infrastructure.Database.Extensions;
+using EntityFrameworkCore.PessimisticConcurrency;
+using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Repository
 {
-    public class RefundProcessingRepository(DatabaseContext dbContext) : ConcurrentRepository(dbContext), IRefundProcessingRepository
+    public class RefundProcessingRepository(DatabaseContext dbContext) : ConcurrentRepository<DatabaseContext>(dbContext), IRefundProcessingRepository
     {
         private readonly DatabaseContext _dbContext = dbContext;
 
@@ -40,10 +41,19 @@ namespace Infrastructure.Database.Repository
         private static RefundEntity? Map(Entities.RefundEntity? core) =>
             core == null ? null : new RefundEntity(core.AccountKey, core.Amount)
             {
-                Id = core.Id
+                Id = core.Id,
+                AccountKey = core.AccountKey,
+                IsProcessed = core.IsProcessed,
+                Amount = core.Amount
             };
-    
-        private static Entities.RefundEntity Map(RefundEntity core) => 
-            new(core.Id, core.AccountKey, core.Amount);
+
+        private static Entities.RefundEntity Map(RefundEntity core) =>
+            new()
+            {
+                Id = core.Id,
+                AccountKey = core.AccountKey,
+                IsProcessed = core.IsProcessed,
+                Amount = core.Amount
+            };
     }
 }

@@ -1,44 +1,16 @@
-﻿using System.Linq.Expressions;
-using BenchmarkDotNet.Attributes;
-using Infrastructure.Database.Entities;
+﻿using BenchmarkDotNet.Attributes;
+using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
 
 namespace PerformanceTests
 {
     public class Benchmark
     {
-        private record DummyConcurrentEntity : ConcurrentEntity;
-
-        private static class Methods
-        {
-            public static bool IsNotLockedRaw<T>(T entity) where T : ConcurrentEntity
-            {
-                return entity.LockedUntil == null || entity.LockedUntil < DateTimeOffset.Now;
-            }
+        private class DummyLockableEntity : LockableEntity;
         
-            public static bool IsNotLocked<T>(T entity) where T : ConcurrentEntity
-            {
-                return IsNotLocked<T>().Compile().Invoke(entity);
-            }
-
-            private static Expression<Func<T, bool>> IsNotLocked<T>() where T : ConcurrentEntity
-            {
-                return entity => IsNotLockedRaw(entity);
-            }
-        }
-
         [Benchmark]
         public void IsNotLockedRaw()
         {
-            var concurrentEntity = new DummyConcurrentEntity();
-            _ = Methods.IsNotLockedRaw(concurrentEntity);
+            var concurrentEntity = new DummyLockableEntity();
         }
-    
-        [Benchmark]
-        public void IsNotLocked()
-        {
-            var concurrentEntity = new DummyConcurrentEntity();
-            _ = Methods.IsNotLocked(concurrentEntity);
-        }
-    
     }
 }
