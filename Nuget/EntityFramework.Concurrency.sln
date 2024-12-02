@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public", "Public\Public.csproj", "{3E7E06C7-22FB-44B5-A485-B3D27CECF767}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Public.EntityFramework", "Public.EntityFramework\Public.EntityFramework.csproj", "{E3639D5A-FFBF-4668-87E4-10956F8AFE5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{BDA7B227-7ADC-4DC1-926A-9BD17F7FDE6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E7E06C7-22FB-44B5-A485-B3D27CECF767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E7E06C7-22FB-44B5-A485-B3D27CECF767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E7E06C7-22FB-44B5-A485-B3D27CECF767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E7E06C7-22FB-44B5-A485-B3D27CECF767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3639D5A-FFBF-4668-87E4-10956F8AFE5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3639D5A-FFBF-4668-87E4-10956F8AFE5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3639D5A-FFBF-4668-87E4-10956F8AFE5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3639D5A-FFBF-4668-87E4-10956F8AFE5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDA7B227-7ADC-4DC1-926A-9BD17F7FDE6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA7B227-7ADC-4DC1-926A-9BD17F7FDE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA7B227-7ADC-4DC1-926A-9BD17F7FDE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA7B227-7ADC-4DC1-926A-9BD17F7FDE6B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
