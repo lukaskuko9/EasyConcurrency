@@ -6,6 +6,6 @@ public static class TimeLockExtensions
         where TLockableEntity : LockableEntity
     {
         var now = DateTimeOffset.Now;
-        return queryable.Where(entity => entity.IsNotLocked());
+        return queryable.Where(entity => entity.IsNotLocked(now));
     }
 }
