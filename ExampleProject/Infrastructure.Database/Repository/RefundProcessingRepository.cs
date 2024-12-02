@@ -2,6 +2,7 @@
 using EntityFrameworkCore.PessimisticConcurrency;
 using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using TimeLockExtensions = EntityFrameworkCore.PessimisticConcurrency.TimeLockExtensions;
 
 namespace Infrastructure.Database.Repository
 {
@@ -29,8 +30,7 @@ namespace Infrastructure.Database.Repository
         public async Task<RefundEntity?> GetAndLockFirstOrDefaultAsync(CancellationToken token)
         {
             var refundEntity = await _dbContext.Refunds
-                .Where(entity => entity.IsProcessed == false)
-                .WhereIsNotLocked()
+                .Where(TimeLockMethods.IsNotLocked<Entities.RefundEntity>())
                 .FirstOrDefaultAsync(token);
 
             var dbEntity = await LockAndSaveAsync(refundEntity, TimeSpan.FromMinutes(5), cancellationToken: token);
