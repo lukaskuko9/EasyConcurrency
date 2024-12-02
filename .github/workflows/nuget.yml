@@ -1,0 +1,44 @@
+name: nuget-publish
+on:
+  workflow_dispatch:
+    inputs:
+      runId:
+        description: Run ID
+jobs:
+  nuget-push-EasyConcurrency-EntityFramework:
+    runs-on: ubuntu-latest
+    steps:   
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name:
+            "artifact"
+          run-id:
+            ${{ inputs.runId }}
+          github-token:
+            ${{ secrets.GITHUB_TOKEN }}
+            
+      - name: Nuget pack 
+        run: dotnet pack Nuget/PessimisticConcurrency/PessimisticConcurrency.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
+  
+      - name: Nuget push
+        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json
+
+  nuget-push-EasyConcurrency-Abstractions:
+    runs-on: ubuntu-latest
+    steps:   
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name:
+            "artifact"
+          run-id:
+            ${{ inputs.runId }}
+          github-token:
+            ${{ secrets.GITHUB_TOKEN }}
+            
+      - name: Nuget pack 
+        run: dotnet pack Nuget/PessimisticConcurrency.Abstractions/PessimisticConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
+
+      - name: Nuget push
+        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json

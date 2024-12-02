@@ -1,0 +1,32 @@
+name: build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Nuget/
+    steps:
+    - name: Check out Code 
+      uses: actions/checkout@v4
+      
+    - name: Restore dependencies
+      run: dotnet restore
+            
+    - name: Build dotnet 
+      run: dotnet build EntityFramework.Concurrency.sln --configuration release --no-restore
+      
+    - name: Run Tests
+      run: dotnet test --configuration Release --no-build --verbosity normal
+      
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: "artifact"
+        path: .
+

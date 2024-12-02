@@ -3,14 +3,14 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.0.1</Version>
+        <Version>0.0.2</Version>
         <Authors>Lukáš Machajdík</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <RootNamespace>EntityFrameworkCore.PessimisticConcurrency</RootNamespace>
-        <PackageId>EntityFrameworkCore.PessimisticConcurrency</PackageId>
-        <Title>EntityFrameworkCore.PessimisticConcurrency</Title>
-        <PackageProjectUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/lukaskuko9/EntityFramework.Concurrency</RepositoryUrl>
+        <RootNamespace>EasyConcurrency.EntityFramework</RootNamespace>
+        <PackageId>EasyConcurrency.EntityFramework</PackageId>
+        <Title>EasyConcurrency.EntityFramework</Title>
+        <PackageProjectUrl>https://github.com/lukaskuko9/EasyConcurrency</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/lukaskuko9/EasyConcurrency</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
