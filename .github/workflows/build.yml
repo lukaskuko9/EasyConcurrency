@@ -22,7 +22,7 @@ jobs:
         catalog: EFConcurrencyTests
         
     - name: Set DB_CONNECTION_STRING
-      run: echo "DB_CONNECTION_STRING=$SQL_SERVER_CONNECTION_STRING;Trusted_Connection=True;" >> $DB_CONNECTION_STRING
+      run: echo "FOO=$SQL_SERVER_CONNECTION_STRING;Trusted_Connection=True;" >> $DB_CONNECTION_STRING
       
     - name: Restore dependencies
       run: dotnet restore
