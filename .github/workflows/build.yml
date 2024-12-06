@@ -29,8 +29,7 @@ jobs:
       run: dotnet build EntityFramework.Concurrency.sln --configuration release --no-restore
       
     - name: Run Tests
-      run: dotnet test 
-      #--configuration Release --no-build --verbosity normal
+      run: dotnet test
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4.4.3
