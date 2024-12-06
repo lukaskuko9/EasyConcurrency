@@ -14,7 +14,14 @@ jobs:
     steps:
     - name: Check out Code 
       uses: actions/checkout@v4
-      
+
+    - name: Install SQL Server
+      uses: Particular/install-sql-server-action@v1.0.0
+      with:
+        connection-string-env-var: DB_CONNECTION_STRING
+        catalog: EFConcurrencyTests
+        extra-params: "TrustServerCertificate=true"
+
     - name: Restore dependencies
       run: dotnet restore
             
@@ -22,7 +29,7 @@ jobs:
       run: dotnet build EntityFramework.Concurrency.sln --configuration release --no-restore
       
     - name: Run Tests
-      run: dotnet test --configuration Release --no-build --verbosity normal
+      run: dotnet test
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4.4.3

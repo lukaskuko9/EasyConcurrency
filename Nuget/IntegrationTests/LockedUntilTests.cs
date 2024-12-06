@@ -11,7 +11,8 @@ public class LockedUntilTests
 
     static LockedUntilTests()
     {
-        var connectionString = "Data Source=.;Initial Catalog=EFConcurrencyTests;Integrated Security=True;TrustServerCertificate=True";
+        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ??
+                               "Data Source=.;Initial Catalog=EFConcurrencyTests;Integrated Security=True;TrustServerCertificate=True";
         var factory = new DatabaseContextFactory();
         Context = factory.CreateDbContext([connectionString]);
         Context.Database.EnsureDeleted();
