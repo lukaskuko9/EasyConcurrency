@@ -19,8 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PessimisticConcurrency.Abstractions\PessimisticConcurrency.Abstractions.csproj" />
-      <ProjectReference Include="..\PessimisticConcurrency\PessimisticConcurrency.csproj" />
+      <ProjectReference Include="..\EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj" />
+      <ProjectReference Include="..\EasyConcurrency.EntityFramework\EasyConcurrency.EntityFramework.csproj" />
     </ItemGroup>
 
     <ItemGroup>

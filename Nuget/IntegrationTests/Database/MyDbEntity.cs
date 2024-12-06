@@ -1,4 +1,4 @@
-﻿using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+﻿using EasyConcurrency.Abstractions;
 
 namespace IntegrationTests.Database;
 

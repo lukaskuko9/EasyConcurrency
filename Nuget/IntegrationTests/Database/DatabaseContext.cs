@@ -1,4 +1,4 @@
-﻿using EntityFrameworkCore.PessimisticConcurrency;
+﻿using EasyConcurrency.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 
 namespace IntegrationTests.Database;

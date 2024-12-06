@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace UnitTests.Migrations
+namespace IntegrationTests.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241202180444_Init")]
+    [Migration("20241206190221_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace UnitTests.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("UnitTests.Database.MyDbEntity", b =>
+            modelBuilder.Entity("IntegrationTests.Database.MyDbEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

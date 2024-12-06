@@ -1,17 +1,14 @@
-﻿using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+﻿using EasyConcurrency.Abstractions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EntityFrameworkCore.PessimisticConcurrency;
+namespace EasyConcurrency.EntityFramework;
 
 public static class TimeLockExtensions
 {
     public static PropertyBuilder<TimeLock?> AddTimeLockConversion(this PropertyBuilder<TimeLock?> propBuilder)
     {
         return propBuilder
-            .HasConversion(
-                timeLock => timeLock == null ? null : timeLock.Value.Value,
-                dateTimeOffset => new TimeLock(dateTimeOffset)
-            )
+            .HasConversion<TimeLockConverter>()
             .IsRequired(false);
     }
     

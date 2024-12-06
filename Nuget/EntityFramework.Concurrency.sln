@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{BDA7B227-7ADC-4DC1-926A-9BD17F7FDE6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PessimisticConcurrency.Abstractions", "PessimisticConcurrency.Abstractions\PessimisticConcurrency.Abstractions.csproj", "{6EC45144-6914-459B-BC05-E89EFEB518A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConcurrency.Abstractions", "EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj", "{6EC45144-6914-459B-BC05-E89EFEB518A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PessimisticConcurrency", "PessimisticConcurrency\PessimisticConcurrency.csproj", "{9BAA9420-BA0E-4311-B4A6-072E782A59D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyConcurrency.EntityFramework", "EasyConcurrency.EntityFramework\EasyConcurrency.EntityFramework.csproj", "{9BAA9420-BA0E-4311-B4A6-072E782A59D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
