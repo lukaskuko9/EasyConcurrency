@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+namespace EasyConcurrency.Abstractions;
 
 public static class TimeLockMethods
 {

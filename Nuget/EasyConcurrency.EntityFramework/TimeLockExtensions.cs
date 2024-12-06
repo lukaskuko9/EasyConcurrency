@@ -1,7 +1,7 @@
-﻿using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+﻿using EasyConcurrency.Abstractions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EntityFrameworkCore.PessimisticConcurrency;
+namespace EasyConcurrency.EntityFramework;
 
 public static class TimeLockExtensions
 {

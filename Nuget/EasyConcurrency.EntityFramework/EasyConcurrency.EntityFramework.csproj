@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PessimisticConcurrency.Abstractions\PessimisticConcurrency.Abstractions.csproj" />
+      <ProjectReference Include="..\EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>

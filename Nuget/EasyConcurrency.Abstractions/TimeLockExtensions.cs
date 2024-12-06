@@ -1,4 +1,4 @@
-﻿namespace EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+﻿namespace EasyConcurrency.Abstractions;
 
 public static class TimeLockExtensions
 {

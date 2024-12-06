@@ -1,7 +1,7 @@
-﻿using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+﻿using EasyConcurrency.Abstractions;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EntityFrameworkCore.PessimisticConcurrency;
+namespace EasyConcurrency.EntityFramework;
 
 public class TimeLockConverter() : ValueConverter<TimeLock?, DateTimeOffset?>
 (

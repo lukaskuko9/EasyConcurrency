@@ -1,9 +1,8 @@
-﻿using System;
+﻿#nullable disable
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-namespace UnitTests.Migrations
+namespace IntegrationTests.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration

@@ -1,4 +1,4 @@
-﻿namespace EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+﻿namespace EasyConcurrency.Abstractions;
 
 public readonly record struct TimeLock(DateTimeOffset? Value) : IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
 {
