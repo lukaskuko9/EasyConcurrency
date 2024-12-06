@@ -2,11 +2,10 @@ using EasyConcurrency.EntityFramework;
 using IntegrationTests.Database;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-using Xunit.Sdk;
 
 namespace IntegrationTests;
 
-public class LockedUntilTests : TestClass
+public class LockedUntilTests
 {
     private static readonly DatabaseContext Context;
 
