@@ -2,10 +2,10 @@
 
 public readonly record struct TimeLock(DateTimeOffset? Value) : IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
 {
-    public static implicit operator DateTimeOffset?(TimeLock? d) => d?.Value;
-    public static implicit operator DateTimeOffset(TimeLock d) => d.Value ?? default;
-    public static implicit operator TimeLock?(DateTimeOffset? d) => d == null ? null : new TimeLock(d.Value);
-    public static implicit operator TimeLock(DateTimeOffset d) => new(d);
+    public static implicit operator DateTimeOffset?(TimeLock? timeLock) => timeLock?.Value;
+    public static implicit operator DateTimeOffset(TimeLock timeLock) => timeLock.Value ?? default;
+    public static implicit operator TimeLock?(DateTimeOffset? timeLock) => timeLock == null ? null : new TimeLock(timeLock.Value);
+    public static implicit operator TimeLock(DateTimeOffset timeLock) => new(timeLock);
     
     public int CompareTo(DateTimeOffset? other)
     {
@@ -22,7 +22,7 @@ public readonly record struct TimeLock(DateTimeOffset? Value) : IComparable<Date
         return Value.Equals(other);
     }
 
-    public readonly bool Equals(TimeLock other)
+    public bool Equals(TimeLock other)
     {
         return Value.Equals(other.Value);
     }
@@ -32,7 +32,7 @@ public readonly record struct TimeLock(DateTimeOffset? Value) : IComparable<Date
         return Value.Equals(other);
     }
 
-    public readonly override int GetHashCode()
+    public override int GetHashCode()
     {
         return Value.GetHashCode();
     }

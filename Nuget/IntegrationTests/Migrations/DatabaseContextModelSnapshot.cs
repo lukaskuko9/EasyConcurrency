@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace UnitTests.Migrations
+namespace IntegrationTests.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace UnitTests.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("UnitTests.Database.MyDbEntity", b =>
+            modelBuilder.Entity("IntegrationTests.Database.MyDbEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
