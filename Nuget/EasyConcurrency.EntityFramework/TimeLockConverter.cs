@@ -7,4 +7,4 @@ public class TimeLockConverter() : ValueConverter<TimeLock?, DateTimeOffset?>
 (
     timeLock => timeLock == null ? null : timeLock.Value.Value,
     dateTimeOffset => new TimeLock(dateTimeOffset)
-    );
+);

@@ -9,7 +9,7 @@ public abstract class ConcurrentRepository<TContext>(TContext databaseContext) w
 {
     #region Locks
     protected async Task<TConcurrentEntity?> LockAndSaveAsync<TConcurrentEntity>(TConcurrentEntity? dbEntity, TimeSpan lockTimeSpan, 
-        Action<IReadOnlyList<EntityEntry>>? concurrencyAction = null, CancellationToken cancellationToken = default) where TConcurrentEntity : LockableEntity
+        Action<IReadOnlyList<EntityEntry>>? concurrencyAction = null, CancellationToken cancellationToken = default) where TConcurrentEntity : class, ILockableEntity
     {
         if (dbEntity == null)
             return null;
@@ -19,11 +19,11 @@ public abstract class ConcurrentRepository<TContext>(TContext databaseContext) w
     }
 
     protected async Task<List<TConcurrentEntity>> LockAndSaveAsync<TConcurrentEntity>(IEnumerable<TConcurrentEntity> dbEntity, TimeSpan lockTimeSpan, 
-        Action<IReadOnlyList<EntityEntry>>? concurrencyAction = null, CancellationToken cancellationToken = default) where TConcurrentEntity : LockableEntity =>
+        Action<IReadOnlyList<EntityEntry>>? concurrencyAction = null, CancellationToken cancellationToken = default) where TConcurrentEntity : ILockableEntity =>
         await LockAndSaveInnerAsync(dbEntity, lockTimeSpan, concurrencyAction, cancellationToken);
 
     private async Task<List<TConcurrentEntity>> LockAndSaveInnerAsync<TConcurrentEntity>(IEnumerable<TConcurrentEntity> entitiesToLock, TimeSpan lockTimeSpan, 
-        Action<IReadOnlyList<EntityEntry>>? action, CancellationToken cancellationToken) where TConcurrentEntity : LockableEntity
+        Action<IReadOnlyList<EntityEntry>>? action, CancellationToken cancellationToken) where TConcurrentEntity : ILockableEntity
     {
         try
         {

@@ -8,10 +8,7 @@ public static class TimeLockExtensions
     public static PropertyBuilder<TimeLock?> AddTimeLockConversion(this PropertyBuilder<TimeLock?> propBuilder)
     {
         return propBuilder
-            .HasConversion(
-                timeLock => timeLock == null ? null : timeLock.Value.Value,
-                dateTimeOffset => new TimeLock(dateTimeOffset)
-            )
+            .HasConversion<TimeLockConverter>()
             .IsRequired(false);
     }
     

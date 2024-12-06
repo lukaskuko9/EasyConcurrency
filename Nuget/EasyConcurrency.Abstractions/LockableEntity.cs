@@ -1,17 +1,17 @@
 ﻿namespace EasyConcurrency.Abstractions;
 
-public abstract class LockableEntity : ConcurrentEntity
+public abstract class LockableEntity : ConcurrentEntity, ILockableEntity
 {
     public TimeLock? LockedUntil { get; set; }
     
     public bool IsNotLocked()
     {
-        return IsNotLocked(DateTimeOffset.Now);
+        return IsNotLocked(DateTimeOffset.UtcNow);
     }
     
     public bool IsNotLocked(DateTimeOffset now)
     {
-        return LockedUntil == null || LockedUntil < now;
+        return TimeLockMethods.IsNotLocked(this);
     }
     
     public bool SetLock(TimeSpan lockTime)
@@ -19,7 +19,7 @@ public abstract class LockableEntity : ConcurrentEntity
         if (IsNotLocked() == false)
             return false;
         
-        LockedUntil = DateTimeOffset.Now.Add(lockTime);
+        LockedUntil = DateTimeOffset.UtcNow.Add(lockTime);
         return true;
     }
     
