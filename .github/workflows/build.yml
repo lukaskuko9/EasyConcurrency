@@ -18,9 +18,12 @@ jobs:
     - name: Install SQL Server
       uses: Particular/install-sql-server-action@v1.0.0
       with:
-        connection-string-env-var: DB_CONNECTION_STRING
+        connection-string-env-var: SQL_SERVER_CONNECTION_STRING
         catalog: EFConcurrencyTests
         
+    - name: Set DB_CONNECTION_STRING
+      run: echo "DB_CONNECTION_STRING=$SQL_SERVER_CONNECTION_STRING;Trusted_Connection=True;" >> $DB_CONNECTION_STRING
+      
     - name: Restore dependencies
       run: dotnet restore
             
