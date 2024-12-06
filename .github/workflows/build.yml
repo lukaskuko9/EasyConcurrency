@@ -15,12 +15,12 @@ jobs:
     - name: Check out Code 
       uses: actions/checkout@v4
 
-   # - name: Install SQL Server
-  #    uses: Particular/install-sql-server-action@v1.0.0
-   #   with:
-   #     connection-string-env-var: "Data Source=.;Initial Catalog=EFConcurrencyTests;Integrated Security=True;TrustServerCertificate=True"
-  #      catalog: EFConcurrencyTests
-   #     extra-params: "Max Pool Size=100;"
+    - name: Install SQL Server
+      uses: Particular/install-sql-server-action@v1.0.0
+      with:
+        connection-string-env-var: "Data Source=.;Initial Catalog=EFConcurrencyTests;Integrated Security=True;TrustServerCertificate=True"
+        catalog: EFConcurrencyTests
+        extra-params: "Max Pool Size=100;"
         
     - name: Restore dependencies
       run: dotnet restore
