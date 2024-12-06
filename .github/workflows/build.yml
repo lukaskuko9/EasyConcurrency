@@ -20,10 +20,8 @@ jobs:
       with:
         connection-string-env-var: SQL_SERVER_CONNECTION_STRING
         catalog: EFConcurrencyTests
-        
-    - name: Set DB_CONNECTION_STRING
-      run: echo "FOO=$SQL_SERVER_CONNECTION_STRING;Trusted_Connection=True;" >> $DB_CONNECTION_STRING
-      
+        extra-params: "TrustServerCertificate=true"
+
     - name: Restore dependencies
       run: dotnet restore
             
