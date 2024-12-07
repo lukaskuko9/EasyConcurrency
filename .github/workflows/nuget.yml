@@ -19,7 +19,7 @@ jobs:
             ${{ secrets.GITHUB_TOKEN }}
             
       - name: Nuget pack 
-        run: dotnet pack Nuget\EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
+        run: dotnet pack EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
 
       - name: Nuget push
         run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json
@@ -27,7 +27,7 @@ jobs:
       - name: Push Nupkg to GitHub Packages
         uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
         with:
-          nupkg-path:  'package/*.nupkg'
+          nupkg-path:  '*.nupkg'
           repo-owner:  'lukaskuko9'
           gh-user:  'lukaskuko9'
           token:  ${{secrets.NUGET_GITHUB_TOKEN}}
@@ -46,7 +46,7 @@ jobs:
             ${{ secrets.GITHUB_TOKEN }}
             
       - name: Nuget pack 
-        run: dotnet pack Nuget/EasyConcurrency.EntityFramework/EasyConcurrency.EntityFramework.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
+        run: dotnet pack EasyConcurrency.EntityFramework/EasyConcurrency.EntityFramework.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
   
       - name: Nuget push
         run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json
@@ -54,7 +54,7 @@ jobs:
       - name: Push Nupkg to GitHub Packages
         uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
         with:
-          nupkg-path:  'package/*.nupkg'
+          nupkg-path:  '*.nupkg'
           repo-owner:  'lukaskuko9'
           gh-user:  'lukaskuko9'
           token:  ${{secrets.NUGET_GITHUB_TOKEN}}
