@@ -17,6 +17,9 @@ jobs:
             ${{ inputs.runId }}
           github-token:
             ${{ secrets.GITHUB_TOKEN }}
+
+      - name: tree 
+        run: tree .
             
       - name: Nuget pack 
         run: dotnet pack EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
@@ -30,7 +33,7 @@ jobs:
           nupkg-path:  '*.nupkg'
           repo-owner:  'lukaskuko9'
           gh-user:  'lukaskuko9'
-          token:  ${{secrets.NUGET_GITHUB_TOKEN}}
+          token:  ${{secrets.GITHUB_TOKEN }}
           
   nuget-push-EasyConcurrency-EntityFramework:
     runs-on: ubuntu-latest
@@ -57,4 +60,4 @@ jobs:
           nupkg-path:  '*.nupkg'
           repo-owner:  'lukaskuko9'
           gh-user:  'lukaskuko9'
-          token:  ${{secrets.NUGET_GITHUB_TOKEN}}
+          token:  ${{secrets.GITHUB_TOKEN }}
