@@ -22,10 +22,10 @@ jobs:
         run: tree .
             
       - name: Nuget pack 
-        run: dotnet pack EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
+        run: dotnet pack EasyConcurrency.Abstractions/EasyConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false 
 
       - name: Nuget push
-        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Push Nupkg to GitHub Packages
         uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
@@ -52,7 +52,7 @@ jobs:
         run: dotnet pack EasyConcurrency.EntityFramework/EasyConcurrency.EntityFramework.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
   
       - name: Nuget push
-        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Push Nupkg to GitHub Packages
         uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
