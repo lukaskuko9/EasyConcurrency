@@ -5,6 +5,33 @@ on:
       runId:
         description: Run ID
 jobs:
+  nuget-push-EasyConcurrency-Abstractions:
+    runs-on: ubuntu-latest
+    steps:   
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name:
+            "artifact"
+          run-id:
+            ${{ inputs.runId }}
+          github-token:
+            ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Nuget pack 
+        run: dotnet pack EasyConcurrency.Abstractions/EasyConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false 
+
+      - name: Nuget push
+        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Push Nupkg to GitHub Packages
+        uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
+        with:
+          nupkg-path:  '*.nupkg'
+          repo-owner:  'lukaskuko9'
+          gh-user:  'lukaskuko9'
+          token:  ${{secrets.GITHUB_TOKEN }}
+          
   nuget-push-EasyConcurrency-EntityFramework:
     runs-on: ubuntu-latest
     steps:   
@@ -19,26 +46,15 @@ jobs:
             ${{ secrets.GITHUB_TOKEN }}
             
       - name: Nuget pack 
-        run: dotnet pack Nuget/PessimisticConcurrency/PessimisticConcurrency.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
+        run: dotnet pack EasyConcurrency.EntityFramework/EasyConcurrency.EntityFramework.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
   
       - name: Nuget push
-        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json --skip-duplicate
 
-  nuget-push-EasyConcurrency-Abstractions:
-    runs-on: ubuntu-latest
-    steps:   
-      - name: Download a Build Artifact
-        uses: actions/download-artifact@v4.1.8
+      - name: Push Nupkg to GitHub Packages
+        uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
         with:
-          name:
-            "artifact"
-          run-id:
-            ${{ inputs.runId }}
-          github-token:
-            ${{ secrets.GITHUB_TOKEN }}
-            
-      - name: Nuget pack 
-        run: dotnet pack Nuget/PessimisticConcurrency.Abstractions/PessimisticConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
-
-      - name: Nuget push
-        run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json
+          nupkg-path:  '*.nupkg'
+          repo-owner:  'lukaskuko9'
+          gh-user:  'lukaskuko9'
+          token:  ${{secrets.GITHUB_TOKEN }}

@@ -35,5 +35,5 @@ jobs:
       uses: actions/upload-artifact@v4.4.3
       with:
         name: "artifact"
-        path: .
+        path: Nuget/
 
