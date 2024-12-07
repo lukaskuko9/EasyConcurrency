@@ -21,8 +21,16 @@ jobs:
       - name: Nuget pack 
         run: dotnet pack Nuget/PessimisticConcurrency/PessimisticConcurrency.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
   
-      - name: Nuget push
+      - name: Push Nuget to Nuget.org
         run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json
+
+      - name: Push Nupkg to GitHub Packages
+        uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
+        with:
+          nupkg-path:  'package/*.nupkg'
+          repo-owner:  'lukaskuko9'
+          gh-user:  'lukaskuko9'
+          token:  ${{secrets.NUGET_GITHUB_TOKEN}}
 
   nuget-push-EasyConcurrency-Abstractions:
     runs-on: ubuntu-latest
@@ -40,5 +48,13 @@ jobs:
       - name: Nuget pack 
         run: dotnet pack Nuget/PessimisticConcurrency.Abstractions/PessimisticConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
 
-      - name: Nuget push
+      - name: Push Nuget to Nuget.org
         run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json
+
+      - name: Push Nupkg to GitHub Packages
+        uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
+        with:
+          nupkg-path:  'package/*.nupkg'
+          repo-owner:  'lukaskuko9'
+          gh-user:  'lukaskuko9'
+          token:  ${{secrets.NUGET_GITHUB_TOKEN}}
