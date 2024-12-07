@@ -4,7 +4,7 @@
 /// Represents a time lock to be held on an entity that naturally expires.
 /// </summary>
 /// <param name="Value">Time when the lock expires</param>
-public readonly record struct TimeLock(DateTimeOffset? Value) : IIsNotLocked, IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
+public record struct TimeLock(DateTimeOffset? Value) : IHasTimeLock, IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
 {
     public static implicit operator DateTimeOffset?(TimeLock? timeLock) => timeLock?.Value;
     public static implicit operator DateTimeOffset(TimeLock timeLock) => timeLock.Value ?? default;
@@ -25,6 +25,36 @@ public readonly record struct TimeLock(DateTimeOffset? Value) : IIsNotLocked, IC
     public bool IsNotLocked(DateTimeOffset now)
     {
         return Value == null || Value < now;
+    }
+
+    public bool SetLock(TimeLock timeLock)
+    {
+        if (IsNotLocked() == false)
+            return false;
+
+        Value = timeLock.Value;
+        return true;
+    }
+    
+    
+    public bool SetLock(TimeSpan lockTimeDuration)
+    {
+        if (IsNotLocked() == false)
+            return false;
+
+        Value = DateTimeOffset.UtcNow.Add(lockTimeDuration);
+        return true;
+    }
+    
+    public bool SetLock(int minutes)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(minutes);
+        return SetLock(TimeSpan.FromMinutes(minutes));
+    }
+
+    public void Unlock()
+    { 
+        Value = null;
     }
 
     public int CompareTo(DateTimeOffset? other)
