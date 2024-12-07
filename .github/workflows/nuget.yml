@@ -18,9 +18,6 @@ jobs:
           github-token:
             ${{ secrets.GITHUB_TOKEN }}
 
-      - name: tree 
-        run: tree .
-            
       - name: Nuget pack 
         run: dotnet pack EasyConcurrency.Abstractions/EasyConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false 
 
