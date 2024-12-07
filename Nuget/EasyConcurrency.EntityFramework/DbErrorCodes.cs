@@ -19,6 +19,20 @@ public static class DbExceptionErrorCodes
     /// </summary>
     private const int UniqueConstraintViolation = 2627;
 
+    /// <summary>
+    /// Checks if the passed <see cref="DbUpdateException"/> was thrown due to unique constraint violation during database update.
+    /// </summary>
+    /// <param name="exception"><see cref="DbUpdateException"/> that was raised</param>
+    /// <returns>True if unique constraint was violated, otherwise false.</returns>
+    /// <code>try
+    /// {
+    ///   ...
+    /// }
+    /// catch (DbUpdateException exception) when (DbExceptionErrorCodes.IsUniqueConstraintViolation(exception))
+    /// {
+    ///   ...
+    /// }
+    /// </code>
     public static bool IsUniqueConstraintViolation(DbUpdateException exception)
     {
         return exception.InnerException is SqlException

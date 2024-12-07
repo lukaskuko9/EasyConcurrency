@@ -16,27 +16,31 @@ public abstract class LockableEntity : ConcurrentEntity, ILockableEntity
     
     public bool SetLock(TimeLock timeLock)
     {
-        if (IsNotLocked() == false)
-            return false;
-
-        LockedUntil = timeLock;
+        if (LockedUntil != null) 
+            return LockedUntil.Value.SetLock(timeLock);
+        
+        LockedUntil = TimeLock.Create(timeLock);
         return true;
     }
     
     
-    public bool SetLock(TimeSpan lockTime)
+    public bool SetLock(TimeSpan lockTimeDuration)
     {
-        if (IsNotLocked() == false)
-            return false;
-
-        LockedUntil = DateTimeOffset.UtcNow.Add(lockTime);
+        if (LockedUntil != null) 
+            return LockedUntil.Value.SetLock(lockTimeDuration);
+        
+        LockedUntil = TimeLock.Create(DateTimeOffset.UtcNow.Add(lockTimeDuration));
         return true;
     }
     
     public bool SetLock(int minutes)
     {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(minutes);
-        return SetLock(TimeSpan.FromMinutes(minutes));
+        if (LockedUntil != null)
+            return LockedUntil.Value.SetLock(minutes);
+        
+        LockedUntil = TimeLock.Create(DateTimeOffset.UtcNow.AddMinutes(minutes));
+        return true;
+
     }
 
     public void Unlock()

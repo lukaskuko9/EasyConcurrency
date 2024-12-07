@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.0.2</Version>
+        <Version>0.1.0</Version>
+        <FileVersion>0.1.0</FileVersion>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
         <Authors>Lukáš Machajdík</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <RootNamespace>EasyConcurrency.EntityFramework</RootNamespace>
@@ -12,7 +14,15 @@
         <PackageProjectUrl>https://github.com/lukaskuko9/EasyConcurrency</PackageProjectUrl>
         <RepositoryUrl>https://github.com/lukaskuko9/EasyConcurrency</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>Copyright © Lukáš Machajdík (aka. lukaskuko9) 2024</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>EntityFramework;EntityFrameworkCore;EntityFrameworkConcurrency;Concurrency;Database;EasyConcurrency;</PackageTags>
+        <Description>
+            EasyConcurrency.EntityFramework is designed to simplify the implementation of concurrency control in Entity Framework. 
+            Entity Framework doesn't provide built-in support for pessimistic concurrency, 
+            but EasyConcurrency fills this gap by offering an easy-to-use interface.
+        </Description>
     </PropertyGroup>
 
     <ItemGroup>

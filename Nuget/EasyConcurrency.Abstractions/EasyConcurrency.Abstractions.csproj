@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.0.1</Version>
+        <Version>0.1.0</Version>
+        <FileVersion>0.1.0</FileVersion>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
         <Authors>Lukáš Machajdík</Authors>
         <RootNamespace>EasyConcurrency.Abstractions</RootNamespace>
         <PackageId>EasyConcurrency.Abstractions</PackageId>
@@ -13,7 +15,11 @@
         <RepositoryUrl>https://github.com/lukaskuko9/EasyConcurrency</RepositoryUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>Copyright © Lukáš Machajdík (aka. lukaskuko9) 2024</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>Concurrency;EasyConcurrency;</PackageTags>
+        <Description>Provides abstractions for EasyConcurrency packages.</Description>
     </PropertyGroup>
 
     <ItemGroup>
