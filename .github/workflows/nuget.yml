@@ -8,6 +8,12 @@ jobs:
   nuget-push-EasyConcurrency-Abstractions:
     runs-on: ubuntu-latest
     steps:   
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: | 
+            8.0.x
+            9.0.x
       - name: Download a Build Artifact
         uses: actions/download-artifact@v4.1.8
         with:
