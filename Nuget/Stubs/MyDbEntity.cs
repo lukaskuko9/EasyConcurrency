@@ -1,6 +1,6 @@
 ﻿using EasyConcurrency.Abstractions;
 
-namespace IntegrationTests.Database;
+namespace Stubs;
 
 public class MyDbEntity : LockableEntity
 {

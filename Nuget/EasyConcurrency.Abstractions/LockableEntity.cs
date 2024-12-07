@@ -6,19 +6,29 @@ public abstract class LockableEntity : ConcurrentEntity, ILockableEntity
     
     public bool IsNotLocked()
     {
-        return IsNotLocked(DateTimeOffset.UtcNow);
+        return LockedUntil.IsNotLocked();
     }
     
     public bool IsNotLocked(DateTimeOffset now)
     {
-        return TimeLockMethods.IsNotLocked(this);
+        return LockedUntil.IsNotLocked(now);
     }
+    
+    public bool SetLock(TimeLock timeLock)
+    {
+        if (IsNotLocked() == false)
+            return false;
+
+        LockedUntil = timeLock;
+        return true;
+    }
+    
     
     public bool SetLock(TimeSpan lockTime)
     {
         if (IsNotLocked() == false)
             return false;
-        
+
         LockedUntil = DateTimeOffset.UtcNow.Add(lockTime);
         return true;
     }
@@ -27,5 +37,10 @@ public abstract class LockableEntity : ConcurrentEntity, ILockableEntity
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(minutes);
         return SetLock(TimeSpan.FromMinutes(minutes));
+    }
+
+    public void Unlock()
+    { 
+        LockedUntil = null;
     }
 }

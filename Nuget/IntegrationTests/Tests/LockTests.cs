@@ -1,24 +1,14 @@
-using EasyConcurrency.EntityFramework;
-using IntegrationTests.Database;
+using EasyConcurrency.Abstractions;
+using EasyConcurrency.EntityFramework.LockableEntity;
 using Microsoft.EntityFrameworkCore;
+using Stubs;
 using Xunit;
 
-namespace IntegrationTests;
+namespace IntegrationTests.Tests;
 
-public class LockedUntilTests
+[Collection(DatabaseCollection.CollectionName)]
+public class LockTests : DatabaseFixture
 {
-    private static readonly DatabaseContext Context;
-
-    static LockedUntilTests()
-    {
-        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ??
-                               "Data Source=.;Initial Catalog=EFConcurrencyTests;Integrated Security=True;TrustServerCertificate=True";
-        var factory = new DatabaseContextFactory();
-        Context = factory.CreateDbContext([connectionString]);
-        Context.Database.EnsureDeleted();
-        Context.Database.Migrate();
-    }
-
     [Fact]
     public async Task LockedUntilTranslatesCorrectly()
     {
@@ -88,5 +78,70 @@ public class LockedUntilTests
         //when lock has expired, entity that was locked is automatically unlocked now and can be fetched
         Assert.NotNull(dbEntityLockExpired);
         Assert.Equal(dbEntityLockExpired.LockedUntil, lockedUntil);
+    }
+
+    [Fact]
+    public async Task CanBeLocked()
+    {
+        var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
+        var newEntity1 = new MyDbEntity
+        {
+            MyUniqueKey = Guid.NewGuid(),
+            LockedUntil = new TimeLock(lockedUntil)
+        };
+        
+        var newEntity2 = new MyDbEntity
+        {
+            MyUniqueKey = Guid.NewGuid(),
+            LockedUntil = lockedUntil
+        };
+        
+        var newEntity3 = new MyDbEntity
+        {
+            MyUniqueKey = Guid.NewGuid(),
+            LockedUntil = null
+        };
+        
+        var newEntity4 = new MyDbEntity
+        {
+            MyUniqueKey = Guid.NewGuid(),
+            LockedUntil = null
+        };
+        
+        await Context.MyDbEntities.AddAsync(newEntity1);
+        await Context.MyDbEntities.AddAsync(newEntity2);
+        await Context.MyDbEntities.AddAsync(newEntity3);
+        await Context.MyDbEntities.AddAsync(newEntity4);
+        await Context.SaveChangesAsync();
+
+        var isLocked = newEntity3.SetLock(lockedUntil);
+        var isLocked2 = newEntity4.SetLock(TimeSpan.FromMinutes(10));
+        Assert.True(isLocked);
+        Assert.True(isLocked2);
+        await Context.SaveChangesAsync();
+
+        var notLockedItems = await Context.MyDbEntities
+            .WhereIsNotLocked()
+            .ToListAsync();
+        
+        Assert.Empty(notLockedItems);
+    }
+
+    [Fact]
+    public async Task LockCanBeUnlocked()
+    {
+        var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(-10);
+        var newEntity = new MyDbEntity
+        {
+            MyUniqueKey = Guid.NewGuid(),
+            LockedUntil = new TimeLock(lockedUntil)
+        };
+        await Context.MyDbEntities.AddAsync(newEntity);
+        await Context.SaveChangesAsync();
+
+        newEntity.Unlock();
+        await Context.SaveChangesAsync();
+        
+        Assert.True(newEntity.IsNotLocked());
     }
 }
