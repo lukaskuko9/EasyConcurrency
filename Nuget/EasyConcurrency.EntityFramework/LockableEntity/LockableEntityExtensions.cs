@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using EasyConcurrency.Abstractions;
 
-namespace EasyConcurrency.EntityFramework;
+namespace EasyConcurrency.EntityFramework.LockableEntity;
 
 public static class LockableEntityExtensions
 {

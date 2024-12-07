@@ -1,26 +1,14 @@
 using EasyConcurrency.Abstractions;
-using EasyConcurrency.EntityFramework;
-using IntegrationTests.Database;
+using EasyConcurrency.EntityFramework.LockableEntity;
 using Microsoft.EntityFrameworkCore;
 using Stubs;
 using Xunit;
 
-namespace IntegrationTests;
+namespace IntegrationTests.Tests;
 
-public class LockTests
+[Collection(DatabaseCollection.CollectionName)]
+public class LockTests : DatabaseFixture
 {
-    private static readonly DatabaseContext Context;
-
-    static LockTests()
-    {
-        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ??
-                               "Data Source=.;Initial Catalog=EFConcurrencyTests;Integrated Security=True;TrustServerCertificate=True";
-        var factory = new DatabaseContextFactory();
-        Context = factory.CreateDbContext([connectionString]);
-        Context.Database.EnsureDeleted();
-        Context.Database.Migrate();
-    }
-
     [Fact]
     public async Task LockedUntilTranslatesCorrectly()
     {
