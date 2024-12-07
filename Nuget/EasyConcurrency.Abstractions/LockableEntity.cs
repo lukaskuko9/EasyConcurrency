@@ -16,7 +16,7 @@ public abstract class LockableEntity : ConcurrentEntity, ILockableEntity
     
     public bool SetLock(TimeLock timeLock)
     {
-        if (IsNotLocked() == false)
+        if (LockedUntil.IsNotLocked() == false)
             return false;
 
         LockedUntil = timeLock;
@@ -35,7 +35,7 @@ public abstract class LockableEntity : ConcurrentEntity, ILockableEntity
     
     public bool SetLock(int minutes)
     {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(minutes);
+        ArgumentOutOfRangeException.ThrowIfNegative(minutes);
         return SetLock(TimeSpan.FromMinutes(minutes));
     }
 

@@ -5,9 +5,9 @@ namespace EasyConcurrency.EntityFramework.ConcurrentRepository;
 
 public interface IConcurrentRepository
 {
-    Task<TConcurrentEntity?> LockAndSaveAsync<TConcurrentEntity>(TConcurrentEntity? dbEntity,
+    Task<TLockableEntity?> LockAndSaveAsync<TLockableEntity>(TLockableEntity? dbEntity,
         TimeSpan lockTimeSpan, Action<IReadOnlyList<EntityEntry>>? actionOnConcurrency = null, 
-        CancellationToken cancellationToken = default) where TConcurrentEntity : class, ILockableEntity;
+        CancellationToken cancellationToken = default) where TLockableEntity : class, ILockableEntity;
 
-    Task<bool> InsertAndSaveAsync<TConcurrentEntity>(TConcurrentEntity entity, CancellationToken token = default) where TConcurrentEntity : class, ILockableEntity;
+    Task<bool> InsertAndSaveAsync<TLockableEntity>(TLockableEntity entity, CancellationToken token = default) where TLockableEntity : class, ILockableEntity;
 }

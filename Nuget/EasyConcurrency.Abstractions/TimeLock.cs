@@ -1,13 +1,21 @@
 ﻿namespace EasyConcurrency.Abstractions;
 
-public readonly record struct TimeLock(DateTimeOffset? Value) : IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
+/// <summary>
+/// Represents a time lock to be held on an entity that naturally expires.
+/// </summary>
+/// <param name="Value">Time when the lock expires</param>
+public readonly record struct TimeLock(DateTimeOffset? Value) : IIsNotLocked, IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
 {
     public static implicit operator DateTimeOffset?(TimeLock? timeLock) => timeLock?.Value;
     public static implicit operator DateTimeOffset(TimeLock timeLock) => timeLock.Value ?? default;
-    public static implicit operator TimeLock?(DateTimeOffset? timeLock) => timeLock == null ? null : Create(timeLock.Value);
-    public static implicit operator TimeLock(DateTimeOffset timeLock) => Create(timeLock);
-    
-    public static TimeLock Create(DateTimeOffset timeLock) => new(timeLock);
+    public static implicit operator TimeLock?(DateTimeOffset? lockedUntil) => lockedUntil == null ? null : Create(lockedUntil.Value);
+    public static implicit operator TimeLock(DateTimeOffset lockedUntil) => Create(lockedUntil);
+    /// <summary>
+    /// Creates a <see cref="TimeLock"/> instance. 
+    /// </summary>
+    /// <param name="lockedUntil">The date and time expiration of the lock</param>
+    /// <returns></returns>
+    public static TimeLock Create(DateTimeOffset lockedUntil) => new(lockedUntil);
     
     public bool IsNotLocked()
     {
