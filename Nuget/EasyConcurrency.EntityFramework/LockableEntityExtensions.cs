@@ -15,15 +15,9 @@ public static class LockableEntityExtensions
         var now = DateTimeOffset.UtcNow;
         return queryable.Where(IsNotLocked<TLockableEntity>(now));
     }
-    
-    public static Expression<Func<TLockableEntity, bool>> IsNotLocked<TLockableEntity>() where TLockableEntity: ILockableEntity
+
+    private static Expression<Func<TLockableEntity, bool>> IsNotLocked<TLockableEntity>(DateTimeOffset now) where TLockableEntity: ILockableEntity
     {
-        var now = DateTimeOffset.UtcNow;
-        return IsNotLocked<TLockableEntity>(now);
-    }
-    
-    public static Expression<Func<TLockableEntity, bool>> IsNotLocked<TLockableEntity>(DateTimeOffset now) where TLockableEntity: ILockableEntity
-    {
-         return TimeLockMethods.IsNotLockedAsExpression<TLockableEntity>(now);
+         return LockableEntityMethods.IsNotLockedAsExpression<TLockableEntity>(now);
     }
 }

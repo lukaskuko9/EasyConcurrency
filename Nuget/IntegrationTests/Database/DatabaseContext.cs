@@ -1,5 +1,6 @@
 ﻿using EasyConcurrency.EntityFramework;
 using Microsoft.EntityFrameworkCore;
+using Stubs;
 
 namespace IntegrationTests.Database;
 

@@ -1,33 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <RootNamespace>IntegrationTests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0"/>
         <PackageReference Include="xunit" Version="2.9.2" />
         <PackageReference Include="xunit.runner.console" Version="2.9.2"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj" />
-      <ProjectReference Include="..\EasyConcurrency.EntityFramework\EasyConcurrency.EntityFramework.csproj" />
-      <ProjectReference Include="..\Stubs\Stubs.csproj" />
+        <Using Include="Xunit"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Migrations\" />
+      <ProjectReference Include="..\EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj" />
+      <ProjectReference Include="..\EasyConcurrency.EntityFramework\EasyConcurrency.EntityFramework.csproj" />
+      <ProjectReference Include="..\Stubs\Stubs.csproj" />
     </ItemGroup>
 
 </Project>

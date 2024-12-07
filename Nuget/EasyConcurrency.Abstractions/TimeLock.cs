@@ -4,9 +4,21 @@ public readonly record struct TimeLock(DateTimeOffset? Value) : IComparable<Date
 {
     public static implicit operator DateTimeOffset?(TimeLock? timeLock) => timeLock?.Value;
     public static implicit operator DateTimeOffset(TimeLock timeLock) => timeLock.Value ?? default;
-    public static implicit operator TimeLock?(DateTimeOffset? timeLock) => timeLock == null ? null : new TimeLock(timeLock.Value);
-    public static implicit operator TimeLock(DateTimeOffset timeLock) => new(timeLock);
+    public static implicit operator TimeLock?(DateTimeOffset? timeLock) => timeLock == null ? null : Create(timeLock.Value);
+    public static implicit operator TimeLock(DateTimeOffset timeLock) => Create(timeLock);
     
+    public static TimeLock Create(DateTimeOffset timeLock) => new(timeLock);
+    
+    public bool IsNotLocked()
+    {
+        return IsNotLocked(DateTimeOffset.UtcNow);
+    }
+    
+    public bool IsNotLocked(DateTimeOffset now)
+    {
+        return Value == null || Value < now;
+    }
+
     public int CompareTo(DateTimeOffset? other)
     {
         return Nullable.Compare(Value, other);
