@@ -10,7 +10,7 @@ You have a dedicated endpoint. It works like this:
 3. If the payment was not postponed yet, you postpone it
 4. A response is returned of a postponed due date for the payment.
 
-![Postpone Endpoint](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/88197fd09bfb802aff69d686beed563b681bd8aa/Readme/OptimisticConcurrency/1.svg?token=AELHIOC3NQZWF4JGE7YNPNTHKXBL6)
+![Postpone Endpoint](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/0f54a6575819c06b7095e0a27dcd4424a519c638/Readme/OptimisticConcurrency/1.svg?token=AELHIOC7YY7FSROESDG47GDHKXFMI)
 
 ### Issue
 This works perfectly fine - that is, until one day,
@@ -23,7 +23,7 @@ in all the requests postpone has not been done yet - meaning they can bypass the
 
 The result is that the payment was postponed 10 times, each request postponed it by 30 days.
 
-![Postpone Issue](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/88197fd09bfb802aff69d686beed563b681bd8aa/Readme/OptimisticConcurrency/2.svg?token=AELHIODHE7PH4GRLURQA7C3HKXDZO)
+![Postpone Issue](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/0f54a6575819c06b7095e0a27dcd4424a519c638/Readme/OptimisticConcurrency/3.svg?token=AELHIOBRUSPLHYGQGE7PZSLHKXFP2)
 
 ### Solution
 Solution lies in detecting the moment this happens. 
