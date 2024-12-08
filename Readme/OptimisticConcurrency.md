@@ -23,7 +23,7 @@ in all the requests postpone has not been done yet - meaning they can bypass the
 
 The result is that the payment was postponed 10 times, each request postponed it by 30 days.
 
-![Postpone Issue](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/0f54a6575819c06b7095e0a27dcd4424a519c638/Readme/OptimisticConcurrency/3.svg?token=AELHIOBRUSPLHYGQGE7PZSLHKXFP2)
+![Postpone Issue](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/be785d15a706b2cae5600448609b7b03a0f17f16/Readme/OptimisticConcurrency/2.svg?token=AELHIOAJPLRMYOZZ226CRBDHKXFUK)
 
 ### Solution
 Solution lies in detecting the moment this happens. 
@@ -38,4 +38,4 @@ and an exception is raised (instead of postponing again).
 
 You can catch this exception and recover from this depending on your use case.
 
-![Postpone Issue](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/88197fd09bfb802aff69d686beed563b681bd8aa/Readme/OptimisticConcurrency/3.svg?token=AELHIOHZQN2VZEBZWPZUXGLHKXD4A)
+![Postpone Issue](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/0f54a6575819c06b7095e0a27dcd4424a519c638/Readme/OptimisticConcurrency/3.svg?token=AELHIOBRUSPLHYGQGE7PZSLHKXFP2)
