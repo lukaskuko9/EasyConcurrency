@@ -1,9 +1,12 @@
 ﻿## Optimistic Concurrency Control
 Optimistic concurrency control considers the best case scenario - with minimal concurrency occurence.
+The idea of optimistic concurrency is that when it occurs, you can react to it and decide what to do next - how to recover from it.
+
+You will know if concurrency occured only when attempting to save the changes you made - not before.
 
 ### Example
-Imagine a simple scenario where a user can postpone his payment by 30 days, but he can do it only once for the payment.
-You have a dedicated endpoint. It works like this:
+Imagine a simple scenario where a user can postpone his payment by 30 days, but requirements state that he can do it only once for the payment.
+You have a dedicated API endpoint. It works like this:
 
 1. A request is sent to your endpoint with Id of the payment to postpone
 2. You check if the payment was already postponed
@@ -21,7 +24,7 @@ only a very small fraction of second between each other,
 they will fetch the payment from database and (in the worst case scenario)
 in all the requests postpone has not been done yet - meaning they can bypass the condition.
 
-The result is that the payment was postponed 10 times, each request postponed it by 30 days.
+The result as diagram below indicates - is that the payment was postponed 2 times, each request postponed it by 60 days.
 
 ![Postpone Issue](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/be785d15a706b2cae5600448609b7b03a0f17f16/Readme/OptimisticConcurrency/2.svg?token=AELHIOAJPLRMYOZZ226CRBDHKXFUK)
 
