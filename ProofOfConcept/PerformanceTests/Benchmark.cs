@@ -1,5 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
-using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+using EasyConcurrency.Abstractions;
 
 namespace PerformanceTests
 {

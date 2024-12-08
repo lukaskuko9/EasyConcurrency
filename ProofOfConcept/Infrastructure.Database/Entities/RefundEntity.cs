@@ -1,5 +1,5 @@
 ﻿using Core.PrimitiveTypeObsession;
-using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+using EasyConcurrency.Abstractions;
 
 namespace Infrastructure.Database.Entities;
 
