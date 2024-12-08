@@ -1,0 +1,34 @@
+﻿@startuml
+    participant Request
+    participant API
+
+    activate API
+
+    par#White Request 1
+Request -> API: API Request to postpone payment 1    
+API -> Database: Check if postponed
+    activate Database
+Database -> API: Not postponed
+deactivate Database
+API -> Database : Postpone in database 1
+activate Database
+Database -> API : Postponed
+    deactivate Database
+API -> Request : Postpone Succesful
+else Request 2
+Request -> API: API Request to postpone payment 2
+API -> Database: Check if postponed
+    activate Database
+Database -> API: Not postponed
+deactivate Database
+API -> Database : Postpone in database 2
+activate Database
+Database --> API : Concurrency exception
+destroy Database
+deactivate Database
+API --> Request : Postpone error
+destroy API
+end
+
+    deactivate API
+    @enduml
