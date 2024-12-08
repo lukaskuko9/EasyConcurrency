@@ -14,7 +14,7 @@ par#White Request 1
     activate Database
     Database -> API : Postponed
     deactivate Database
-    API -> Request : Postpone Succesful
+    API -> Request : Postpone Succesful - Total Postponed 30 days
 else Request 2
     Request -> API: API Request to postpone payment 2
     API -> Database: Check if postponed
@@ -25,7 +25,7 @@ else Request 2
     activate Database
     Database -> API : Postponed
     deactivate Database
-    API -> Request : Postpone Succesful
+    API -> Request : Postpone Succesful - Total Postponed 60 days
 end
 
 deactivate API
