@@ -1,8 +1,7 @@
 ﻿using Core.Refund;
-using EntityFrameworkCore.PessimisticConcurrency;
-using EntityFrameworkCore.PessimisticConcurrency.Abstractions;
+using EasyConcurrency.EntityFramework.ConcurrentRepository;
+using EasyConcurrency.EntityFramework.LockableEntity;
 using Microsoft.EntityFrameworkCore;
-using TimeLockExtensions = EntityFrameworkCore.PessimisticConcurrency.TimeLockExtensions;
 
 namespace Infrastructure.Database.Repository
 {
@@ -17,7 +16,7 @@ namespace Infrastructure.Database.Repository
                 return false;
 
             var mapped = Map(refundEntity);
-            return await InsertAsync(mapped, token);
+            return await InsertAndSaveAsync(mapped, token);
         }
 
         public async Task DeleteAsync(RefundEntity entityToUpdate, CancellationToken token = default)
@@ -30,7 +29,7 @@ namespace Infrastructure.Database.Repository
         public async Task<RefundEntity?> GetAndLockFirstOrDefaultAsync(CancellationToken token)
         {
             var refundEntity = await _dbContext.Refunds
-                .Where(TimeLockMethods.IsNotLocked<Entities.RefundEntity>())
+                .WhereIsNotLocked()
                 .FirstOrDefaultAsync(token);
 
             var dbEntity = await LockAndSaveAsync(refundEntity, TimeSpan.FromMinutes(5), cancellationToken: token);

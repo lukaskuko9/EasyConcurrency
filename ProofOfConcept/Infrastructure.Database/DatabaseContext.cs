@@ -1,5 +1,5 @@
 ﻿using Core.PrimitiveTypeObsession;
-using EntityFrameworkCore.PessimisticConcurrency;
+using EasyConcurrency.EntityFramework.TimeLock;
 using Infrastructure.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
