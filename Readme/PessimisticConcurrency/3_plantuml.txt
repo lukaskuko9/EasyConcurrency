@@ -33,6 +33,12 @@ end note
 API -> Database : Postpone in database
 activate Database
 Database -> API : Postponed
+deactivate Database 
+
+API -> Database : Unlock row
+activate Database
+Database -> API : Unlocked
+
 deactivate Database
 
 deactivate API
