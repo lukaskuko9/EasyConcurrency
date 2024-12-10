@@ -12,8 +12,15 @@ For business reason we can make the write changes only once - when postponing.
 4. Only when it's postponed in the external service, we postpone the payment in our database
 5. A response is returned of a postponed due date for the payment.
 
+
+### Single Request Example
+
 ![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/1.svg)
+
+### Multiple Request Example
+
+![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/2.svg)
 
 ## Solution with pessimistic concurrency control
 
-![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/2.svg)
+![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/3.svg)
