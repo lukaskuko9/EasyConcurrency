@@ -10,7 +10,7 @@ You have a dedicated API endpoint. It works like this:
 
 1. A request is sent to your endpoint with Id of the payment to postpone
 2. You check if the payment was already postponed
-3. If the payment was not postponed yet, you postpone it
+3. If the payment was not postponed yet, you postpone it in database
 4. A response is returned of a postponed due date for the payment.
 
 ![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency/1.svg)
