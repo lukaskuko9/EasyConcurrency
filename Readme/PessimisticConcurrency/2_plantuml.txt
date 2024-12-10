@@ -1,0 +1,72 @@
+﻿@startuml
+
+    participant Request
+    participant API
+
+    activate API
+
+    par#White Request 1
+Request -> API: API Request to postpone payment 1
+API -> Database: Check if postponed
+    activate Database
+Database -> API: Not postponed
+deactivate Database
+
+
+
+API -> ExternalService : Postpone in external service
+
+activate API #FFBBBB
+activate ExternalService
+ExternalService -> API : Postponed
+
+deactivate ExternalService
+
+note left #FFBBBB
+   Critical Section
+end note
+
+API -> Database : Postpone in database
+activate Database
+Database -> API : Postponed
+deactivate Database
+
+deactivate API
+
+API -> Request : Postpone Succesful
+
+
+
+else Request 2
+
+Request -> API: API Request to postpone payment 1
+API -> Database: Check if postponed
+    activate Database
+Database -> API: Not postponed
+deactivate Database
+
+
+
+API -> ExternalService : Postpone in external service
+activate API #FFBBBB
+activate ExternalService
+ExternalService -> API : Postponed
+
+deactivate ExternalService
+
+note left #FFBBBB
+   Critical Section
+end note
+
+API -> Database : Postpone in database
+activate Database
+Database -> API : Postponed
+deactivate Database
+
+deactivate API
+
+API -> Request : Postpone Succesful
+
+
+end
+@enduml
