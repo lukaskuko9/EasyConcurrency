@@ -8,7 +8,7 @@ We first process the payment in our database and then also need to send a POST r
 
 1. A message is fetched from database table
 2. Payment is processed first with POST request to the bank service
-3. 4. Only when it's processed in the bank service we write changes to our database (process it on our side)
+3. Only when it's processed in the bank service we write changes to our database (process it on our side)
 4. Message is marked as processsed
 
 ### Single instance Example
