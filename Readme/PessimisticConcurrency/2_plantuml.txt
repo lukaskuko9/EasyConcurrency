@@ -1,72 +1,52 @@
 ﻿@startuml
+activate JobInstance
 
-    participant Request
-    participant API
+par First instance
 
-    activate API
-
-    par#White Request 1
-Request -> API: API Request to postpone payment 1
-API -> Database: Check if postponed
-    activate Database
-Database -> API: Not postponed
-deactivate Database
-
-
-
-API -> ExternalService : Postpone in external service
-
-activate API #FFBBBB
-activate ExternalService
-ExternalService -> API : Postponed
-
-deactivate ExternalService
-
-note left #FFBBBB
-   Critical Section
-end note
-
-API -> Database : Postpone in database
+JobInstance -> Database: Get payment message
 activate Database
-Database -> API : Postponed
+Database -> JobInstance : Fetched
 deactivate Database
 
-deactivate API
+JobInstance -> BankService: Payment - money transfer
+activate BankService
+BankService -> JobInstance : Money transfered
+deactivate BankService
 
-API -> Request : Postpone Succesful
-
-
-
-else Request 2
-
-Request -> API: API Request to postpone payment 1
-API -> Database: Check if postponed
-    activate Database
-Database -> API: Not postponed
-deactivate Database
-
-
-
-API -> ExternalService : Postpone in external service
-activate API #FFBBBB
-activate ExternalService
-ExternalService -> API : Postponed
-
-deactivate ExternalService
-
-note left #FFBBBB
-   Critical Section
-end note
-
-API -> Database : Postpone in database
+JobInstance -> Database: Process payment
 activate Database
-Database -> API : Postponed
+Database -> JobInstance : Processed
 deactivate Database
 
-deactivate API
+JobInstance -> Database: Marked message as processed
+activate Database
+Database -> JobInstance : Message marked as processed
+deactivate Database
 
-API -> Request : Postpone Succesful
+else Second Instance
+
+
+JobInstance -> Database: Get payment message
+activate Database
+Database -> JobInstance : Fetched
+deactivate Database
+
+JobInstance -> BankService: Payment - money transfer
+activate BankService
+BankService -> JobInstance : Money transfered
+deactivate BankService
+
+JobInstance -> Database: Process payment
+activate Database
+Database -> JobInstance : Processed
+deactivate Database
+
+JobInstance -> Database: Marked message as processed
+activate Database
+Database -> JobInstance : Message marked as processed
+deactivate Database
 
 
 end
+
 @enduml
