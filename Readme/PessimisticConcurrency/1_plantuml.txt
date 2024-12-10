@@ -16,7 +16,7 @@ alt#Gold #LightGreen Not yet postponed
     API -> Database : Postpone in database
     activate Database
     Database -> API : Postponed
-    deactivate Database
+    deactivate atabase
     API -> Request : Postpone succesful
 else #Pink Already postponed
     API -> Database : Check if postponed
