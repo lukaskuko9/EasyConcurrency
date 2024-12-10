@@ -1,29 +1,28 @@
 ﻿@startuml
-Request -> API: API Request to postpone payment
-activate API
+activate JobInstance
 
-alt#Gold #LightGreen Not yet postponed
-    API -> Database : Check if postponed
-    activate Database
-    Database -> API : Not postponed
-    deactivate Database
+par Single job instance only
 
-    API -> ExternalService : Postpone in external service
-    activate ExternalService
-    ExternalService -> API
-    deactivate ExternalService
+JobInstance -> Database: Get payment message
+activate Database
+Database -> JobInstance : Fetched
+deactivate Database
 
-    API -> Database : Postpone in database
-    activate Database
-    Database -> API : Postponed
-    deactivate atabase
-    API -> Request : Postpone succesful
-else #Pink Already postponed
-    API -> Database : Check if postponed
-    activate Database
-    Database -> API : Already postponed
-    deactivate Database
-    API -> Request : Postpone not succesful
+JobInstance -> BankService: Payment - money transfer
+activate BankService
+BankService -> JobInstance : Money transfered
+deactivate BankService
+
+JobInstance -> Database: Process payment
+activate Database
+Database -> JobInstance : Processed
+deactivate Database
+
+JobInstance -> Database: Marked message as processed
+activate Database
+Database -> JobInstance : Message marked as processed
+deactivate Database
+
 end
-deactivate API
+
 @enduml
