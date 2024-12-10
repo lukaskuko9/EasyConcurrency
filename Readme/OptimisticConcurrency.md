@@ -13,7 +13,7 @@ You have a dedicated API endpoint. It works like this:
 3. If the payment was not postponed yet, you postpone it
 4. A response is returned of a postponed due date for the payment.
 
-![Postpone Endpoint](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/0f54a6575819c06b7095e0a27dcd4424a519c638/Readme/OptimisticConcurrency/1.svg?token=AELHIOC7YY7FSROESDG47GDHKXFMI)
+![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency/1.svg)
 
 ## Issue
 This works perfectly fine - that is, until one day,
@@ -26,19 +26,19 @@ in all the requests postpone has not been done yet - meaning they can bypass the
 
 The result as diagram below indicates - is that the payment was postponed 2 times, each request postponed it by 60 days.
 
-![Postpone Issue](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/be785d15a706b2cae5600448609b7b03a0f17f16/Readme/OptimisticConcurrency/2.svg?token=AELHIOAJPLRMYOZZ226CRBDHKXFUK)
+![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency/2.svg)
 
 ## Solution
-Solution lies in detecting the moment this happens. 
-When you fetch the payment to postpone, 
-you also fetch concurrency token with some value. 
-Your fetched concurrency token will be checked against the one stored in database 
+Solution lies in detecting the moment this happens.
+When you fetch the payment to postpone,
+you also fetch concurrency token with some value.
+Your fetched concurrency token will be checked against the one stored in database
 before writing the changes to database.
 
 If the tokens match, that means no other request postponed the payment and changes are written to database.
-If the tokens don't match, your payment was postponed after you fetched the payment from database, 
+If the tokens don't match, your payment was postponed after you fetched the payment from database,
 and an exception is raised (instead of postponing again).
 
 You can catch this exception and recover from this depending on your use case.
 
-![Postpone Issue](https://raw.githubusercontent.com/lukaskuko9/EasyConcurrency/0f54a6575819c06b7095e0a27dcd4424a519c638/Readme/OptimisticConcurrency/3.svg?token=AELHIOBRUSPLHYGQGE7PZSLHKXFP2)
+![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency/3.svg)
