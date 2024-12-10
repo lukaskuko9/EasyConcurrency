@@ -2,7 +2,7 @@
 In contrary to optimistic concurrency control, pessimistic assumes the worst case scenario - that concurrencies either happen often, or they are not something that we can recover from.
 
 ## Example
-Let's imagine the same scenario as with [Optimistic Concurrency](Readme/OptimisticConcurrency.md), but this time,
+Let's imagine the same scenario as with [Optimistic Concurrency](OptimisticConcurrency.md), but this time,
 we postpone in our database and then also need to post these changes to some external service through Http. 
 For business reason we can make the write changes only once - when postponing.
 
