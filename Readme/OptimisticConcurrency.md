@@ -39,6 +39,12 @@ If the tokens match, that means no other request postponed the payment and chang
 If the tokens don't match, your payment was postponed after you fetched the payment from database,
 and an exception is raised (instead of postponing again).
 
-You can catch this exception and recover from this depending on your use case.
-
 ![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency/3.svg)
+
+You could also catch this exception and recover from this depending on your use case.
+
+In the case of our example, if we get a concurrency exception from one of the requests, we could catch the exception and see if the exception occured because the payment was postponed. 
+If it was, we return the same response as we do normally when the payment is already postponed.
+If it is not and concurrency exception was raised because some other property was changed, we can attempt to do the postpone again.
+
+_Note: the handling of concurrency can vary depending on specific use case and optimistic concurrency implementation._
