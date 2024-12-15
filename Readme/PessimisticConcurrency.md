@@ -23,7 +23,7 @@ With a single request we do not have any issues.
 ![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/1.svg)
 
 ### Multiple instances Example
-Since our imaginary payment solution is very popular, we are getting many new payments each second that we need to process. 
+Since our imaginary services are very popular, we are getting many new payments each second that we need to process. 
 But it takes time and with only one instance the number of payment requests is rising faster than we are able to process it.
 
 We can't make any further significant optimalizations of the flow on our side, so we decide to process messages in parallel.
