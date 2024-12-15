@@ -14,12 +14,7 @@ jobs:
     steps:
     - name: Check out Code 
       uses: actions/checkout@v4
-
-    - name: Set FOO
-      run: echo "FOO=123" >> $GITHUB_ENV
-    - name: Test
-      run: echo $FOO
-
+      
     - name: Run SQL Server
       run: |
         echo "Starting SQL Server in a Docker container..."
@@ -28,7 +23,10 @@ jobs:
         echo "Setting environment variables for sqlcmd..."
 
         echo "DB_CONNECTION_STRING=Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $GITHUB_ENV
-        
+
+    - name: Test
+      run: echo $DB_CONNECTION_STRING
+
     - name: Wait for SQL Server availability
       shell: pwsh 
       run: |
