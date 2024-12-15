@@ -25,12 +25,12 @@ jobs:
         docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$sa_pw" -e "MSSQL_PID=Developer" -e "MSSQL_COLLATION=SQL_Latin1_General_CP1_CS_AS" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
         
         echo "Setting environment variables for sqlcmd..."
-        echo "SQLCMDPASSWORD=$sa_pw" >> $GITHUB_ENV
-        echo "SQLCMDUSER=sa" >> $GITHUB_ENV
-        echo "SQLCMDSERVER=localhost,1433" >> $GITHUB_ENV
+        echo "SQLCMDPASSWORD=$sa_pw" >> $DB_CONNECTION_STRING
+        echo "SQLCMDUSER=sa" >> $DB_CONNECTION_STRING
+        echo "SQLCMDSERVER=localhost,1433" >> $DB_CONNECTION_STRING
 
-        echo "Setting environment variable ${{ inputs.connection-string-env-var }} to SQL connection string..."
-        echo "${{ inputs.connection-string-env-var }}=Server=localhost;Database=${{ inputs.catalog }};User Id=sa;Password=$sa_pw;Encrypt=false;${{ inputs.extra-params }}" >> $GITHUB_ENV  
+        echo "Setting environment variable $DB_CONNECTION_STRING to SQL connection string..."
+        echo "$DB_CONNECTION_STRING=Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=$sa_pw;Encrypt=false;TrustServerCertificate=true" >> $DB_CONNECTION_STRING  
         # Wait for availability then create initial catalog
 
         for ($i = 1; $i -le 30; $i++) {
@@ -45,8 +45,8 @@ jobs:
           }
         }
 
-        Write-Output "Creating initial catalog '${{ inputs.catalog }}'"
-        sqlcmd -Q "CREATE DATABASE [${{ inputs.catalog }}]"
+        Write-Output "Creating initial catalog 'EFConcurrencyTests'"
+        sqlcmd -Q "CREATE DATABASE [EFConcurrencyTests]"
     
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
