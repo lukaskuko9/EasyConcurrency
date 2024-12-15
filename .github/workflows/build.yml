@@ -23,7 +23,7 @@ jobs:
         echo "Setting environment variables for sqlcmd..."
 
         echo "Setting environment variable $DB_CONNECTION_STRING to SQL connection string..."
-        echo "${{DB_CONNECTION_STRING}}=Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $GITHUB_ENV
+        echo "CUSTOM_VAR=Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $GITHUB_ENV
         echo "1: ${{DB_CONNECTION_STRING}}"
         echo "2: ${{env.DB_CONNECTION_STRING}}"
         
