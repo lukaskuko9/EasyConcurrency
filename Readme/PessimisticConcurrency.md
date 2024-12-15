@@ -26,8 +26,8 @@ With multiple multiple instances things get messy and without any concurrency ha
 ![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/2.svg)
 
 #### Solution with pessimistic concurrency control
-Using the optimistic concurrency will not help us here because we need to make sure when calling the external service, only one instance will call it for a single payment. 
-Using pessimistic concurrency, we can lock it for a specific amount of time. Once locked, we are sure that only the instance that locked it will be able to enter the critical section.
+Using only the optimistic concurrency will not help us here because we need to make sure when calling the external service, only one instance will call it for a single payment. 
+We can lock the message for a specific amount of time. This is done with the same way we detect optimistic concurrency, to make sure only one process is able to lock the message - through concurrency token. Once locked, we are sure that only the instance that locked the message will be able to enter the critical section to process it.
 Once we are done with processing, we can mark the message as processed and unlock it.
 
 1. A message is fetched from database table
