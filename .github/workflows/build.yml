@@ -20,6 +20,7 @@ jobs:
       with:
         connection-string-env-var: DB_CONNECTION_STRING
         catalog: EFConcurrencyTests
+        sqlserver-version: 2019
         extra-params: "TrustServerCertificate=true"
 
     - name: Setup dotnet
