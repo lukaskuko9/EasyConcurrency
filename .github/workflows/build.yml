@@ -40,7 +40,7 @@ jobs:
 
         for ($i = 1; $i -le 30; $i++) {
           Write-Output "Attempt $i/30 to connect to SQL Server..."
-          sqlcmd -b -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
+          docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P $sa_pw -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
           if ($?) {
             Write-Output "  - SQL Server is now ready"
             break
@@ -52,7 +52,7 @@ jobs:
 
         Write-Output "Creating initial catalog 'EFConcurrencyTests'"
         
-        sqlcmd -Q "CREATE DATABASE [EFConcurrencyTests]"
+        docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P $sa_pw -Q "CREATE DATABASE [EFConcurrencyTests]"
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
