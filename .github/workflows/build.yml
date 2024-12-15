@@ -23,8 +23,7 @@ jobs:
         echo "Setting environment variables for sqlcmd..."
 
         echo "DB_CONNECTION_STRING=Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $GITHUB_ENV
-        echo "1: ${{DB_CONNECTION_STRING}}"
-        echo "2: ${{env.DB_CONNECTION_STRING}}"
+        echo $DB_CONNECTION_STRING"
         
     - name: Wait for SQL Server availability
       shell: pwsh 
