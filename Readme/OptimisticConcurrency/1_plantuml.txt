@@ -1,0 +1,23 @@
+﻿@startuml
+Request -> API: API Request to postpone payment
+activate API
+
+alt#Gold #LightGreen Not yet postponed
+    API -> Database : Check if postponed
+    activate Database
+    Database -> API : Not postponed
+    deactivate Database
+    API -> Database : Postpone in database
+    activate Database
+    Database -> API : Postponed
+    deactivate Database
+    API -> Request : Postpone succesful
+else #Pink Already postponed
+    API -> Database : Check if postponed
+    activate Database
+    Database -> API : Already postponed
+    deactivate Database
+    API -> Request : Postpone not succesful
+end
+deactivate API
+@enduml

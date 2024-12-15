@@ -1,0 +1,28 @@
+﻿@startuml
+activate JobInstance
+
+par Single job instance only
+
+JobInstance -> Database: Get payment message
+activate Database
+Database -> JobInstance : Fetched
+deactivate Database
+
+JobInstance -> BankService: Payment - money transfer
+activate BankService
+BankService -> JobInstance : Money transfered
+deactivate BankService
+
+JobInstance -> Database: Process payment
+activate Database
+Database -> JobInstance : Processed
+deactivate Database
+
+JobInstance -> Database: Marked message as processed
+activate Database
+Database -> JobInstance : Message marked as processed
+deactivate Database
+
+end
+
+@enduml
