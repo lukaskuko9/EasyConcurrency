@@ -34,7 +34,7 @@ jobs:
         # Wait for availability then create initial catalog
         
         for $i in {1..30}
-          Write-Output "Attempt $i/30 to connect to SQL Server..."
+          echo "Attempt $i/30 to connect to SQL Server..."
           sqlcmd -b -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
           if ($?) {
             echo " - SQL Server is now ready"
