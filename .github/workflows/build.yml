@@ -15,10 +15,6 @@ jobs:
     - name: Check out Code 
       uses: actions/checkout@v4
 
-    - name: Install sqlcmd
-      run: |
-        apt-get update
-        apt-get install sqlcmd
     - name: Run SQL Server
       run: |
         # If the password generator needs to be changed, make sure the resulting password meets SQL Server password requirements
