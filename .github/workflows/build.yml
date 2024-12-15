@@ -28,8 +28,11 @@ jobs:
 
         echo "Setting environment variable $DB_CONNECTION_STRING to SQL connection string..."
         echo "Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=$sa_pw;Encrypt=false;TrustServerCertificate=true" >> $env:DB_CONNECTION_STRING
-        # Wait for availability then create initial catalog
 
+    - name: Wait for SQL Server availability
+      run: |
+        # Wait for availability then create initial catalog
+        
         for ($i = 1; $i -le 30; $i++) {
           Write-Output "Attempt $i/30 to connect to SQL Server..."
           sqlcmd -b -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
@@ -44,7 +47,6 @@ jobs:
 
         Write-Output "Creating initial catalog 'EFConcurrencyTests'"
         sqlcmd -Q "CREATE DATABASE [EFConcurrencyTests]"
-    
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
