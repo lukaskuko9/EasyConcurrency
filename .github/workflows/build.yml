@@ -44,9 +44,9 @@ jobs:
           }
         }
 
-        Write-Output "Creating initial catalog 'EFConcurrencyTests'"
+        #Write-Output "Creating initial catalog 'EFConcurrencyTests'"
         
-        docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P MyStrongPassword123@ -Q "CREATE DATABASE [EFConcurrencyTests]"
+        #docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P MyStrongPassword123@ -Q "CREATE DATABASE [EFConcurrencyTests]"
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
