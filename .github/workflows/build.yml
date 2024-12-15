@@ -17,17 +17,13 @@ jobs:
 
     - name: Run SQL Server
       run: |
-        # If the password generator needs to be changed, make sure the resulting password meets SQL Server password requirements
-        sa_pw=$(uuidgen) 
-        echo "::add-mask::$sa_pw"
-
         echo "Starting SQL Server in a Docker container..."
-        docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$sa_pw" -e "MSSQL_PID=Developer" -e "MSSQL_COLLATION=SQL_Latin1_General_CP1_CS_AS" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
+        docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=MyStrongPassword123@" -e "MSSQL_PID=Developer" -e "MSSQL_COLLATION=SQL_Latin1_General_CP1_CS_AS" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
         
         echo "Setting environment variables for sqlcmd..."
 
         echo "Setting environment variable $DB_CONNECTION_STRING to SQL connection string..."
-        echo "Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=$sa_pw;Encrypt=false;TrustServerCertificate=true" >> $env:DB_CONNECTION_STRING
+        echo "Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $env:DB_CONNECTION_STRING
 
     - name: Wait for SQL Server availability
       shell: pwsh 
@@ -36,7 +32,7 @@ jobs:
 
         for ($i = 1; $i -le 30; $i++) {
           Write-Output "Attempt $i/30 to connect to SQL Server..."
-          docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P $sa_pw -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
+          docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P MyStrongPassword123@ -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
           if ($?) {
             Write-Output "  - SQL Server is now ready"
             break
@@ -48,7 +44,7 @@ jobs:
 
         Write-Output "Creating initial catalog 'EFConcurrencyTests'"
         
-        docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P $sa_pw -Q "CREATE DATABASE [EFConcurrencyTests]"
+        docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P MyStrongPassword123@ -Q "CREATE DATABASE [EFConcurrencyTests]"
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
