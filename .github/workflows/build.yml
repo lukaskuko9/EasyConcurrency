@@ -37,15 +37,15 @@ jobs:
           Write-Output "Attempt $i/30 to connect to SQL Server..."
           sqlcmd -b -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
           if ($?) {
-            Write-Output "  - SQL Server is now ready"
+            echo " - SQL Server is now ready"
             break
           } else {
-            Write-Output "  - Not ready, sleeping for 5s"
-            Start-Sleep -seconds 5
+            echo " - Not ready, sleeping for 5s"
+            sleep 5
           }
         }
 
-        Write-Output "Creating initial catalog 'EFConcurrencyTests'"
+        echo "Creating initial catalog 'EFConcurrencyTests'"
         sqlcmd -Q "CREATE DATABASE [EFConcurrencyTests]"
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
