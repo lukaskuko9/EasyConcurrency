@@ -25,9 +25,6 @@ jobs:
         docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$sa_pw" -e "MSSQL_PID=Developer" -e "MSSQL_COLLATION=SQL_Latin1_General_CP1_CS_AS" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
         
         echo "Setting environment variables for sqlcmd..."
-        echo "SQLCMDPASSWORD=$sa_pw" >> $DB_CONNECTION_STRING_TMP
-        echo "SQLCMDUSER=sa" >> $DB_CONNECTION_STRING_TMP
-        echo "SQLCMDSERVER=localhost,1433" >> $DB_CONNECTION_STRING_TMP
 
         echo "Setting environment variable $DB_CONNECTION_STRING to SQL connection string..."
         echo "Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=$sa_pw;Encrypt=false;TrustServerCertificate=true" >> $env:DB_CONNECTION_STRING
