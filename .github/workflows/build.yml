@@ -30,7 +30,7 @@ jobs:
         echo "SQLCMDSERVER=localhost,1433" >> $DB_CONNECTION_STRING_TMP
 
         echo "Setting environment variable $DB_CONNECTION_STRING to SQL connection string..."
-        echo "$DB_CONNECTION_STRING_TMP=Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=$sa_pw;Encrypt=false;TrustServerCertificate=true" >> $env:DB_CONNECTION_STRING
+        echo "Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=$sa_pw;Encrypt=false;TrustServerCertificate=true" >> $env:DB_CONNECTION_STRING
         # Wait for availability then create initial catalog
 
         for ($i = 1; $i -le 30; $i++) {
