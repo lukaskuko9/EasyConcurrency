@@ -9,7 +9,7 @@ If you are new to concurrency handling, you can read more about [Optimistic conc
 ## EasyConcurrency.EntityFramework
 EasyConcurrency.EntityFramework provides base implementations for concurrency handling when using EntityFramework. 
 
-For installation options, visit the packkage on [Nuget.org](https://www.nuget.org/packages/EasyConcurrency.EntityFramework/).
+For installation options, visit the package on [Nuget.org](https://www.nuget.org/packages/EasyConcurrency.EntityFramework/).
 
 ### Usages
 TODO
