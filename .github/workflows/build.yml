@@ -30,24 +30,24 @@ jobs:
         echo "Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=$sa_pw;Encrypt=false;TrustServerCertificate=true" >> $env:DB_CONNECTION_STRING
 
     - name: Wait for SQL Server availability
+      shell: pwsh 
       run: |
         # Wait for availability then create initial catalog
-        
-        for i in $(seq 1 30);
-        do
-          echo "Attempt $i/30 to connect to SQL Server..."
+
+        for ($i = 1; $i -le 30; $i++) {
+          Write-Output "Attempt $i/30 to connect to SQL Server..."
           sqlcmd -b -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
           if ($?) {
-            echo " - SQL Server is now ready"
+            Write-Output "  - SQL Server is now ready"
             break
           } else {
-            echo " - Not ready, sleeping for 5s"
-            sleep 5
+            Write-Output "  - Not ready, sleeping for 5s"
+            Start-Sleep -seconds 5
           }
         }
-        done
+
+        Write-Output "Creating initial catalog 'EFConcurrencyTests'"
         
-        echo "Creating initial catalog 'EFConcurrencyTests'"
         sqlcmd -Q "CREATE DATABASE [EFConcurrencyTests]"
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
