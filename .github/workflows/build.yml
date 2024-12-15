@@ -22,7 +22,7 @@ jobs:
         
         echo "Setting environment variables for sqlcmd..."
 
-        echo "DB_CONNECTION_STRING=Server=localhost;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $GITHUB_ENV
+        echo "DB_CONNECTION_STRING=Server=localhost,1433;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $GITHUB_ENV
 
     - name: Test
       run: echo $DB_CONNECTION_STRING
@@ -34,7 +34,7 @@ jobs:
 
         for ($i = 1; $i -le 30; $i++) {
           Write-Output "Attempt $i/30 to connect to SQL Server..."
-          docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P MyStrongPassword123@ -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
+          docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost,1433 -U sa -P MyStrongPassword123@ -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
           if ($?) {
             Write-Output "  - SQL Server is now ready"
             break
@@ -44,9 +44,9 @@ jobs:
           }
         }
 
-        #Write-Output "Creating initial catalog 'EFConcurrencyTests'"
+        Write-Output "Creating initial catalog 'EFConcurrencyTests'"
         
-        #docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost -U sa -P MyStrongPassword123@ -Q "CREATE DATABASE [EFConcurrencyTests]"
+        docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost,1433 -U sa -P MyStrongPassword123@ -Q "CREATE DATABASE [EFConcurrencyTests]"
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
