@@ -1,4 +1,5 @@
 ﻿using EasyConcurrency.Abstractions;
+using EasyConcurrency.Abstractions.TimeLock;
 
 namespace UnitTests;
 

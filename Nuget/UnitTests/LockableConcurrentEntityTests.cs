@@ -1,21 +1,23 @@
 ﻿using EasyConcurrency.Abstractions;
+using EasyConcurrency.Abstractions.Entities.LockableEntity;
+using EasyConcurrency.Abstractions.TimeLock;
 using Stubs;
 
 namespace UnitTests;
 
-public class LockableEntityTests
+public class LockableConcurrentEntityTests
 {
     [Fact]
     public void MyDbEntityIsAssignableToLockableEntity()
     {
-        var entity = new MyDbEntity { MyUniqueKey = Guid.NewGuid() };
-        Assert.IsAssignableFrom<LockableEntity>(entity);
+        var entity = new MyDbConcurrentEntity { MyUniqueKey = Guid.NewGuid() };
+        Assert.IsAssignableFrom<LockableConcurrentEntity>(entity);
     }
 
     [Fact]
     public void IsLockedTests()
     {
-        var entity = new MyDbEntity
+        var entity = new MyDbConcurrentEntity
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(10)
@@ -29,7 +31,7 @@ public class LockableEntityTests
     [Fact]
     public void IsNotLockedTests()
     {
-        var entity = new MyDbEntity
+        var entity = new MyDbConcurrentEntity
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
@@ -43,7 +45,7 @@ public class LockableEntityTests
     [Fact]
     public void SetLockedLocksWhenNotLocked()
     {
-        var entity = new MyDbEntity
+        var entity = new MyDbConcurrentEntity
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
@@ -62,7 +64,7 @@ public class LockableEntityTests
     [Fact]
     public void SetLockedDoesNotLockWhenLocked()
     {
-        var entity = new MyDbEntity
+        var entity = new MyDbConcurrentEntity
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(5)
@@ -76,7 +78,7 @@ public class LockableEntityTests
     [Fact]
     public void UnlockSetsLockedUntilToNull()
     {
-        var entity = new MyDbEntity
+        var entity = new MyDbConcurrentEntity
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(5)

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegrationTests.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241206190221_Init")]
+    [Migration("20241215130410_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace IntegrationTests.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("IntegrationTests.Database.MyDbEntity", b =>
+            modelBuilder.Entity("Stubs.MyDbConcurrentEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,6 +34,7 @@ namespace IntegrationTests.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset?>("LockedUntil")
+                        .IsConcurrencyToken()
                         .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("MyUniqueKey")
@@ -53,6 +54,25 @@ namespace IntegrationTests.Migrations
                         .IsUnique();
 
                     b.ToTable("MyDbEntities", (string)null);
+                });
+
+            modelBuilder.Entity("Stubs.MyLockableEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset?>("LockedUntil")
+                        .IsConcurrencyToken()
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LockedUntil");
+
+                    b.ToTable("MyLockableEntities", (string)null);
                 });
 #pragma warning restore 612, 618
         }

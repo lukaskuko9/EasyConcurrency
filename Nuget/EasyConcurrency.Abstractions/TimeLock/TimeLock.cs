@@ -1,4 +1,4 @@
-﻿namespace EasyConcurrency.Abstractions;
+﻿namespace EasyConcurrency.Abstractions.TimeLock;
 
 /// <summary>
 /// Represents a time lock to be held on an entity that naturally expires.
