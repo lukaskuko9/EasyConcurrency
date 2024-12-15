@@ -1,66 +1,65 @@
 ﻿@startuml
+activate JobInstance
 
-    participant Request
-    participant API
+par First Instance
 
-    activate API
-
-    par#White Request 1
-Request -> API: API Request to postpone payment 1
-API -> Database: Check if postponed
-    activate Database
-Database -> API: Not postponed
-deactivate Database
-
-API -> Database : Lock row
-
-activate API #FFBBBB
+JobInstance -> Database: Get payment message
 activate Database
-
-Database -> API : Locked
+Database -> JobInstance : Fetched
 deactivate Database
 
-API -> ExternalService : Postpone in external service
-activate ExternalService
-ExternalService -> API : Postponed
+JobInstance -> Database : Can do refund
+activate Database
+Database -> JobInstance : Refund allowed
+deactivate Database
 
-deactivate ExternalService
+JobInstance -> Database: Lock payment message
+activate Database
+Database -> JobInstance : Locked
+deactivate Database
+
+activate JobInstance #FFBBBB
+
+JobInstance -> BankService: Payment - money transfer
+activate BankService
+BankService -> JobInstance : Money transferred
+deactivate BankService
 
 note left #FFBBBB
    Critical Section
 end note
 
-API -> Database : Postpone in database
+JobInstance -> Database: Process payment
 activate Database
-Database -> API : Postponed
-deactivate Database 
-
-API -> Database : Unlock row
-activate Database
-Database -> API : Unlocked
-
+Database -> JobInstance : Processed
 deactivate Database
 
-deactivate API
-
-API -> Request : Postpone Succesful
-
-
-
-else Request 2
-Request -> API: API Request to postpone payment 2
-API -> Database: Check if postponed
-    activate Database
-Database -> API: Not postponed
-deactivate Database
-API -> Database : Lock row
+JobInstance -> Database: Marked message as processed
 activate Database
-Database --> API : Already locked
+Database -> JobInstance : Message marked as processed
+deactivate Database
+
+deactivate JobInstance
+
+else Second Instance
+
+
+JobInstance -> Database: Get payment message
+activate Database
+Database -> JobInstance : Fetched
+deactivate Database
+
+JobInstance -> Database : Can do refund
+activate Database
+Database -> JobInstance : Refund allowed
+deactivate Database
+
+JobInstance -> Database: Lock payment message
+activate Database
+Database -> JobInstance : Already locked
+
 destroy Database
-deactivate Database
-API --> Request : Postpone error
-destroy API
+
 end
 
-deactivate API
 @enduml

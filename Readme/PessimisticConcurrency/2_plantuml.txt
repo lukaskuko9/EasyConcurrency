@@ -1,17 +1,28 @@
 ﻿@startuml
 activate JobInstance
 
-par First instance
+par First Instance
 
 JobInstance -> Database: Get payment message
 activate Database
 Database -> JobInstance : Fetched
 deactivate Database
 
+JobInstance -> Database : Can do refund
+activate Database
+Database -> JobInstance : Refund allowed
+deactivate Database
+
+activate JobInstance #FFBBBB
+
 JobInstance -> BankService: Payment - money transfer
 activate BankService
 BankService -> JobInstance : Money transfered
 deactivate BankService
+
+note left #FFBBBB
+   Critical Section
+end note
 
 JobInstance -> Database: Process payment
 activate Database
@@ -22,6 +33,8 @@ JobInstance -> Database: Marked message as processed
 activate Database
 Database -> JobInstance : Message marked as processed
 deactivate Database
+
+deactivate JobInstance
 
 else Second Instance
 
@@ -31,10 +44,21 @@ activate Database
 Database -> JobInstance : Fetched
 deactivate Database
 
+JobInstance -> Database : Can do refund
+activate Database
+Database -> JobInstance : Refund allowed
+deactivate Database
+
+activate JobInstance #FFBBBB
+
 JobInstance -> BankService: Payment - money transfer
 activate BankService
 BankService -> JobInstance : Money transfered
 deactivate BankService
+
+note left #FFBBBB
+   Critical Section
+end note
 
 JobInstance -> Database: Process payment
 activate Database
@@ -46,6 +70,7 @@ activate Database
 Database -> JobInstance : Message marked as processed
 deactivate Database
 
+deactivate JobInstance
 
 end
 
