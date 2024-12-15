@@ -17,8 +17,13 @@ The number of rows in the table rises as the number of payments we need to proce
 4. Only when it's processed in the bank service we write changes to our database (process it on our side, give user what he paid for)
 5. Message is marked as processsed
 
+We will ignore what will happen if POST request is succesfully sent to the bank service, but we fail to process it on our side due to e.g. database transient error.
+That should be a chapter on it's own.
+
+*Note: while this example may not be a perfect one, it serves as an example of how pessimistic concurrency control can be done.*
+
 ### Single instance Example
-With a single request we do not have any issues.
+With a single request we do not have any issues. Users pays for our service which is provided to him once the payment is completed.
 
 ![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/1.svg)
 
@@ -26,21 +31,22 @@ With a single request we do not have any issues.
 Since our imaginary services are very popular, we are getting many new payments each second that we need to process. 
 But it takes time and with only one instance the number of payment requests is rising faster than we are able to process it.
 
-We can't make any further significant optimalizations of the flow on our side, so we decide to process messages in parallel.
+We can't make any further significant optimalizations of the flow on our side, so we decide to process messages in parallel as our only viable option.
 
 #### Without any concurrency handling
 With multiple job instances in parallel, there is a chance (be it small or high) that at least two instances will run the same query at the same time,
 taking the same payment. 
 
-Multiple pass through the check if we can proceed with the payment because it was not processed yet, then all processing the same payment.
-We have sucessfuly processed the payment - but our customer has paid multiple times the same amount that he was supposed to pay.
+Multiple job instances then pass through the check if we can proceed with the payment (because it was not processed yet), then all processing the same payment.
+We have sucessfuly processed the payment and provided the service to our customer - but the customer has paid multiple times the same amount that he was supposed to pay.
 
-With multiple multiple instances things get messy and without any concurrency handling we process the payment multiple times in both the bank service and our database.
+With multiple instances things get messy and without any concurrency handling we process the payment multiple times in both the bank service and our database.
 
 ![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/2.svg)
 
 #### Solution with pessimistic concurrency control
-Using only the optimistic concurrency will not help us here because we need to make sure when calling the external service, only one instance will call it for a single payment. 
+Using only the optimistic concurrency will not help us here because we need to make sure when calling the external service, only one job instance will call the bank service for a single payment. 
+
 We can lock the message for a specific amount of time. This is done with the same way we detect optimistic concurrency, to make sure only one process is able to lock the message - through concurrency token. 
 
 Once locked, we are sure that only the instance that locked the message will be able to enter the critical section to process it.
