@@ -7,6 +7,7 @@ This time, let's imagine a scenario where we have a database table will with dat
 In our imaginary solution the users of our application pay us for some service. In our API requests they verify through their bank account provider. 
 Once verified, we add the payment request to database table. 
 The payment requests should then be processed as part of our job application.
+We only provide our services once user has paid for them.
 
 The number of rows in the table rises as the number of payments we need to process is increasing every now and then.
 
