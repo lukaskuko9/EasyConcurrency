@@ -59,9 +59,13 @@ jobs:
             
     - name: Build dotnet 
       run: dotnet build EntityFramework.Concurrency.sln --configuration release --no-restore
-      
-    - name: Run Tests
-      run: dotnet test --no-build -c Release -- xunit.parallelizeTestCollections=false
+
+      #split by target framework; otherwise will run target frameworks in parallel causing exceptions for integration tests
+    - name: Run Tests .Net 8.0
+      run: dotnet test --no-build --no-restore -c Release -f net8.0
+            
+    - name: Run Tests .Net 9.0
+      run: dotnet test --no-build --no-restore -c Release -f net9.0
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4.4.3
