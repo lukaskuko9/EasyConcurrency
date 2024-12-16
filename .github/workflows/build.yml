@@ -14,7 +14,14 @@ jobs:
     steps:
     - name: Check out Code 
       uses: actions/checkout@v4
-      
+    - name: Time badge
+      uses: RubbaBoy/BYOB@v1.3.0
+      with:
+        NAME: time
+        LABEL: 'Updated at'
+        STATUS: ${{ steps.date.outputs.data }}
+        COLOR: 00EEFF
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Run SQL Server
       run: |
         echo "Starting SQL Server"
