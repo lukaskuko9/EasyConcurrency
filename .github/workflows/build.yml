@@ -17,36 +17,32 @@ jobs:
       
     - name: Run SQL Server
       run: |
-        echo "Starting SQL Server in a Docker container..."
-        docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=MyStrongPassword123@" -e "MSSQL_PID=Developer" -e "MSSQL_COLLATION=SQL_Latin1_General_CP1_CS_AS" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
+        echo "Starting SQL Server"
+        docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=MyStrongPassword123@" -e "MSSQL_PID=Developer" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
         
-        echo "Setting environment variables for sqlcmd..."
-
+        echo "Setting connection string to database as environment variable"
         echo "DB_CONNECTION_STRING=Server=localhost,1433;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $GITHUB_ENV
-
-    - name: Test
-      run: echo $DB_CONNECTION_STRING
-
-    - name: Wait for SQL Server availability
-      shell: pwsh 
-      run: |
-        # Wait for availability then create initial catalog
-
-        for ($i = 1; $i -le 30; $i++) {
-          Write-Output "Attempt $i/30 to connect to SQL Server..."
-          docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost,1433 -U sa -P MyStrongPassword123@ -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
-          if ($?) {
-            Write-Output "  - SQL Server is now ready"
-            break
-          } else {
-            Write-Output "  - Not ready, sleeping for 5s"
-            Start-Sleep -seconds 5
-          }
-        }
-
-        Write-Output "Creating initial catalog 'EFConcurrencyTests'"
         
-        docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost,1433 -U sa -P MyStrongPassword123@ -Q "CREATE DATABASE [EFConcurrencyTests]"
+   # - name: Wait for SQL Server availability
+   #   shell: pwsh 
+   #   run: |
+  #      # Wait for availability then create initial catalog
+#
+   #     for ($i = 1; $i -le 30; $i++) {
+   #       Write-Output "Attempt $i/30 to connect to SQL Server..."
+  #        docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost,1433 -U sa -P MyStrongPassword123@ -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
+    #      if ($?) {
+   ##         Write-Output "  - SQL Server is now ready"
+    #        break
+   #       } else {
+     #       Write-Output "  - Not ready, sleeping for 5s"
+    #        Start-Sleep -seconds 5
+     #     }
+    #    }
+
+    #    Write-Output "Creating initial catalog 'EFConcurrencyTests'"
+        
+     #   docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost,1433 -U sa -P MyStrongPassword123@ -Q "CREATE DATABASE [EFConcurrencyTests]"
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
