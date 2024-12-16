@@ -22,27 +22,7 @@ jobs:
         
         echo "Setting connection string to database as environment variable"
         echo "DB_CONNECTION_STRING=Server=localhost,1433;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $GITHUB_ENV
-        
-   # - name: Wait for SQL Server availability
-   #   shell: pwsh 
-   #   run: |
-  #      # Wait for availability then create initial catalog
-#
-   #     for ($i = 1; $i -le 30; $i++) {
-   #       Write-Output "Attempt $i/30 to connect to SQL Server..."
-  #        docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost,1433 -U sa -P MyStrongPassword123@ -Q "SELECT @@SERVERNAME as ServerName" 2>&1>$null
-    #      if ($?) {
-   ##         Write-Output "  - SQL Server is now ready"
-    #        break
-   #       } else {
-     #       Write-Output "  - Not ready, sleeping for 5s"
-    #        Start-Sleep -seconds 5
-     #     }
-    #    }
 
-    #    Write-Output "Creating initial catalog 'EFConcurrencyTests'"
-        
-     #   docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd -b -C -S localhost,1433 -U sa -P MyStrongPassword123@ -Q "CREATE DATABASE [EFConcurrencyTests]"
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
