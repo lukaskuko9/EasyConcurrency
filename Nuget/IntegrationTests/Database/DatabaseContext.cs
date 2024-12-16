@@ -19,7 +19,6 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        Console.WriteLine("ConnectionString" + GetConnectionString());
         modelBuilder.Entity<MyDbConcurrentEntity>(entityBuilder =>
         {
             entityBuilder.ToTable("MyDbEntities");
