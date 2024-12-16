@@ -15,10 +15,11 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     }
     
     public static string GetConnectionString()
-    => Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? DatabaseContextFactory.DefaultConnectionString;
+        => Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? DatabaseContextFactory.DefaultConnectionString;
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        Console.WriteLine("ConnectionString" + GetConnectionString());
         modelBuilder.Entity<MyDbConcurrentEntity>(entityBuilder =>
         {
             entityBuilder.ToTable("MyDbEntities");
