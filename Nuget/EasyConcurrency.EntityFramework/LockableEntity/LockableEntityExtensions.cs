@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using EasyConcurrency.Abstractions;
+using EasyConcurrency.Abstractions.Entities.LockableEntity;
 
 namespace EasyConcurrency.EntityFramework.LockableEntity;
 

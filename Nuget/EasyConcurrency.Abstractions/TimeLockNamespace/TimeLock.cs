@@ -1,4 +1,4 @@
-﻿namespace EasyConcurrency.Abstractions;
+﻿namespace EasyConcurrency.Abstractions.TimeLockNamespace;
 
 /// <summary>
 /// Represents a time lock to be held on an entity that naturally expires.
@@ -7,16 +7,25 @@
 public record struct TimeLock(DateTimeOffset? Value) : IHasTimeLock, IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
 {
     public static implicit operator DateTimeOffset?(TimeLock? timeLock) => timeLock?.Value;
-    public static implicit operator DateTimeOffset(TimeLock timeLock) => timeLock.Value ?? default;
-    public static implicit operator TimeLock?(DateTimeOffset? lockedUntil) => lockedUntil == null ? null : Create(lockedUntil.Value);
-    public static implicit operator TimeLock(DateTimeOffset lockedUntil) => Create(lockedUntil);
+    public static implicit operator DateTimeOffset?(TimeLock timeLock) => timeLock.Value;
+    public static implicit operator TimeLock?(DateTimeOffset? lockedUntil) => lockedUntil == null ? null : new TimeLock(lockedUntil.Value);
+    public static implicit operator TimeLock(DateTimeOffset lockedUntil) => new(lockedUntil);
+    
     /// <summary>
     /// Creates a <see cref="TimeLock"/> instance. 
     /// </summary>
     /// <param name="lockedUntil">The date and time expiration of the lock</param>
-    /// <returns></returns>
-    public static TimeLock Create(DateTimeOffset lockedUntil) => new(lockedUntil);
+    /// <returns>New TimeLock instance specifying date and time until which the lock takes effect</returns>
+    public static TimeLock Create(DateTimeOffset? lockedUntil) => new(lockedUntil);
     
+    /// <summary>
+    /// Creates a <see cref="TimeLock"/> instance with <paramref name="now"/> as current time
+    /// </summary>
+    /// <param name="now">Current date and time</param>
+    /// <param name="lockTimeDuration">Duration of the lock</param>
+    /// <returns>New TimeLock instance specifying date and time until which the lock takes effect</returns>
+    public static TimeLock Create(DateTimeOffset now, TimeSpan lockTimeDuration) => new(now.Add(lockTimeDuration));
+
     public bool IsNotLocked()
     {
         return IsNotLocked(DateTimeOffset.UtcNow);

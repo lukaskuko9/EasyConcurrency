@@ -1,4 +1,4 @@
-﻿namespace EasyConcurrency.Abstractions;
+﻿namespace EasyConcurrency.Abstractions.TimeLockNamespace;
 
 /// <summary>
 /// Provides basic interface for determining, if an instance is locked or not.
@@ -22,7 +22,6 @@ public interface IHasTimeLock
     /// </returns>
     public bool IsNotLocked(DateTimeOffset now);
     
-        
     /// <summary>
     /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked for <paramref name="lockTimeDuration"/> duration.
     /// </summary>

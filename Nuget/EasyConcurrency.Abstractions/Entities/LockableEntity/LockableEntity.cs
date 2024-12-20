@@ -1,7 +1,11 @@
-﻿namespace EasyConcurrency.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using EasyConcurrency.Abstractions.TimeLockNamespace;
 
-public abstract class LockableEntity : ConcurrentEntity, ILockableEntity
+namespace EasyConcurrency.Abstractions.Entities.LockableEntity;
+
+public abstract class LockableEntity : ILockableEntity
 {
+    [ConcurrencyCheck]
     public TimeLock? LockedUntil { get; set; }
     
     public bool IsNotLocked()

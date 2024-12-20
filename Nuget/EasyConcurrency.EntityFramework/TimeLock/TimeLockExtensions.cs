@@ -18,7 +18,7 @@ public static class TimeLockExtensions
     ///}
     /// </code>
     /// <returns>The same builder instance so that multiple configuration calls can be chained.</returns>
-    public static PropertyBuilder<Abstractions.TimeLock?> AddTimeLockConversion(this PropertyBuilder<Abstractions.TimeLock?> propBuilder)
+    public static PropertyBuilder<Abstractions.TimeLockNamespace.TimeLock?> AddTimeLockConversion(this PropertyBuilder<Abstractions.TimeLockNamespace.TimeLock?> propBuilder)
     {
         return propBuilder
             .HasConversion<TimeLockConverter>()

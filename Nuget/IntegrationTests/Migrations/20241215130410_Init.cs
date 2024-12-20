@@ -18,12 +18,25 @@ namespace IntegrationTests.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MyUniqueKey = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
-                    LockedUntil = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    LockedUntil = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MyDbEntities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MyLockableEntities",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LockedUntil = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MyLockableEntities", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
@@ -36,6 +49,11 @@ namespace IntegrationTests.Migrations
                 table: "MyDbEntities",
                 column: "MyUniqueKey",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MyLockableEntities_LockedUntil",
+                table: "MyLockableEntities",
+                column: "LockedUntil");
         }
 
         /// <inheritdoc />
@@ -43,6 +61,9 @@ namespace IntegrationTests.Migrations
         {
             migrationBuilder.DropTable(
                 name: "MyDbEntities");
+
+            migrationBuilder.DropTable(
+                name: "MyLockableEntities");
         }
     }
 }

@@ -14,13 +14,13 @@ jobs:
     steps:
     - name: Check out Code 
       uses: actions/checkout@v4
-
-    - name: Install SQL Server
-      uses: Particular/install-sql-server-action@v1.0.0
-      with:
-        connection-string-env-var: DB_CONNECTION_STRING
-        catalog: EFConcurrencyTests
-        extra-params: "TrustServerCertificate=true"
+    - name: Run SQL Server
+      run: |
+        echo "Starting SQL Server"
+        docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=MyStrongPassword123@" -e "MSSQL_PID=Developer" -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server:2022-latest
+        
+        echo "Setting connection string to database as environment variable"
+        echo "DB_CONNECTION_STRING=Server=localhost,1433;Database=EFConcurrencyTests;User Id=sa;Password=MyStrongPassword123@;Encrypt=false;TrustServerCertificate=true" >> $GITHUB_ENV
 
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
@@ -34,10 +34,14 @@ jobs:
             
     - name: Build dotnet 
       run: dotnet build EntityFramework.Concurrency.sln --configuration release --no-restore
-      
-    - name: Run Tests
-      run: dotnet test
-      
+
+      #split by target framework; otherwise will run target frameworks in parallel causing exceptions for integration tests
+    - name: Run Tests .Net 8.0
+      run: dotnet test --no-build --no-restore -c Release -f net8.0
+            
+    - name: Run Tests .Net 9.0
+      run: dotnet test --no-build --no-restore -c Release -f net9.0
+        
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4.4.3
       with:
