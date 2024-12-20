@@ -42,7 +42,17 @@ public interface IHasTimeLock
     /// <returns>True, if this entity was successfully locked,
     /// false if entity cannot be locked now, as there is already lock present on this entity.</returns>
     public bool SetLock(int minutes);
-    
+
+    /// <summary>
+    /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked until <paramref name="timeLock"/> does not expire or is not unlocked
+    /// </summary>
+    /// <param name="timeLock"><paramref name="timeLock"/> value to set</param>
+    /// <remarks>This does not persist changes in data source where the entity should be locked.
+    /// Request to save changes needs to be sent to the data source for this lock to take effect.</remarks>
+    /// <returns>True, if this entity was successfully locked,
+    /// false if entity cannot be locked now, as there is already lock present on this entity.</returns>
+    /// 
+    public bool SetLock(TimeLock timeLock);
     /// <summary>
     /// Unlocks the <see cref="TimeLock"/> on the entity by setting it to null value.
     /// Useful for when the entity was claimed by current process which has finished operating on it.

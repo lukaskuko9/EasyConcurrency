@@ -3,21 +3,28 @@ using EasyConcurrency.Abstractions.TimeLockNamespace;
 
 namespace EasyConcurrency.Abstractions.Entities.LockableEntity;
 
+/// <summary>
+/// Provides base methods for handling pessimistic concurrency scenarios of implementing class instance. 
+/// </summary>
 public abstract class LockableEntity : ILockableEntity
 {
+    /// <inheritdoc />
     [ConcurrencyCheck]
     public TimeLock? LockedUntil { get; set; }
     
+    /// <inheritdoc />
     public bool IsNotLocked()
     {
         return LockedUntil.IsNotLocked();
     }
-    
+        
+    /// <inheritdoc />
     public bool IsNotLocked(DateTimeOffset now)
     {
         return LockedUntil.IsNotLocked(now);
     }
-    
+        
+    /// <inheritdoc />
     public bool SetLock(TimeLock timeLock)
     {
         if (LockedUntil != null) 
@@ -27,7 +34,7 @@ public abstract class LockableEntity : ILockableEntity
         return true;
     }
     
-    
+    /// <inheritdoc />
     public bool SetLock(TimeSpan lockTimeDuration)
     {
         if (LockedUntil != null) 
@@ -36,7 +43,8 @@ public abstract class LockableEntity : ILockableEntity
         LockedUntil = TimeLock.Create(DateTimeOffset.UtcNow.Add(lockTimeDuration));
         return true;
     }
-    
+        
+    /// <inheritdoc />
     public bool SetLock(int minutes)
     {
         if (LockedUntil != null)
@@ -44,9 +52,9 @@ public abstract class LockableEntity : ILockableEntity
         
         LockedUntil = TimeLock.Create(DateTimeOffset.UtcNow.AddMinutes(minutes));
         return true;
-
     }
-
+    
+    /// <inheritdoc />
     public void Unlock()
     { 
         LockedUntil = null;
