@@ -4,9 +4,9 @@
         <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.2.0</Version>
-        <FileVersion>0.2.0</FileVersion>
-        <AssemblyVersion>0.2.0</AssemblyVersion>
+        <Version>0.2.1</Version>
+        <FileVersion>0.2.1</FileVersion>
+        <AssemblyVersion>0.2.1</AssemblyVersion>
         <Authors>Lukáš Machajdík</Authors>
         <RootNamespace>EasyConcurrency.Abstractions</RootNamespace>
         <PackageId>EasyConcurrency.Abstractions</PackageId>
@@ -14,6 +14,7 @@
         <PackageProjectUrl>https://github.com/lukaskuko9/EasyConcurrency</PackageProjectUrl>
         <RepositoryUrl>https://github.com/lukaskuko9/EasyConcurrency</RepositoryUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright © Lukáš Machajdík (aka. lukaskuko9) 2024</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>

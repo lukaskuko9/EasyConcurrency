@@ -2,7 +2,7 @@
 
 namespace EasyConcurrency.Abstractions.Entities.LockableEntity;
 
-public static class LockableEntityMethods
+internal static class LockableEntityMethods
 {
     internal static Expression<Func<T, bool>> IsNotLockedAsExpression<T>(DateTimeOffset now) where T : ILockableEntity
     {

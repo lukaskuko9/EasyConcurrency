@@ -2,6 +2,9 @@
 
 namespace EasyConcurrency.EntityFramework.TimeLock;
 
+/// <summary>
+/// Extension methods for <see cref="EasyConcurrency.Abstractions.TimeLockNamespace.TimeLock"/> types
+/// </summary>
 public static class TimeLockExtensions
 {
     /// <summary>

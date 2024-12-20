@@ -3,11 +3,12 @@
         <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.2.0</Version>
-        <FileVersion>0.2.0</FileVersion>
-        <AssemblyVersion>0.2.0</AssemblyVersion>
+        <Version>0.2.1</Version>
+        <FileVersion>0.2.1</FileVersion>
+        <AssemblyVersion>0.2.1</AssemblyVersion>
         <Authors>Lukáš Machajdík</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RootNamespace>EasyConcurrency.EntityFramework</RootNamespace>
         <PackageId>EasyConcurrency.EntityFramework</PackageId>
         <Title>EasyConcurrency.EntityFramework</Title>

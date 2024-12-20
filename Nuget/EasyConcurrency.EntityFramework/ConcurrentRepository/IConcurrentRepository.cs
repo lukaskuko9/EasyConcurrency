@@ -1,9 +1,16 @@
-﻿using EasyConcurrency.Abstractions.Entities.LockableEntity;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using EasyConcurrency.Abstractions.Entities.LockableEntity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EasyConcurrency.EntityFramework.ConcurrentRepository;
 
+/// <summary>
+/// Provides an interface for concurrent repositories able to work with <see cref="ILockableEntity"/> types
+/// </summary>
 public interface IConcurrentRepository
 {
     /// <summary>

@@ -1,15 +1,20 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using EasyConcurrency.Abstractions;
 using EasyConcurrency.Abstractions.Entities.LockableEntity;
 
 namespace EasyConcurrency.EntityFramework.LockableEntity;
 
+/// <summary>
+/// A set of extensions for <see cref="ILockableEntity"/> implementation types
+/// </summary>
 public static class LockableEntityExtensions
 {
     /// <summary>
     /// Filters out the entities that are not locked.
     /// </summary>
-    /// <param name="queryable">An <see cref="IQueryable{T}"/> to filter</param>
+    /// <param name="queryable">An <see cref="IQueryable"/> to filter</param>
     /// <param name="now">Date and time to use to determine if an entity is not locked</param>
     /// <typeparam name="TLockableEntity">Entity implementing <see cref="ILockableEntity"/></typeparam>
     /// <code>

@@ -11,5 +11,5 @@ public interface IConcurrentEntity
     /// Version stamp of current entity.
     /// </summary>
     [Timestamp] 
-    public byte[] Version { get; }
+    public byte[] Version { get; init; }
 }
