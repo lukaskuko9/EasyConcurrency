@@ -33,7 +33,7 @@ jobs:
       run: dotnet restore
             
     - name: Build dotnet 
-      run: dotnet build EntityFramework.Concurrency.sln --configuration release --no-restore
+      run: dotnet build EntityFramework.Concurrency.sln --configuration release --no-restore /p:ContinuousIntegrationBuild=true
 
       #split by target framework; otherwise will run target frameworks in parallel causing exceptions for integration tests
     - name: Run Tests .Net 8.0
