@@ -1,5 +1,5 @@
 ﻿using EasyConcurrency.Abstractions;
-using EasyConcurrency.Abstractions.TimeLock;
+using EasyConcurrency.Abstractions.TimeLockNamespace;
 
 namespace UnitTests;
 

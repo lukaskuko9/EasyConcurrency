@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EasyConcurrency.Abstractions.TimeLock;
+using EasyConcurrency.Abstractions.TimeLockNamespace;
 
 namespace EasyConcurrency.Abstractions.Entities.LockableEntity;
 
 public abstract class LockableEntity : ILockableEntity
 {
     [ConcurrencyCheck]
-    public TimeLock.TimeLock? LockedUntil { get; set; }
+    public TimeLock? LockedUntil { get; set; }
     
     public bool IsNotLocked()
     {
@@ -18,12 +18,12 @@ public abstract class LockableEntity : ILockableEntity
         return LockedUntil.IsNotLocked(now);
     }
     
-    public bool SetLock(TimeLock.TimeLock timeLock)
+    public bool SetLock(TimeLock timeLock)
     {
         if (LockedUntil != null) 
             return LockedUntil.Value.SetLock(timeLock);
         
-        LockedUntil = TimeLock.TimeLock.Create(timeLock);
+        LockedUntil = TimeLock.Create(timeLock);
         return true;
     }
     
@@ -33,7 +33,7 @@ public abstract class LockableEntity : ILockableEntity
         if (LockedUntil != null) 
             return LockedUntil.Value.SetLock(lockTimeDuration);
         
-        LockedUntil = TimeLock.TimeLock.Create(DateTimeOffset.UtcNow.Add(lockTimeDuration));
+        LockedUntil = TimeLock.Create(DateTimeOffset.UtcNow.Add(lockTimeDuration));
         return true;
     }
     
@@ -42,7 +42,7 @@ public abstract class LockableEntity : ILockableEntity
         if (LockedUntil != null)
             return LockedUntil.Value.SetLock(minutes);
         
-        LockedUntil = TimeLock.TimeLock.Create(DateTimeOffset.UtcNow.AddMinutes(minutes));
+        LockedUntil = TimeLock.Create(DateTimeOffset.UtcNow.AddMinutes(minutes));
         return true;
 
     }

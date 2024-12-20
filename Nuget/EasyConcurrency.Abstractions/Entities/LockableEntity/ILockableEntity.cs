@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EasyConcurrency.Abstractions.TimeLock;
+using EasyConcurrency.Abstractions.TimeLockNamespace;
 
 namespace EasyConcurrency.Abstractions.Entities.LockableEntity;
 
@@ -14,5 +14,5 @@ public interface ILockableEntity : IHasTimeLock
     /// it is  locked, otherwise it is not locked.
     /// </summary>
     [ConcurrencyCheck]
-    public TimeLock.TimeLock? LockedUntil { get; set; }
+    public TimeLock? LockedUntil { get; set; }
 }

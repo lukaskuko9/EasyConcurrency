@@ -1,4 +1,4 @@
-using EasyConcurrency.Abstractions.TimeLock;
+using EasyConcurrency.Abstractions.TimeLockNamespace;
 using EasyConcurrency.EntityFramework.LockableEntity;
 using Microsoft.EntityFrameworkCore;
 using Stubs;

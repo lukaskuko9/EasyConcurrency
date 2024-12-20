@@ -1,6 +1,6 @@
 ﻿using EasyConcurrency.Abstractions;
 using EasyConcurrency.Abstractions.Entities.LockableEntity;
-using EasyConcurrency.Abstractions.TimeLock;
+using EasyConcurrency.Abstractions.TimeLockNamespace;
 using Stubs;
 
 namespace UnitTests;

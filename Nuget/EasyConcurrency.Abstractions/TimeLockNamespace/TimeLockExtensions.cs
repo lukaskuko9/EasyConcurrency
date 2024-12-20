@@ -1,4 +1,4 @@
-﻿namespace EasyConcurrency.Abstractions.TimeLock;
+﻿namespace EasyConcurrency.Abstractions.TimeLockNamespace;
 
 public static class TimeLockExtensions
 {
