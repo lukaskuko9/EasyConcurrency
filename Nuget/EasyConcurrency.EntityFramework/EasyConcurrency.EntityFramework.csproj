@@ -3,9 +3,9 @@
         <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.2.1</Version>
-        <FileVersion>0.2.1</FileVersion>
-        <AssemblyVersion>0.2.1</AssemblyVersion>
+        <Version>0.2.2</Version>
+        <FileVersion>0.2.2</FileVersion>
+        <AssemblyVersion>0.2.2</AssemblyVersion>
         <Authors>Lukáš Machajdík</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -15,10 +15,15 @@
         <PackageProjectUrl>https://github.com/lukaskuko9/EasyConcurrency</PackageProjectUrl>
         <RepositoryUrl>https://github.com/lukaskuko9/EasyConcurrency</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedAllSources>true</EmbedAllSources>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>embedded</DebugType>
         <Copyright>Copyright © Lukáš Machajdík (aka. lukaskuko9) 2024</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>EntityFramework;EntityFrameworkCore;EntityFrameworkConcurrency;Concurrency;Database;EasyConcurrency;</PackageTags>
+        <PackageTags>EntityFramework;Concurrency;EntityFrameworkCore;EntityFrameworkConcurrency;Database;EasyConcurrency;</PackageTags>
         <Description>
             EasyConcurrency.EntityFramework is designed to simplify the implementation of concurrency control in Entity Framework. 
             Entity Framework doesn't provide built-in support for pessimistic concurrency, 
@@ -37,6 +42,10 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.6" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+      <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
 </Project>

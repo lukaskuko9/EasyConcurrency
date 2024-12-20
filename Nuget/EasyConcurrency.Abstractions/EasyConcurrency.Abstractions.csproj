@@ -4,9 +4,9 @@
         <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.2.1</Version>
-        <FileVersion>0.2.1</FileVersion>
-        <AssemblyVersion>0.2.1</AssemblyVersion>
+        <Version>0.2.2</Version>
+        <FileVersion>0.2.2</FileVersion>
+        <AssemblyVersion>0.2.2</AssemblyVersion>
         <Authors>Lukáš Machajdík</Authors>
         <RootNamespace>EasyConcurrency.Abstractions</RootNamespace>
         <PackageId>EasyConcurrency.Abstractions</PackageId>
@@ -16,6 +16,10 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <IncludeSymbols>true</IncludeSymbols>
+        <EmbedAllSources>true</EmbedAllSources>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>embedded</DebugType>
         <Copyright>Copyright © Lukáš Machajdík (aka. lukaskuko9) 2024</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
@@ -25,5 +29,12 @@
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 </Project>
