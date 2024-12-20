@@ -13,7 +13,10 @@ public class TimeLockTests
     {
         var now = DateTimeOffset.UtcNow;
         var timeLock = TimeLock.Create(now.AddMinutes(lockedForMinutes));
+        var timeLock2 = TimeLock.Create(now, TimeSpan.FromMinutes(lockedForMinutes));
         Assert.False(timeLock.IsNotLocked(now));
+        Assert.False(timeLock2.IsNotLocked(now));
+        Assert.Equal(timeLock.Value, timeLock2.Value);
     }
     
     [Theory]
@@ -24,7 +27,10 @@ public class TimeLockTests
     {
         var now = DateTimeOffset.UtcNow;
         var timeLock = TimeLock.Create(now.AddMinutes(lockedForMinutes));
+        var timeLock2 = TimeLock.Create(now, TimeSpan.FromMinutes(lockedForMinutes));
         Assert.True(timeLock.IsNotLocked(now));
+        Assert.True(timeLock2.IsNotLocked(now));
+        Assert.Equal(timeLock.Value, timeLock2.Value);
     }
     
     [Fact]

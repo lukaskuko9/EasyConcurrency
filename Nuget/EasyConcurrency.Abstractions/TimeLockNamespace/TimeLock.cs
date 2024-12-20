@@ -15,9 +15,17 @@ public record struct TimeLock(DateTimeOffset? Value) : IHasTimeLock, IComparable
     /// Creates a <see cref="TimeLock"/> instance. 
     /// </summary>
     /// <param name="lockedUntil">The date and time expiration of the lock</param>
-    /// <returns></returns>
+    /// <returns>New TimeLock instance specifying date and time until which the lock takes effect</returns>
     public static TimeLock Create(DateTimeOffset? lockedUntil) => new(lockedUntil);
     
+    /// <summary>
+    /// Creates a <see cref="TimeLock"/> instance with <paramref name="now"/> as current time
+    /// </summary>
+    /// <param name="now">Current date and time</param>
+    /// <param name="lockTimeDuration">Duration of the lock</param>
+    /// <returns>New TimeLock instance specifying date and time until which the lock takes effect</returns>
+    public static TimeLock Create(DateTimeOffset now, TimeSpan lockTimeDuration) => new(now.Add(lockTimeDuration));
+
     public bool IsNotLocked()
     {
         return IsNotLocked(DateTimeOffset.UtcNow);
