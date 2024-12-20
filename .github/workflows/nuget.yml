@@ -25,7 +25,7 @@ jobs:
             ${{ secrets.GITHUB_TOKEN }}
 
       - name: Nuget pack 
-        run: dotnet pack EasyConcurrency.Abstractions/EasyConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false 
+        run: dotnet pack EasyConcurrency.Abstractions/EasyConcurrency.Abstractions.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false -p:ContinuousIntegrationBuild=true
 
       - name: Nuget push
         run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json --skip-duplicate
@@ -58,7 +58,7 @@ jobs:
             ${{ secrets.GITHUB_TOKEN }}
             
       - name: Nuget pack 
-        run: dotnet pack EasyConcurrency.EntityFramework/EasyConcurrency.EntityFramework.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false
+        run: dotnet pack EasyConcurrency.EntityFramework/EasyConcurrency.EntityFramework.csproj --configuration release --verbosity minimal -o . -p:GeneratePackageOnBuild=false -p:ContinuousIntegrationBuild=true
   
       - name: Nuget push
         run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_API_SECRET }} -s https://api.nuget.org/v3/index.json --skip-duplicate
