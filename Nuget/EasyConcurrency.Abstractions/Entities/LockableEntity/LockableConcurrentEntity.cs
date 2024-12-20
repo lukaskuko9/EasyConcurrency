@@ -9,5 +9,5 @@ public abstract class LockableConcurrentEntity : LockableEntity, ConcurrentEntit
 {
     /// <inheritdoc />
     [Timestamp] 
-    public byte[] Version { get; init; } = [];
+    public byte[] Version { get; } = [];
 }
