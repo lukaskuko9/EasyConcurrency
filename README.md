@@ -95,16 +95,21 @@ or maybe a composite index on `LockedUntil` property.
 Example from [Samples](https://github.com/lukaskuko9/EasyConcurrency/tree/master/Samples) solution:
 
 ```csharp
-protected override void OnModelCreating(ModelBuilder modelBuilder)
+public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
-    modelBuilder.Entity<SampleEntity>(entityBuilder =>
+    public DbSet<SampleEntity> SampleEntities { get; set; }
+   
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        entityBuilder.HasKey(sampleEntity => sampleEntity.Id);
-        entityBuilder.Property(sampleEntity => sampleEntity.LockedUntil).AddTimeLockConversion();
-        
-        entityBuilder.HasIndex(sampleEntity => new {sampleEntity.LockedUntil, sampleEntity.IsProcessed});
-        entityBuilder.HasIndex(sampleEntity => sampleEntity.MyUuid).IsUnique();
-    });
+        modelBuilder.Entity<SampleEntity>(entityBuilder =>
+        {
+            entityBuilder.HasKey(sampleEntity => sampleEntity.Id);
+            entityBuilder.Property(sampleEntity => sampleEntity.LockedUntil).AddTimeLockConversion();
+            
+            entityBuilder.HasIndex(sampleEntity => new {sampleEntity.LockedUntil, sampleEntity.IsProcessed});
+            entityBuilder.HasIndex(sampleEntity => sampleEntity.MyUuid).IsUnique();
+        });
+    }
 }
 ```
 
