@@ -54,8 +54,8 @@ EasyConcurrency.EntityFramework provides base implementations for concurrency ha
 ### Setup
 
 #### Database entity
-Start with your database entity you want to save to database. 
-This entity should inherit from `LockableEntity` or `LockableConcurrentEntity` class.
+The entity you want to save to database should inherit from `LockableEntity` or `LockableConcurrentEntity` class.
+This provides it with the `LockedUntil` property.
 
 Example from [Samples](https://github.com/lukaskuko9/EasyConcurrency/tree/master/Samples) solution:
 ````csharp
@@ -68,10 +68,29 @@ public class SampleEntity : LockableConcurrentEntity
 ````
 
 #### Database context configuration
-* wrapper conversion
-* index on LockedUntil
+Because we use `TimeLock` which is a custom value type,
+we need to tell entity framework how to convert it to primity type `DateTimeOffset`.
+This can easily be done with extension method `.AddTimeLockConversion();` 
+for the `LockedUntil` property on our database entity.
 
+Depending on your database queries you might want to have an index, 
+or maybe a composite index on `LockedUntil` property.
 
+Example from [Samples](https://github.com/lukaskuko9/EasyConcurrency/tree/master/Samples) solution:
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<SampleEntity>(entityBuilder =>
+    {
+        entityBuilder.HasKey(sampleEntity => sampleEntity.Id);
+        entityBuilder.Property(sampleEntity => sampleEntity.LockedUntil).AddTimeLockConversion();
+        
+        entityBuilder.HasIndex(sampleEntity => new {sampleEntity.LockedUntil, sampleEntity.IsProcessed});
+        entityBuilder.HasIndex(sampleEntity => sampleEntity.MyUuid).IsUnique();
+    });
+}
+```
 
 #### Locking entity
 
