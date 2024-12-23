@@ -91,9 +91,67 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
     });
 }
 ```
+#### Fetching entities with no lock
+To fetch only entities that are currently not locked during database query,
+you can use `.WhereIsNotLocked()` extension method. 
 
+This will add the `.Where` condition to the query to get you only entities 
+that you can safely write changes to.
+
+```csharp
+//get entity only if not locked; if entity is locked this will return null;
+var entity = await dbContext.SampleEntities
+    .WhereIsNotLocked()
+    .SingleOrDefaultAsync(sampleEntity => sampleEntity.MyUuid == ConcurrentEntityUuid);
+
+if (entity is null)
+{
+    //entity is null, we cannot process it
+    return;
+}
+```
 #### Locking entity
+Locking the entity is no more work than calling `SetLock` method to set the lock for the entity, 
+and calling `SaveChanges` or `SaveChangesAsync` method afterward to save the changes to database. 
+
+While saving the changes, a [DbUpdateConcurrencyException](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.dbupdateconcurrencyexception)
+can be raised if the lock was changed on the entity by other process 
+after it was fetched from database.
+
+You might catch this exception and [resolve concurrency conflicts](https://learn.microsoft.com/en-us/ef/core/saving/concurrency?tabs=data-annotations#resolving-concurrency-conflicts).
+
+```csharp
+//lock entity for 5 minutes
+entity.SetLock(TimeSpan.FromMinutes(5));
+
+try
+{
+    //save lock to database
+    await dbContext.SaveChangesAsync();
+    Console.WriteLine($"Task {i} successfully locked entity");
+}
+catch (DbUpdateConcurrencyException)
+{
+    //failed to lock entity, entity was locked by other task after we got the entity from database
+    Console.WriteLine($"Task {i} failed to lock entity. Exception was handled");
+    continue;
+}
+```
+
+If everything is done correctly, then the process that locked the entity is the 
+only one able to manipulate with it.
+
+*Note: even if lock is set in database, it will not work unless you respect the lock with 
+`IsNotLocked` methods before making any write changes to it.*
 
 #### Unlocking entity
+Unlocking the entity is not any harder than locking it. Simply call method `Unlock` on the entity.
 
+```csharp
+//unlock entity and save to database
+entity.Unlock();
+await dbContext.SaveChangesAsync();
+```
 
+This will set the `LockedUntil` property to value `null`, resetting the lock.
+Other processes can lock it again for themselves to do some other changes.

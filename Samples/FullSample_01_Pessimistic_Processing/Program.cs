@@ -40,10 +40,9 @@ public static class Program
 
         while (true)
         {
-            //
             var dbContext = DbContextFactory.CreateDatabaseContext(args);
 
-            //get entity only if not locked
+            //get entity only if not locked; if entity is locked this will return null;
             var entity = await dbContext.SampleEntities
                 .WhereIsNotLocked()
                 .SingleOrDefaultAsync(sampleEntity => sampleEntity.MyUuid == ConcurrentEntityUuid,
@@ -51,6 +50,7 @@ public static class Program
 
             if (entity is null)
             {
+                //entity is null, we cannot process it
                 const int waitTime = 200;
                 await Task.Delay(waitTime, cts.Token);
                 Console.WriteLine(
@@ -61,7 +61,7 @@ public static class Program
             try
             {
                 //lock entity
-                entity.SetLock(5);
+                entity.SetLock(TimeSpan.FromMinutes(5));
 
                 //save lock to database
                 await dbContext.SaveChangesAsync(cts.Token);
