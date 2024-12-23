@@ -30,8 +30,8 @@ namespace Infrastructure.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("LockCount")
-                        .HasColumnType("bigint");
+                    b.Property<bool>("IsProcessed")
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockedUntil")
                         .IsConcurrencyToken()
@@ -50,6 +50,8 @@ namespace Infrastructure.Database.Migrations
 
                     b.HasIndex("MyUuid")
                         .IsUnique();
+
+                    b.HasIndex("IsProcessed", "LockedUntil");
 
                     b.ToTable("SampleEntities");
                 });

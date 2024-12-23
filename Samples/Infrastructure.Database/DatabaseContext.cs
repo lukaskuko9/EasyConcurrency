@@ -19,7 +19,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             entityBuilder.HasKey(sampleEntity => sampleEntity.Id);
             entityBuilder.Property(sampleEntity => sampleEntity.LockedUntil).AddTimeLockConversion();
             
-            entityBuilder.HasIndex(sampleEntity => new {sampleEntity.LockedUntil, sampleEntity.IsProcessed});
+            entityBuilder.HasIndex(sampleEntity => new {sampleEntity.IsProcessed, sampleEntity.LockedUntil});
             entityBuilder.HasIndex(sampleEntity => sampleEntity.MyUuid).IsUnique();
         });
     }

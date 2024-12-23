@@ -38,7 +38,7 @@ public static class Program
             eventArgs.Cancel = true;
         };
 
-        while (true)
+        while (cts.Token.IsCancellationRequested == false)
         {
             var dbContext = DbContextFactory.CreateDatabaseContext(args);
 

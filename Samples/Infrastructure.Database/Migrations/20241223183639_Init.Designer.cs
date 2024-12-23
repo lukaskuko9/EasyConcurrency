@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241220174513_Init")]
+    [Migration("20241223183639_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -33,8 +33,8 @@ namespace Infrastructure.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("LockCount")
-                        .HasColumnType("bigint");
+                    b.Property<bool>("IsProcessed")
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockedUntil")
                         .IsConcurrencyToken()
@@ -53,6 +53,8 @@ namespace Infrastructure.Database.Migrations
 
                     b.HasIndex("MyUuid")
                         .IsUnique();
+
+                    b.HasIndex("IsProcessed", "LockedUntil");
 
                     b.ToTable("SampleEntities");
                 });

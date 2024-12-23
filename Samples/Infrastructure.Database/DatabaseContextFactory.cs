@@ -12,6 +12,8 @@ public class DatabaseContextFactory : IDesignTimeDbContextFactory<DatabaseContex
         var connectionString = args.Length != 0 ? args[0] : DefaultConnectionString;
         var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
         optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.EnableSensitiveDataLogging();
+        optionsBuilder.LogTo(Console.WriteLine);
 
         return new DatabaseContext(optionsBuilder.Options);
     }

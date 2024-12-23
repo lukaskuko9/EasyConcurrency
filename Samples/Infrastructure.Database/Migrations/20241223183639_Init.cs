@@ -18,7 +18,7 @@ namespace Infrastructure.Database.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MyUuid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LockCount = table.Column<long>(type: "bigint", nullable: false),
+                    IsProcessed = table.Column<bool>(type: "bit", nullable: false),
                     LockedUntil = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false)
                 },
@@ -26,6 +26,11 @@ namespace Infrastructure.Database.Migrations
                 {
                     table.PrimaryKey("PK_SampleEntities", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SampleEntities_IsProcessed_LockedUntil",
+                table: "SampleEntities",
+                columns: new[] { "IsProcessed", "LockedUntil" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_SampleEntities_MyUuid",
