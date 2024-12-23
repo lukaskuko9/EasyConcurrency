@@ -6,5 +6,5 @@ public class SampleEntity : LockableConcurrentEntity
 {
     public long Id { get; set; }
     public Guid MyUuid { get; set; }
-    public long LockCount { get; set; }
+    public bool IsProcessed { get; set; }
 }

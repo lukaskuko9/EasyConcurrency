@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample_01_Setup", "Sample_01_Setup\Sample_01_Setup.csproj", "{72F4E18D-7E70-4018-A859-6C00D1DD0109}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FullSample_01_Pessimistic_Processing", "FullSample_01_Pessimistic_Processing\FullSample_01_Pessimistic_Processing.csproj", "{72F4E18D-7E70-4018-A859-6C00D1DD0109}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Database", "Infrastructure.Database\Infrastructure.Database.csproj", "{C81D02BE-C9F1-416A-8A7D-BF32EA1C2043}"
 EndProject
