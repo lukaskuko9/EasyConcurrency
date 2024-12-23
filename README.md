@@ -1,3 +1,19 @@
+# Table of Contents
+1. [EasyConcurrency](#easyconcurrency)
+2. [EasyConcurrency.Abstractions](#easyconcurrencyabstractions)
+   * [TimeLock](#timelock)
+   * [ILockableEntity](#ilockableentity)
+   * [LockableEntity](#lockableentity)
+   * [LockableConcurrentEntity](#lockableconcurrententity)
+3. [EasyConcurrency.EntityFramework](#easyconcurrencyentityframework)
+   * [Setup](#setup)
+     * [Database entity](#database-entity)
+     * [Database context configuration](#database-context-configuration)
+   * [Usage](#usage)
+     * [Fetching entities with no lock](#fetching-entities-with-no-lock)
+     * [Locking entity](#locking-entity)
+     * [Unlocking entity](#unlocking-entity)
+
 # EasyConcurrency
 EasyConcurrency nugets aim to make concurrency easier for your .NET Core Applications. The main motivation for this project was the fact that Entity Framework does not have a built-in solution for pessimistic concurrency control.
 
@@ -91,6 +107,9 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
     });
 }
 ```
+
+### Usage
+
 #### Fetching entities with no lock
 To fetch only entities that are currently not locked during database query,
 you can use `.WhereIsNotLocked()` extension method. 
