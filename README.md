@@ -125,14 +125,22 @@ that you can safely write changes to.
 ```csharp
 //get entity only if not locked; if entity is locked this will return null;
 var entity = await dbContext.SampleEntities
-    .WhereIsNotLocked()
-    .SingleOrDefaultAsync(sampleEntity => sampleEntity.MyUuid == ConcurrentEntityUuid);
+        .Where(sampleEntity => sampleEntity.MyUuid == Guid.Parse("b72be891-f1f2-4508-b230-85a7909c86d0"))
+        .WhereIsNotLocked()
+        .SingleOrDefaultAsync();
 
 if (entity is null)
 {
     //entity is null, we cannot process it
     return;
 }
+```
+
+This generates the following SQL query:
+```sql
+SELECT TOP(2) [s].[Id], [s].[IsProcessed], [s].[LockedUntil], [s].[MyUuid], [s].[Version]
+FROM [SampleEntities] AS [s]
+WHERE [s].[MyUuid] = 'b72be891-f1f2-4508-b230-85a7909c86d0' AND ([s].[LockedUntil] IS NULL OR CAST([s].[LockedUntil] AS datetimeoffset) < @__now_0)
 ```
 #### Locking entity
 Locking the entity is no more work than calling `SetLock` method to set the lock for the entity, 
