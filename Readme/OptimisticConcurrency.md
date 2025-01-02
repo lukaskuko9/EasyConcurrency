@@ -29,7 +29,7 @@ The result as diagram below indicates - is that the payment was postponed 2 time
 ![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/OptimisticConcurrency/2.svg)
 
 ## Solution
-Solution lies in detecting the moment this happens.
+Solution lies in detecting the moment this happens.[PessimisticConcurrency.md](PessimisticConcurrency.md)
 When you fetch the payment to postpone,
 you also fetch concurrency token with some value.
 Your fetched concurrency token will be checked against the one stored in database
@@ -39,7 +39,7 @@ If the tokens match, that means no other request postponed the payment and chang
 If the tokens don't match, your payment was postponed after you fetched the payment from database,
 and an exception is raised (instead of postponing again).
 
-![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency/3.svg)
+![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/OptimisticConcurrency/3.svg)
 
 You could also catch this exception and recover from this depending on your use case.
 

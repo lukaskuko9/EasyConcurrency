@@ -25,7 +25,7 @@ That should be a chapter on it's own.
 ### Single instance Example
 With a single request we do not have any issues. Users pays for our service which is provided to him once the payment is completed.
 
-![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/1.svg)
+![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/PessimisticConcurrency/1.svg)
 
 ### Multiple instances Example
 Since our imaginary services are very popular, we are getting many new payments each second that we need to process. 
@@ -42,7 +42,7 @@ We have sucessfuly processed the payment and provided the service to our custome
 
 With multiple instances things get messy and without any concurrency handling we process the payment multiple times in both the bank service and our database.
 
-![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/2.svg)
+![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/PessimisticConcurrency/2.svg)
 
 #### Solution with pessimistic concurrency control
 Using only the optimistic concurrency will not help us here because we need to make sure when calling the external service, only one job instance will call the bank service for a single payment. 
@@ -60,4 +60,4 @@ Once we are done with processing, we can mark the message as processed and unloc
 6. Only when it's processed in the bank service we write changes to our database (process it on our side)
 7. Message is marked as processsed
 
-![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency/3.svg)
+![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/PessimisticConcurrency/3.svg)
