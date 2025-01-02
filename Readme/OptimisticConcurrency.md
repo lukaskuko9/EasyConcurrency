@@ -13,7 +13,7 @@ You have a dedicated API endpoint. It works like this:
 3. If the payment was not postponed yet, you postpone it in database
 4. A response is returned of a postponed due date for the payment.
 
-![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency/1.svg)
+![Postpone Endpoint](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/OptimisticConcurrency/1.svg)
 
 ## Issue
 This works perfectly fine - that is, until one day,
@@ -26,7 +26,7 @@ in all the requests postpone has not been done yet - meaning they can bypass the
 
 The result as diagram below indicates - is that the payment was postponed 2 times, each request postponed it by 60 days.
 
-![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency/2.svg)
+![Postpone Issue](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/OptimisticConcurrency/2.svg)
 
 ## Solution
 Solution lies in detecting the moment this happens.
