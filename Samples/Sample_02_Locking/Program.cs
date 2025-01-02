@@ -60,7 +60,7 @@ public static class Program
                 )
             );
 
-        if (updatedRows == 1)
+        if (updatedRows == 1) //MyUuid prop is unique, so we know there can be only 0 or 1 rows updated
         {
             //we have managed to lock 
         }

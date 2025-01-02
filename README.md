@@ -19,16 +19,16 @@ EasyConcurrency nugets aim to make concurrency easier for your .NET Core Applica
 
 Be it optimistic or pessimistic concurrency control, EasyConcurrency can help you with both of them.
 
-If you are new to concurrency handling, you can read more about [Optimistic concurrency control](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency.md) or
-[Pessimistic concurrency control](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency.md) directly in this repository.
+If you are new to concurrency handling, you can read more about [Optimistic concurrency control](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/OptimisticConcurrency.md) or
+[Pessimistic concurrency control](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/PessimisticConcurrency.md) directly in this repository.
 
 For installation options, visit the package on [Nuget.org](https://www.nuget.org/packages/EasyConcurrency.EntityFramework/).
 
-## EasyConcurrency.Abstractions
+# EasyConcurrency.Abstractions
 EasyConcurrency.Abstractions nuget provides the essential classes and interfaces
 that form the foundation of the implementation.
 
-### TimeLock
+## TimeLock
 *TimeLock* is a custom value type that wraps around `DateTimeOffset`. The *TimeLock* is locked for a given duration until it naturally expires,
 or is unlocked / released before that can happen.
 
@@ -45,17 +45,17 @@ E.g. we have locked an entity to do write operations on it, but are finished wor
 We can unlock the *TimeLock* so that other processes can claim it for write changes.
 
 
-### ILockableEntity
+## ILockableEntity
 *ILockableEntity* is an interface providing various methods for locking and unlocking
 entity. This is the entity you'd want to lock before reaching critical section.
 
 Naturally this interface also provides `LockedUntil` property of type *TimeLock*,
 that has [Concurrency check attribute](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/data-annotations#concurrencycheck).
 
-#### LockableEntity
+### LockableEntity
 Implementations methods from `ILockableEntity` interface.
 
-#### LockableConcurrentEntity
+### LockableConcurrentEntity
 `LockableConcurrentEntity` inherits from `LockableEntity`, providing also `Version`
 property with [Timestamp attribute](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/data-annotations#timestamp).
 
@@ -64,12 +64,12 @@ The difference between `LockableEntity` and `LockableConcurrentEntity`
 is that the former reacts to concurrences only on the `LockedUntil` property to lock it properly,
 while the latter reacts to concurrences on any of the properties on that entity.
 
-## EasyConcurrency.EntityFramework
+# EasyConcurrency.EntityFramework
 EasyConcurrency.EntityFramework provides base implementations for concurrency handling when using EntityFramework. 
 
-### Setup
+## Setup
 
-#### Database entity
+### Database entity
 The entity you want to save to database should inherit from `LockableEntity` or `LockableConcurrentEntity` class.
 This provides it with the `LockedUntil` property.
 
@@ -83,7 +83,7 @@ public class SampleEntity : LockableConcurrentEntity
 }
 ````
 
-#### Database context configuration
+### Database context configuration
 Because we use `TimeLock` which is a custom value type,
 we need to tell entity framework how to convert it to primity type `DateTimeOffset`.
 This can easily be done with extension method `.AddTimeLockConversion();` 
@@ -113,9 +113,9 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
 }
 ```
 
-### Usage
+## Usage
 
-#### Fetching entities with no lock
+### Fetching entities with no lock
 To fetch only entities that are currently not locked during database query,
 you can use `.WhereIsNotLocked()` extension method. 
 
@@ -131,7 +131,7 @@ var entity = await dbContext.SampleEntities
 
 if (entity is null)
 {
-    //entity is null, we cannot process it
+    //entity is locked or doesn't exist
     return;
 }
 ```
@@ -142,7 +142,7 @@ SELECT TOP(2) [s].[Id], [s].[IsProcessed], [s].[LockedUntil], [s].[MyUuid], [s].
 FROM [SampleEntities] AS [s]
 WHERE [s].[MyUuid] = 'b72be891-f1f2-4508-b230-85a7909c86d0' AND ([s].[LockedUntil] IS NULL OR CAST([s].[LockedUntil] AS datetimeoffset) < @__now_0)
 ```
-#### Locking entity
+### Locking entity
 Locking the entity is no more work than calling `SetLock` method to set the lock for the entity, 
 and calling `SaveChanges` or `SaveChangesAsync` method afterward to save the changes to database. 
 
@@ -170,19 +170,31 @@ catch (DbUpdateConcurrencyException)
 }
 ```
 
-If everything is done correctly, then the process that locked the entity is the 
-only one able to manipulate with it.
+Generates SQL query:
+```sql
+UPDATE [SampleEntities] SET [LockedUntil] = @p0
+OUTPUT INSERTED.[Version]
+WHERE [Id] = @p1 AND [LockedUntil] IS NULL AND [Version] = @p2;
+```
 
 *Note: even if lock is set in database, it will not work unless you respect the lock with 
 `IsNotLocked` methods before making any write changes to it.*
 
-#### Unlocking entity
+### Unlocking entity
 Unlocking the entity is not any harder than locking it. Simply call method `Unlock` on the entity.
 
 ```csharp
 //unlock entity and save to database
 entity.Unlock();
 await dbContext.SaveChangesAsync();
+```
+
+Generates SQL query:
+```sql
+-- @p0 is NULL this time
+UPDATE [SampleEntities] SET [LockedUntil] = @p0
+OUTPUT INSERTED.[Version]
+WHERE [Id] = @p1 AND [LockedUntil] = @p2 AND [Version] = @p3;
 ```
 
 This will set the `LockedUntil` property to value `null`, resetting the lock.

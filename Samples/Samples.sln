@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample_01_Fetching", "Sampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample_02_Locking", "Sample_02_Locking\Sample_02_Locking.csproj", "{B530E355-4DCA-4C7C-A4D0-CFD3ABEEAB42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample_03_Unlocking", "Sample_03_Unlocking\Sample_03_Unlocking.csproj", "{9C44800D-62C9-49B3-9BC7-300A7E8D64C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{B530E355-4DCA-4C7C-A4D0-CFD3ABEEAB42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B530E355-4DCA-4C7C-A4D0-CFD3ABEEAB42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B530E355-4DCA-4C7C-A4D0-CFD3ABEEAB42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C44800D-62C9-49B3-9BC7-300A7E8D64C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C44800D-62C9-49B3-9BC7-300A7E8D64C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C44800D-62C9-49B3-9BC7-300A7E8D64C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C44800D-62C9-49B3-9BC7-300A7E8D64C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
