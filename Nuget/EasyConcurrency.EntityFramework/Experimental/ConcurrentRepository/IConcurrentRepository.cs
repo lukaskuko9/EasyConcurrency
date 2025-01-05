@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using EasyConcurrency.Abstractions.Entities.LockableEntity;
+﻿using EasyConcurrency.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace EasyConcurrency.EntityFramework.ConcurrentRepository;
+namespace EasyConcurrency.EntityFramework.Experimental.ConcurrentRepository;
 
 /// <summary>
-/// Provides an interface for concurrent repositories able to work with <see cref="ILockableEntity"/> types
+/// Provides an interface for concurrent repositories able to work with <see cref="ITimeLockEntity"/> types
 /// </summary>
 public interface IConcurrentRepository
 {
@@ -23,7 +19,7 @@ public interface IConcurrentRepository
     /// <returns>Locked entity if lock was successful, otherwise null.</returns>
     Task<TLockableEntity?> LockAndSaveAsync<TLockableEntity>(TLockableEntity entityToLock,
         TimeSpan lockTimeSpan, Action<IReadOnlyList<EntityEntry>>? actionOnConcurrency = null, 
-        CancellationToken cancellationToken = default) where TLockableEntity : class, ILockableEntity;
+        CancellationToken cancellationToken = default) where TLockableEntity : class, ITimeLockEntity;
 
     /// <summary>
     /// Locks a collection of entities and calls <see cref="DbContext.SaveChangesAsync(System.Threading.CancellationToken)"/> on database context to save the locks in database.
@@ -36,7 +32,7 @@ public interface IConcurrentRepository
     Task<List<TLockableEntity>> LockAndSaveAsync<TLockableEntity>(
         IEnumerable<TLockableEntity> entitiesToLock, TimeSpan lockTimeSpan,
         Action<IReadOnlyList<EntityEntry>>? actionOnConcurrency = null,
-        CancellationToken cancellationToken = default) where TLockableEntity : class, ILockableEntity;
+        CancellationToken cancellationToken = default) where TLockableEntity : class, ITimeLockEntity;
     
     /// <summary>
     /// Inserts the entity and calls <see cref="DbContext.SaveChangesAsync(System.Threading.CancellationToken)"/> on database context to save it in database.
@@ -45,7 +41,7 @@ public interface IConcurrentRepository
     /// <param name="entityToInsert">Entity to insert</param>
     /// <param name="token">CancellationToken to cancel the operation</param>
     /// <returns>If insert is successful returns the inserted entity, otherwise null.</returns>
-    Task<bool> InsertAndSaveAsync<TLockableEntity>(TLockableEntity entityToInsert, CancellationToken token = default) where TLockableEntity : class, ILockableEntity;
+    Task<bool> InsertAndSaveAsync<TLockableEntity>(TLockableEntity entityToInsert, CancellationToken token = default) where TLockableEntity : class, ITimeLockEntity;
 
     /// <summary>
     /// Inserts the entity and calls <see cref="DbContext.SaveChangesAsync(System.Threading.CancellationToken)"/> on database context to save it in database.
@@ -54,6 +50,6 @@ public interface IConcurrentRepository
     /// <param name="entitiesToInsert">Entity to insert</param>
     /// <param name="token">CancellationToken to cancel the operation</param>
     /// <returns>If insert is successful returns a collection of inserted entities, otherwise empty collection.</returns>
-    Task<IReadOnlyCollection<TLockableEntity>> InsertAndSaveAsync<TLockableEntity>(IReadOnlyCollection<TLockableEntity> entitiesToInsert, CancellationToken token = default) where TLockableEntity : class, ILockableEntity;
+    Task<IReadOnlyCollection<TLockableEntity>> InsertAndSaveAsync<TLockableEntity>(IReadOnlyCollection<TLockableEntity> entitiesToInsert, CancellationToken token = default) where TLockableEntity : class, ITimeLockEntity;
     
 }

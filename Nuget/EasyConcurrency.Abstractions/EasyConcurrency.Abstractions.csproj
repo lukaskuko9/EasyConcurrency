@@ -4,9 +4,9 @@
         <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.2.2</Version>
-        <FileVersion>0.2.2</FileVersion>
-        <AssemblyVersion>0.2.2</AssemblyVersion>
+        <Version>1.0.0</Version>
+        <FileVersion>1.0.0</FileVersion>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
         <Authors>Lukáš Machajdík</Authors>
         <RootNamespace>EasyConcurrency.Abstractions</RootNamespace>
         <PackageId>EasyConcurrency.Abstractions</PackageId>
@@ -24,12 +24,11 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
         <PackageTags>Concurrency;EasyConcurrency;</PackageTags>
+        <PackageReleaseNotes>
+            1.0.0 - First stable version with full implementations for optimistic and pessimistic scenario solutions
+        </PackageReleaseNotes>
         <Description>Provides abstractions for EasyConcurrency packages.</Description>
     </PropertyGroup>
-
-    <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
-    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
@@ -37,4 +36,15 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="bin\release\net8.0\EasyConcurrency.Abstractions.xml" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Content Include="bin\release\net8.0\EasyConcurrency.Abstractions.xml" />
+        <Content Include="bin\release\net9.0\EasyConcurrency.Abstractions.xml" />
+    </ItemGroup>
+
 </Project>

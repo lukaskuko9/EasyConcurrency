@@ -3,9 +3,9 @@
         <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.2.2</Version>
-        <FileVersion>0.2.2</FileVersion>
-        <AssemblyVersion>0.2.2</AssemblyVersion>
+        <Version>1.0.0</Version>
+        <FileVersion>1.0.0</FileVersion>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
         <Authors>Lukáš Machajdík</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -27,16 +27,15 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
         <PackageTags>EntityFramework;Concurrency;EntityFrameworkCore;EntityFrameworkConcurrency;Database;EasyConcurrency;</PackageTags>
+        <PackageReleaseNotes>
+            1.0.0 - First stable version with full implementations for optimistic and pessimistic scenario solutions
+        </PackageReleaseNotes>
         <Description>
             EasyConcurrency.EntityFramework is designed to simplify the implementation of concurrency control in Entity Framework. 
             Entity Framework doesn't provide built-in support for pessimistic concurrency, 
             but EasyConcurrency fills this gap by offering an easy-to-use interface.
         </Description>
     </PropertyGroup>
-
-    <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
-    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj" />
@@ -49,6 +48,20 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="bin\release\net8.0\EasyConcurrency.EntityFramework.xml" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="bin\release\net8.0\EasyConcurrency.EntityFramework.xml" />
+        <Content Include="bin\release\net9.0\EasyConcurrency.EntityFramework.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Experimental\" />
     </ItemGroup>
 
 </Project>

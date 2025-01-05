@@ -8,6 +8,7 @@ If you are new to concurrency handling, you can read more about [Optimistic conc
 
 For installation options using EntityFramework, visit the package on [Nuget.org](https://www.nuget.org/packages/EasyConcurrency.EntityFramework/).
 
+
 ## EasyConcurrency.Abstractions
 EasyConcurrency.Abstractions nuget provides the essential classes and interfaces
 that form the foundation of the implementation.
@@ -29,21 +30,21 @@ E.g. we have locked an entity to do write operations on it, but are finished wor
 We can unlock the *TimeLock* so that other processes can claim it for write changes.
 
 
-### ILockableEntity
-*ILockableEntity* is an interface providing various methods for locking and unlocking
+### ITimeLockEntity
+*ITimeLockEntity* is an interface providing various methods for locking and unlocking
 entity. This is the entity you'd want to lock before reaching critical section.
 
 Naturally this interface also provides `LockedUntil` property of type *TimeLock*,
 that has [Concurrency check attribute](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/data-annotations#concurrencycheck).
 
-#### LockableEntity
-Implementations methods from `ILockableEntity` interface.
+#### TimeLockEntity
+Implementations methods from `ITimeLockEntity` interface.
 
-#### LockableConcurrentEntity
-`LockableConcurrentEntity` inherits from `LockableEntity`, providing also `Version`
+#### TimeLockVersioningEntity
+`TimeLockVersioningEntity` inherits from `TimeLockEntity`, providing also `Version`
 property with [Timestamp attribute](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/data-annotations#timestamp).
 
 Both of these types can be used for pessimistic concurrency control.
-The difference between `LockableEntity` and `LockableConcurrentEntity`
+The difference between `TimeLockEntity` and `TimeLockVersioningEntity`
 is that the former reacts to concurrences only on the `LockedUntil` property to lock it properly,
 while the latter reacts to concurrences on any of the properties on that entity.
