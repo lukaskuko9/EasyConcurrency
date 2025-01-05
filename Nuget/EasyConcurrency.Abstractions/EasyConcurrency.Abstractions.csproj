@@ -39,12 +39,6 @@
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\"/>
-        <None Include="bin\release\net8.0\EasyConcurrency.Abstractions.xml" Pack="true" PackagePath="\"/>
-    </ItemGroup>
-    
-    <ItemGroup>
-        <Content Include="bin\release\net8.0\EasyConcurrency.Abstractions.xml" />
-        <Content Include="bin\release\net9.0\EasyConcurrency.Abstractions.xml" />
     </ItemGroup>
 
 </Project>
