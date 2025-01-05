@@ -7,12 +7,12 @@ using Xunit;
 namespace IntegrationTests.Tests;
 
 [Collection(DatabaseCollection.CollectionName)]
-public class LockableEntityTests : DatabaseFixture
+public class TimeLockEntityTests : DatabaseFixture
 {
     [Fact]
     public async Task ConcurrencyTokenTakesEffect()
     {
-        var entity = new MyLockableEntity
+        var entity = new MyTimeLockEntity
         {
             LockedUntil = null
         };
@@ -35,7 +35,7 @@ public class LockableEntityTests : DatabaseFixture
         Assert.False(lockedEntity.IsNotLocked());
     }
 
-    private static async Task<MyLockableEntity?> GetAndLockEntity(DatabaseContext dbContext)
+    private static async Task<MyTimeLockEntity?> GetAndLockEntity(DatabaseContext dbContext)
     {
         try
         {

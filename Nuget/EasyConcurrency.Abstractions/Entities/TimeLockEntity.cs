@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EasyConcurrency.Abstractions.TimeLockNamespace;
+using EasyConcurrency.Abstractions.Extensions;
 
-namespace EasyConcurrency.Abstractions.Entities.LockableEntity;
+namespace EasyConcurrency.Abstractions.Entities;
 
 /// <summary>
 /// Provides base methods for handling pessimistic concurrency scenarios of implementing class instance. 
 /// </summary>
-public abstract class LockableEntity : ILockableEntity
+public abstract class TimeLockEntity : ITimeLockEntity
 {
     /// <inheritdoc />
     [ConcurrencyCheck]

@@ -2,9 +2,9 @@
 1. [EasyConcurrency](#easyconcurrency)
 2. [EasyConcurrency.Abstractions](#easyconcurrencyabstractions)
     * [TimeLock](#timelock)
-    * [ILockableEntity](#ilockableentity)
-    * [LockableEntity](#lockableentity)
-    * [LockableConcurrentEntity](#lockableconcurrententity)
+    * [ITimeLockEntity](#ITimeLockEntity)
+    * [TimeLockEntity](#TimeLockEntity)
+    * [TimeLockVersioningEntity](#TimeLockVersioningEntity)
 3. [EasyConcurrency.EntityFramework](#easyconcurrencyentityframework)
     * [Setup](#setup)
         * [Database entity](#database-entity)
@@ -15,12 +15,12 @@
         * [Unlocking entity](#unlocking-entity)
 
 # EasyConcurrency
-EasyConcurrency nugets aim to make concurrency easier for your .NET Core Applications. The main motivation for this project was the fact that Entity Framework does not have a built-in solution for pessimistic concurrency control.
+EasyConcurrency nuget packages aim to make concurrency easier for your .NET Core Applications. The main motivation for this project was the fact that Entity Framework does not have a built-in solution for pessimistic concurrency control.
 
 Be it optimistic or pessimistic concurrency control, EasyConcurrency can help you with both of them.
 
-If you are new to concurrency handling, you can read more about [Optimistic concurrency control](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/OptimisticConcurrency.md) or
-[Pessimistic concurrency control](https://github.com/lukaskuko9/EasyConcurrency/blob/readmes/Readme/PessimisticConcurrency.md) directly in this repository.
+If you are new to concurrency handling, you can read more about [Optimistic concurrency control](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/OptimisticConcurrency.md) or
+[Pessimistic concurrency control](https://github.com/lukaskuko9/EasyConcurrency/blob/master/Readme/PessimisticConcurrency.md) directly in this repository.
 
 For installation options, visit the package on [Nuget.org](https://www.nuget.org/packages/EasyConcurrency.EntityFramework/).
 
@@ -45,22 +45,22 @@ E.g. we have locked an entity to do write operations on it, but are finished wor
 We can unlock the *TimeLock* so that other processes can claim it for write changes.
 
 
-### ILockableEntity
-*ILockableEntity* is an interface providing various methods for locking and unlocking
+### ITimeLockEntity
+*ITimeLockEntity* is an interface providing various methods for locking and unlocking
 entity. This is the entity you'd want to lock before reaching critical section.
 
 Naturally this interface also provides `LockedUntil` property of type *TimeLock*,
 that has [Concurrency check attribute](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/data-annotations#concurrencycheck).
 
-#### LockableEntity
-Implementations methods from `ILockableEntity` interface.
+#### TimeLockEntity
+Implementations methods from `ITimeLockEntity` interface.
 
-#### LockableConcurrentEntity
-`LockableConcurrentEntity` inherits from `LockableEntity`, providing also `Version`
+#### TimeLockVersioningEntity
+`TimeLockVersioningEntity` inherits from `TimeLockEntity`, providing also `Version`
 property with [Timestamp attribute](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/data-annotations#timestamp).
 
 Both of these types can be used for pessimistic concurrency control.
-The difference between `LockableEntity` and `LockableConcurrentEntity`
+The difference between `TimeLockEntity` and `TimeLockVersioningEntity`
 is that the former reacts to concurrences only on the `LockedUntil` property to lock it properly,
 while the latter reacts to concurrences on any of the properties on that entity.
 
@@ -70,12 +70,12 @@ EasyConcurrency.EntityFramework provides base implementations for concurrency ha
 ### Setup
 
 #### Database entity
-The entity you want to save to database should inherit from `LockableEntity` or `LockableConcurrentEntity` class.
+The entity you want to save to database should inherit from `TimeLockEntity` or `TimeLockVersioningEntity` class.
 This provides it with the `LockedUntil` property.
 
 Example from [Samples](https://github.com/lukaskuko9/EasyConcurrency/tree/master/Samples) solution:
 ````csharp
-public class SampleEntity : LockableConcurrentEntity
+public class SampleEntity : TimeLockVersioningEntity
 {
     public long Id { get; set; }
     public Guid MyUuid { get; set; }
@@ -174,8 +174,7 @@ Unlocking the entity is not any harder than locking it. Simply call method `Unlo
 ```csharp
 //unlock entity and save to database
 entity.Unlock();
-await dbContext.SaveChangesAsync();
-```
+await dbContext.SaveChangesAsync(); 
 
 This will set the `LockedUntil` property to value `null`, resetting the lock.
 Other processes can lock it again for themselves to do some other changes.

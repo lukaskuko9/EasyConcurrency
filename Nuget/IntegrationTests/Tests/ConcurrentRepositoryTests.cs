@@ -14,7 +14,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     {
         var uniqueKey = Guid.NewGuid();
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
-        var newEntityLocked = new MyDbConcurrentEntity
+        var newEntityLocked = new MyDbVersioningEntity
         {
             MyUniqueKey = uniqueKey,
             LockedUntil = lockedUntil
@@ -23,7 +23,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
         var inserted = await Repository.InsertAndSaveAsync(newEntityLocked);
         Assert.True(inserted);
         
-        var newEntityLocked2 = new MyDbConcurrentEntity
+        var newEntityLocked2 = new MyDbVersioningEntity
         {
             MyUniqueKey = uniqueKey,
             LockedUntil = lockedUntil
@@ -37,7 +37,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     public async Task NotLockedEntityCanBeLocked()
     {
         var uniqueKey = Guid.NewGuid();
-        var newEntityLocked = new MyDbConcurrentEntity
+        var newEntityLocked = new MyDbVersioningEntity
         {
             MyUniqueKey = uniqueKey,
             LockedUntil = null
@@ -58,7 +58,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     {
         var newEntities = Enumerable
             .Range(0, 10)
-            .Select(_ => new MyDbConcurrentEntity
+            .Select(_ => new MyDbVersioningEntity
                 {
                     MyUniqueKey = Guid.NewGuid(),
                     LockedUntil = null
@@ -75,7 +75,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     public async Task ActionIsInvokedOnLockAndSave()
     {
         var uniqueKey = Guid.NewGuid();
-        var newEntityLocked = new MyDbConcurrentEntity
+        var newEntityLocked = new MyDbVersioningEntity
         {
             MyUniqueKey = uniqueKey,
             LockedUntil = null

@@ -1,4 +1,4 @@
-﻿using EasyConcurrency.EntityFramework.ConcurrentRepository;
+﻿using EasyConcurrency.EntityFramework.Experimental.ConcurrentRepository;
 
 namespace IntegrationTests.Database;
 

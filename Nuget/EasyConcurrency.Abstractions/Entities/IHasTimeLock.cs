@@ -1,4 +1,4 @@
-﻿namespace EasyConcurrency.Abstractions.TimeLockNamespace;
+﻿namespace EasyConcurrency.Abstractions.Entities;
 
 /// <summary>
 /// Provides basic interface for determining, if an instance is locked or not.

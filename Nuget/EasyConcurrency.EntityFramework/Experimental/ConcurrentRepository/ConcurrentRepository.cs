@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using EasyConcurrency.Abstractions.Entities.LockableEntity;
+﻿using EasyConcurrency.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace EasyConcurrency.EntityFramework.ConcurrentRepository;
+namespace EasyConcurrency.EntityFramework.Experimental.ConcurrentRepository;
 
 
 /// <summary>
 /// Abstract class providing basic functionality to make it easier to implement concurrent repositories
 /// </summary>
-/// <param name="databaseContext"></param>
-/// <typeparam name="TContext"></typeparam>
+/// <param name="databaseContext">Database context</param>
+/// <typeparam name="TContext"><see cref="DbContext"/> type</typeparam>
 public abstract class ConcurrentRepository<TContext>(TContext databaseContext) : IConcurrentRepository
     where TContext: DbContext
 {
@@ -22,7 +17,7 @@ public abstract class ConcurrentRepository<TContext>(TContext databaseContext) :
    
     /// <inheritdoc />
     public async Task<TLockableEntity?> LockAndSaveAsync<TLockableEntity>(TLockableEntity entityToLock, TimeSpan lockTimeSpan, 
-        Action<IReadOnlyList<EntityEntry>>? actionOnConcurrency = null, CancellationToken cancellationToken = default) where TLockableEntity : class, ILockableEntity
+        Action<IReadOnlyList<EntityEntry>>? actionOnConcurrency = null, CancellationToken cancellationToken = default) where TLockableEntity : class, ITimeLockEntity
     {
         ArgumentNullException.ThrowIfNull(entityToLock);
         var locked = await LockAndSaveInnerAsync([entityToLock], lockTimeSpan, actionOnConcurrency, cancellationToken);
@@ -31,13 +26,13 @@ public abstract class ConcurrentRepository<TContext>(TContext databaseContext) :
     /// <inheritdoc />
     public async Task<List<TLockableEntity>> LockAndSaveAsync<TLockableEntity>(
         IEnumerable<TLockableEntity> entitiesToLock, TimeSpan lockTimeSpan, Action<IReadOnlyList<EntityEntry>>? actionOnConcurrency = null,
-        CancellationToken cancellationToken = default) where TLockableEntity : class, ILockableEntity
+        CancellationToken cancellationToken = default) where TLockableEntity : class, ITimeLockEntity
     {
         return await LockAndSaveInnerAsync(entitiesToLock, lockTimeSpan, actionOnConcurrency, cancellationToken);
     }
 
     private async Task<List<TLockableEntity>> LockAndSaveInnerAsync<TLockableEntity>(IEnumerable<TLockableEntity> entitiesToLock, TimeSpan lockTimeSpan, 
-        Action<IReadOnlyList<EntityEntry>>? action, CancellationToken cancellationToken = default) where TLockableEntity : ILockableEntity
+        Action<IReadOnlyList<EntityEntry>>? action, CancellationToken cancellationToken = default) where TLockableEntity : ITimeLockEntity
     {
         try
         {
@@ -67,7 +62,7 @@ public abstract class ConcurrentRepository<TContext>(TContext databaseContext) :
     #endregion
     
     /// <inheritdoc />
-    public async Task<bool> InsertAndSaveAsync<TLockableEntity>(TLockableEntity entityToInsert, CancellationToken token = default) where TLockableEntity: class, ILockableEntity
+    public async Task<bool> InsertAndSaveAsync<TLockableEntity>(TLockableEntity entityToInsert, CancellationToken token = default) where TLockableEntity: class, ITimeLockEntity
     {
         try
         {
@@ -81,7 +76,7 @@ public abstract class ConcurrentRepository<TContext>(TContext databaseContext) :
     }
 
     /// <inheritdoc />
-    public async Task<IReadOnlyCollection<TLockableEntity>> InsertAndSaveAsync<TLockableEntity>(IReadOnlyCollection<TLockableEntity> entitiesToInsert, CancellationToken token = default) where TLockableEntity: class, ILockableEntity
+    public async Task<IReadOnlyCollection<TLockableEntity>> InsertAndSaveAsync<TLockableEntity>(IReadOnlyCollection<TLockableEntity> entitiesToInsert, CancellationToken token = default) where TLockableEntity: class, ITimeLockEntity
     {
         try
         {
