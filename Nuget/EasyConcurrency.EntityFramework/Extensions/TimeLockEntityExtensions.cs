@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using EasyConcurrency.Abstractions;
+﻿using System.Linq.Expressions;
 using EasyConcurrency.Abstractions.Entities;
 
-namespace EasyConcurrency.EntityFramework.LockableEntity;
+namespace EasyConcurrency.EntityFramework.Extensions;
 
 /// <summary>
 /// A set of extensions for <see cref="ITimeLockEntity"/> implementation types
