@@ -1,4 +1,5 @@
-﻿using IntegrationTests.Database;
+﻿using EasyConcurrency.Abstractions.Extensions;
+using IntegrationTests.Database;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Stubs;
@@ -14,7 +15,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     {
         var uniqueKey = Guid.NewGuid();
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
-        var newEntityLocked = new MyDbVersioningEntity
+        var newEntityLocked = new MyDbVersioning
         {
             MyUniqueKey = uniqueKey,
             LockedUntil = lockedUntil
@@ -23,7 +24,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
         var inserted = await Repository.InsertAndSaveAsync(newEntityLocked);
         Assert.True(inserted);
         
-        var newEntityLocked2 = new MyDbVersioningEntity
+        var newEntityLocked2 = new MyDbVersioning
         {
             MyUniqueKey = uniqueKey,
             LockedUntil = lockedUntil
@@ -37,7 +38,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     public async Task NotLockedEntityCanBeLocked()
     {
         var uniqueKey = Guid.NewGuid();
-        var newEntityLocked = new MyDbVersioningEntity
+        var newEntityLocked = new MyDbVersioning
         {
             MyUniqueKey = uniqueKey,
             LockedUntil = null
@@ -58,7 +59,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     {
         var newEntities = Enumerable
             .Range(0, 10)
-            .Select(_ => new MyDbVersioningEntity
+            .Select(_ => new MyDbVersioning
                 {
                     MyUniqueKey = Guid.NewGuid(),
                     LockedUntil = null
@@ -75,7 +76,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     public async Task ActionIsInvokedOnLockAndSave()
     {
         var uniqueKey = Guid.NewGuid();
-        var newEntityLocked = new MyDbVersioningEntity
+        var newEntityLocked = new MyDbVersioning
         {
             MyUniqueKey = uniqueKey,
             LockedUntil = null

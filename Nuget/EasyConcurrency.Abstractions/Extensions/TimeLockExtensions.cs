@@ -1,4 +1,4 @@
-﻿using EasyConcurrency.Abstractions.Entities;
+﻿using EasyConcurrency.Abstractions.TimeLock;
 
 namespace EasyConcurrency.Abstractions.Extensions;
 
@@ -13,7 +13,7 @@ public static class TimeLockExtensions
     /// <returns>Returns true if entity is not locked and therefore free to be claimed,
     /// otherwise false.
     /// </returns>
-    public static bool IsNotLocked(this TimeLock? timeLock)
+    public static bool IsNotLocked(this TimeLock.TimeLock? timeLock)
     {
         return timeLock is null || timeLock.Value.IsNotLocked();
     }
@@ -26,7 +26,7 @@ public static class TimeLockExtensions
     /// <returns>Returns true if entity is not locked and therefore free to be claimed,
     /// otherwise false.
     /// </returns>
-    public static bool IsNotLocked(this TimeLock? timeLock, DateTimeOffset now)
+    public static bool IsNotLocked(this TimeLock.TimeLock? timeLock, DateTimeOffset now)
     {
         return timeLock is null || timeLock.Value.IsNotLocked(now);
     }

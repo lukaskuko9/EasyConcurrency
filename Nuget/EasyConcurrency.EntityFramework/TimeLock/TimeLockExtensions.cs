@@ -3,7 +3,7 @@
 namespace EasyConcurrency.EntityFramework.TimeLock;
 
 /// <summary>
-/// Extension methods for <see cref="Abstractions.Entities.TimeLock"/> types
+/// Extension methods for <see cref="Abstractions.TimeLock.TimeLock"/> types
 /// </summary>
 public static class TimeLockExtensions
 {
@@ -21,7 +21,7 @@ public static class TimeLockExtensions
     ///}
     /// </code>
     /// <returns>The same builder instance so that multiple configuration calls can be chained.</returns>
-    public static PropertyBuilder<Abstractions.Entities.TimeLock?> AddTimeLockConversion(this PropertyBuilder<Abstractions.Entities.TimeLock?> propBuilder)
+    public static PropertyBuilder<Abstractions.TimeLock.TimeLock?> AddTimeLockConversion(this PropertyBuilder<Abstractions.TimeLock.TimeLock?> propBuilder)
     {
         return propBuilder
             .HasConversion<TimeLockConverter>()

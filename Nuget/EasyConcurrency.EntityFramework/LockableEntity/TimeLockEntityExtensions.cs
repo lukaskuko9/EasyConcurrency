@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Linq.Expressions;
 using EasyConcurrency.Abstractions;
-using EasyConcurrency.Abstractions.Entities;
+using EasyConcurrency.Abstractions.HasTimeLock;
+using EasyConcurrency.Abstractions.TimeLock;
 
 namespace EasyConcurrency.EntityFramework.LockableEntity;
 
 /// <summary>
-/// A set of extensions for <see cref="ITimeLockEntity"/> implementation types
+/// A set of extensions for <see cref="IHasTimeLock"/> implementation types
 /// </summary>
 public static class TimeLockEntityExtensions
 {
@@ -16,7 +17,7 @@ public static class TimeLockEntityExtensions
     /// </summary>
     /// <param name="queryable">An <see cref="IQueryable"/> to filter</param>
     /// <param name="now">Date and time to use to determine if an entity is not locked</param>
-    /// <typeparam name="TLockableEntity">Entity implementing <see cref="ITimeLockEntity"/></typeparam>
+    /// <typeparam name="TLockableEntity">Entity implementing <see cref="IHasTimeLock"/></typeparam>
     /// <code>
     /// var dbEntityNotLocked = await databaseContext.MyLockableEntities
     /// .WhereIsNotLocked(DateTimeOffset.Now)
@@ -25,7 +26,7 @@ public static class TimeLockEntityExtensions
     /// <returns>
     /// An <see cref="IQueryable{T}"/> that contains elements from the input sequence that are not locked.
     /// </returns>
-    public static IQueryable<TLockableEntity> WhereIsNotLocked<TLockableEntity>(this IQueryable<TLockableEntity> queryable, DateTimeOffset now) where TLockableEntity: ITimeLockEntity
+    public static IQueryable<TLockableEntity> WhereIsNotLocked<TLockableEntity>(this IQueryable<TLockableEntity> queryable, DateTimeOffset now) where TLockableEntity: IHasTimeLock
     {
         return queryable.Where(IsNotLocked<TLockableEntity>(now));
     }
@@ -34,7 +35,7 @@ public static class TimeLockEntityExtensions
     /// Filters out the entities that are not locked using <see cref="DateTimeOffset.UtcNow"/> as current time.
     /// </summary>
     /// <param name="queryable">An <see cref="IQueryable{T}"/> to filter</param>
-    /// <typeparam name="TLockableEntity">Entity implementing <see cref="ITimeLockEntity"/></typeparam>
+    /// <typeparam name="TLockableEntity">Entity implementing <see cref="IHasTimeLock"/></typeparam>
     /// <code>
     /// var dbEntityNotLocked = await databaseContext.MyLockableEntities
     /// .WhereIsNotLocked()
@@ -43,13 +44,13 @@ public static class TimeLockEntityExtensions
     /// <returns>
     /// An <see cref="IQueryable{T}"/> that contains elements from the input sequence that are not locked.
     /// </returns>
-    public static IQueryable<TLockableEntity> WhereIsNotLocked<TLockableEntity>(this IQueryable<TLockableEntity> queryable) where TLockableEntity: ITimeLockEntity
+    public static IQueryable<TLockableEntity> WhereIsNotLocked<TLockableEntity>(this IQueryable<TLockableEntity> queryable) where TLockableEntity: IHasTimeLock
     {
         var now = DateTimeOffset.UtcNow;
         return queryable.Where(IsNotLocked<TLockableEntity>(now));
     }
 
-    private static Expression<Func<TLockableEntity, bool>> IsNotLocked<TLockableEntity>(DateTimeOffset now) where TLockableEntity: ITimeLockEntity
+    private static Expression<Func<TLockableEntity, bool>> IsNotLocked<TLockableEntity>(DateTimeOffset now) where TLockableEntity: IHasTimeLock
     {
          return TimeLockEntityMethods.IsNotLockedAsExpression<TLockableEntity>(now);
     }

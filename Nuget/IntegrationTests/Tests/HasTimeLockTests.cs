@@ -1,4 +1,5 @@
-﻿using EasyConcurrency.EntityFramework.LockableEntity;
+﻿using EasyConcurrency.Abstractions.Extensions;
+using EasyConcurrency.EntityFramework.LockableEntity;
 using IntegrationTests.Database;
 using Microsoft.EntityFrameworkCore;
 using Stubs;
@@ -7,12 +8,12 @@ using Xunit;
 namespace IntegrationTests.Tests;
 
 [Collection(DatabaseCollection.CollectionName)]
-public class TimeLockEntityTests : DatabaseFixture
+public class HasTimeLockTests : DatabaseFixture
 {
     [Fact]
     public async Task ConcurrencyTokenTakesEffect()
     {
-        var entity = new MyTimeLockEntity
+        var entity = new MyHasTimeLock
         {
             LockedUntil = null
         };
@@ -35,7 +36,7 @@ public class TimeLockEntityTests : DatabaseFixture
         Assert.False(lockedEntity.IsNotLocked());
     }
 
-    private static async Task<MyTimeLockEntity?> GetAndLockEntity(DatabaseContext dbContext)
+    private static async Task<MyHasTimeLock?> GetAndLockEntity(DatabaseContext dbContext)
     {
         try
         {

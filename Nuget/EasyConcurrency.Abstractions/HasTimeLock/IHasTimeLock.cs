@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
+using EasyConcurrency.Abstractions.TimeLock;
 
-namespace EasyConcurrency.Abstractions.Entities;
+namespace EasyConcurrency.Abstractions.HasTimeLock;
 
 /// <summary>
 /// Provides interface for handling pessimistic concurrency scenarios of implementing class instance. 
 /// </summary>
-public interface ITimeLockEntity : IHasTimeLock
+public interface IHasTimeLock
 {
     /// <summary>
     /// Specifies the <see cref="TimeLock"/> until which the entity remains locked.
@@ -13,5 +14,5 @@ public interface ITimeLockEntity : IHasTimeLock
     /// it is  locked, otherwise it is not locked.
     /// </summary>
     [ConcurrencyCheck]
-    public TimeLock? LockedUntil { get; set; }
+    public TimeLock.TimeLock? LockedUntil { get; set; }
 }

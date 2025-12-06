@@ -1,4 +1,5 @@
-using EasyConcurrency.Abstractions.Entities;
+using EasyConcurrency.Abstractions.Extensions;
+using EasyConcurrency.Abstractions.TimeLock;
 using EasyConcurrency.EntityFramework.LockableEntity;
 using Microsoft.EntityFrameworkCore;
 using Stubs;
@@ -12,14 +13,14 @@ public class LockTests : DatabaseFixture
     [Fact]
     public async Task LockedUntilTranslatesCorrectly()
     {
-        var newEntityNotLocked = new MyDbVersioningEntity
+        var newEntityNotLocked = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
         };
         
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
-        var newEntityLocked = new MyDbVersioningEntity
+        var newEntityLocked = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = lockedUntil
@@ -40,14 +41,14 @@ public class LockTests : DatabaseFixture
     [Fact]
     public async Task LockIsRespected()
     {
-        var newEntityNotLocked = new MyDbVersioningEntity
+        var newEntityNotLocked = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
         };
         
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
-        var newEntityLocked = new MyDbVersioningEntity
+        var newEntityLocked = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = lockedUntil
@@ -84,25 +85,25 @@ public class LockTests : DatabaseFixture
     public async Task CanBeLocked()
     {
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
-        var newEntity1 = new MyDbVersioningEntity
+        var newEntity1 = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = new TimeLock(lockedUntil)
         };
         
-        var newEntity2 = new MyDbVersioningEntity
+        var newEntity2 = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = lockedUntil
         };
         
-        var newEntity3 = new MyDbVersioningEntity
+        var newEntity3 = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
         };
         
-        var newEntity4 = new MyDbVersioningEntity
+        var newEntity4 = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
@@ -131,7 +132,7 @@ public class LockTests : DatabaseFixture
     public async Task LockCanBeUnlocked()
     {
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(-10);
-        var newEntity = new MyDbVersioningEntity
+        var newEntity = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = new TimeLock(lockedUntil)

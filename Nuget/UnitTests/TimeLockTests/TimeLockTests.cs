@@ -1,5 +1,5 @@
-﻿using EasyConcurrency.Abstractions.Entities;
-using EasyConcurrency.Abstractions.Extensions;
+﻿using EasyConcurrency.Abstractions.Extensions;
+using EasyConcurrency.Abstractions.TimeLock;
 
 namespace UnitTests.TimeLockTests;
 

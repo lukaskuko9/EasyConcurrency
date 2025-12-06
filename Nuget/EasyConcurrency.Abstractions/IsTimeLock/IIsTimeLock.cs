@@ -1,9 +1,11 @@
-﻿namespace EasyConcurrency.Abstractions.Entities;
+﻿using EasyConcurrency.Abstractions.TimeLock;
+
+namespace EasyConcurrency.Abstractions.IsTimeLock;
 
 /// <summary>
 /// Provides basic interface for determining, if an instance is locked or not.
 /// </summary>
-public interface IHasTimeLock
+public interface IIsTimeLock
 {
     /// <summary>
     /// Checks whether this entity is not locked using <see cref="DateTimeOffset.UtcNow"/> as current time.
@@ -23,9 +25,9 @@ public interface IHasTimeLock
     public bool IsNotLocked(DateTimeOffset now);
     
     /// <summary>
-    /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked for <paramref name="lockTimeDuration"/> duration.
+    /// Sets the <see cref="lockTimeDuration"/> on the entity. This entity will be locked for <paramref name="lockTimeDuration"/> duration.
     /// </summary>
-    /// <param name="lockTimeDuration">How long to lock the entity for when using <see cref="DateTimeOffset.UtcNow"/> as current date and time.</param>
+    /// <param name="lockTimeDuration">How long to lock the entity for when using <see cref="DateTimeOffset"/> as current date and time.</param>
     /// <remarks>This does not persist changes in data source where the entity should be locked.
     /// Request to save changes needs to be sent to the data source for this lock to take effect.</remarks>
     /// <returns>True, if this entity was successfully locked,
@@ -52,7 +54,7 @@ public interface IHasTimeLock
     /// <returns>True, if this entity was successfully locked,
     /// false if entity cannot be locked now, as there is already lock present on this entity.</returns>
     /// 
-    public bool SetLock(TimeLock timeLock);
+    public bool SetLock(TimeLock.TimeLock timeLock);
     /// <summary>
     /// Unlocks the <see cref="TimeLock"/> on the entity by setting it to null value.
     /// Useful for when the entity was claimed by current process which has finished operating on it.

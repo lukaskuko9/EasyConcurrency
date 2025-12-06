@@ -1,10 +1,12 @@
-﻿namespace EasyConcurrency.Abstractions.Entities;
+﻿using EasyConcurrency.Abstractions.IsTimeLock;
+
+namespace EasyConcurrency.Abstractions.TimeLock;
 
 /// <summary>
 /// Represents a time lock to be held on an entity that naturally expires.
 /// </summary>
 /// <param name="Value">Time when the lock expires</param>
-public record struct TimeLock(DateTimeOffset? Value) : IHasTimeLock, IComparable<DateTimeOffset>, IComparable<TimeLock>, IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
+public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<DateTimeOffset>, IComparable<TimeLock>, IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
 {
     /// <summary>
     /// Implicit operator for <see cref="DateTimeOffset"/> and <see cref="TimeLock"/> conversion

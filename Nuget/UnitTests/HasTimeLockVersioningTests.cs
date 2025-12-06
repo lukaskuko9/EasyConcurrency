@@ -1,23 +1,22 @@
-﻿using EasyConcurrency.Abstractions;
-using EasyConcurrency.Abstractions.Entities;
-using EasyConcurrency.Abstractions.Extensions;
+﻿using EasyConcurrency.Abstractions.Extensions;
+using EasyConcurrency.Abstractions.HasTimeLock;
 using Stubs;
 
 namespace UnitTests;
 
-public class TimeLockVersioningEntityTests
+public class HasTimeLockVersioningTests
 {
     [Fact]
     public void MyDbEntityIsAssignableToLockableEntity()
     {
-        var entity = new MyDbVersioningEntity { MyUniqueKey = Guid.NewGuid() };
-        Assert.IsAssignableFrom<TimeLockVersioningEntity>(entity);
+        var entity = new MyDbVersioning { MyUniqueKey = Guid.NewGuid() };
+        Assert.IsAssignableFrom<IHasTimeLock>(entity);
     }
 
     [Fact]
     public void IsLockedTests()
     {
-        var entity = new MyDbVersioningEntity
+        var entity = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(10)
@@ -31,7 +30,7 @@ public class TimeLockVersioningEntityTests
     [Fact]
     public void IsNotLockedTests()
     {
-        var entity = new MyDbVersioningEntity
+        var entity = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
@@ -45,7 +44,7 @@ public class TimeLockVersioningEntityTests
     [Fact]
     public void SetLockedLocksWhenNotLocked()
     {
-        var entity = new MyDbVersioningEntity
+        var entity = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
@@ -64,7 +63,7 @@ public class TimeLockVersioningEntityTests
     [Fact]
     public void SetLockedDoesNotLockWhenLocked()
     {
-        var entity = new MyDbVersioningEntity
+        var entity = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(5)
@@ -78,7 +77,7 @@ public class TimeLockVersioningEntityTests
     [Fact]
     public void UnlockSetsLockedUntilToNull()
     {
-        var entity = new MyDbVersioningEntity
+        var entity = new MyDbVersioning
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(5)
