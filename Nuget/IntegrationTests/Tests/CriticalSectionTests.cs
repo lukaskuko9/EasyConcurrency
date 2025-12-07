@@ -58,11 +58,10 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         
         //Act
         var databaseFactory = new DatabaseContextFactory();
-        List<int> concurrencyHandledForTasks = [];
         var tasks = Enumerable.Range(0, noOfTasks).Select(taskIndex =>
         {
             var dbContext = databaseFactory.CreateDbContext([]);
-            return LockEntityAndChangeParam(dbContext, expectedEntity, taskIndex, concurrencyHandledForTasks);
+            return LockEntityAndChangeParam(dbContext, expectedEntity, taskIndex);
         });
         
         var response = (await Task.WhenAll(tasks)).ToList();
@@ -80,12 +79,13 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
     }
 
     private async Task<bool> LockEntityAndChangeParam(DatabaseContext db,
-        MyLockableEntity expectedEntity, int testParam, List<int> concurrencyHandledForTasks)
+        MyLockableEntity expectedEntity, int testParam)
     {
-        await Task.Delay(new Random().Next(10, 20));
+        //introduce a random delay; this is to randomize the task that will succeed in acquiring the lock,
+        //thus moving a bit closer to real life scenarios
+        await Task.Delay(new Random().Next(0, 10));
         var criticalSectionService = new CriticalSectionService<DatabaseContext>(db);
         
-       
         var entityToLock = await db.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
 
         var opts = (CriticalSectionOptions x) =>
@@ -93,7 +93,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
             x.AutoUnlockOnCriticalSectionExit = false;
             x.OnConcurrencyResolutionHandle = _ =>
             {
-                concurrencyHandledForTasks.Add(testParam);
+                logger.WriteLine($"Concurrency handled for task: {testParam}");
             };
         };
         
