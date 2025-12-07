@@ -11,11 +11,7 @@ public class DatabaseContextFactory : IDesignTimeDbContextFactory<DatabaseContex
     {
         var connectionString = args.Length != 0 ? args[0] : DatabaseContext.GetConnectionString();
         var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
-        optionsBuilder.UseSqlServer(connectionString, opts =>
-            {
-                opts.EnableRetryOnFailure();
-            }
-        );
+        optionsBuilder.UseSqlServer(connectionString);
 
         return new DatabaseContext(optionsBuilder.Options);
     }

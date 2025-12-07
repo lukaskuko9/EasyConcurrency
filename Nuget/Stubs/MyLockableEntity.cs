@@ -10,6 +10,9 @@ public class MyLockableEntity : IHasTimeLock
     
     [ConcurrencyCheck]
     public TimeLock? LockedUntil { get; set; }
+    
+    [ConcurrencyCheck]
+    public DateTimeOffset? Asd { get; set; }
 
     public string? TestParameterString { get; set; } = null;
     public Guid? TestParameterGuid { get; set; } = null;

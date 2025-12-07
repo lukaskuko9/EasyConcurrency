@@ -12,11 +12,11 @@ public class DatabaseFixture : IDisposable
 
     protected DatabaseFixture()
     {
-        var connectionString = DatabaseContext.GetConnectionString();
         var factory = new DatabaseContextFactory();
-        Context = factory.CreateDbContext([connectionString]);
+        Context = factory.CreateDbContext([]);
         Context.Database.EnsureDeleted();
-        Context.Database.Migrate();
+        Context.Database.EnsureCreated();
+
         Repository = new MyConcurrentRepository(Context);
     }
 
