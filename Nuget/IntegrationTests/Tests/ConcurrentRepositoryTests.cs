@@ -1,11 +1,11 @@
 ﻿using EasyConcurrency.Abstractions.Extensions;
-using IntegrationTests.Database;
+using EasyConcurrency.IntegrationTests.Database;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Stubs;
 using Xunit;
 
-namespace IntegrationTests.Tests;
+namespace EasyConcurrency.IntegrationTests.Tests;
 
 [Collection(DatabaseCollection.CollectionName)]
 public class ConcurrentRepositoryTests : DatabaseFixture

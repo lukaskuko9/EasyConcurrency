@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Stubs;
 
-namespace IntegrationTests.Database;
+namespace EasyConcurrency.IntegrationTests.Database;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {

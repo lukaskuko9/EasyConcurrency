@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Stubs;
 using Xunit;
 
-namespace IntegrationTests.Tests;
+namespace EasyConcurrency.IntegrationTests.Tests;
 
 [Collection(DatabaseCollection.CollectionName)]
 public class LockTests : DatabaseFixture

@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace IntegrationTests;
+namespace EasyConcurrency.IntegrationTests;
 
 [CollectionDefinition(CollectionName)]
 public class DatabaseCollection : ICollectionFixture<DatabaseCollection>

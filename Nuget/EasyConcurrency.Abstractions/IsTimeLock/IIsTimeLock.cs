@@ -25,7 +25,7 @@ public interface IIsTimeLock
     public bool IsNotLocked(DateTimeOffset now);
     
     /// <summary>
-    /// Sets the <see cref="lockTimeDuration"/> on the entity. This entity will be locked for <paramref name="lockTimeDuration"/> duration.
+    /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked for <paramref name="lockTimeDuration"/> duration.
     /// </summary>
     /// <param name="lockTimeDuration">How long to lock the entity for when using <see cref="DateTimeOffset"/> as current date and time.</param>
     /// <remarks>This does not persist changes in data source where the entity should be locked.

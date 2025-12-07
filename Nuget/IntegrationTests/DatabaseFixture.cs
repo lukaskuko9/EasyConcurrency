@@ -1,9 +1,7 @@
-﻿using IntegrationTests.Database;
+﻿using EasyConcurrency.IntegrationTests.Database;
 using Microsoft.EntityFrameworkCore;
-using Xunit.Abstractions;
-using Xunit.Sdk;
 
-namespace IntegrationTests;
+namespace EasyConcurrency.IntegrationTests;
 
 public class DatabaseFixture : IDisposable
 {

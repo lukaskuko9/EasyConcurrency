@@ -1,12 +1,12 @@
 ﻿using EasyConcurrency.Abstractions.Extensions;
 using EasyConcurrency.EntityFramework.Entities;
-using IntegrationTests.Database;
+using EasyConcurrency.IntegrationTests.Database;
 using Microsoft.EntityFrameworkCore;
 using Stubs;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace IntegrationTests.Tests;
+namespace EasyConcurrency.IntegrationTests.Tests;
 
 [Collection(DatabaseCollection.CollectionName)]
 public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
@@ -27,7 +27,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         //Act
         await using (var criticalSection = await criticalSectionService.BeginCriticalSectionAndCommitAsync(expectedEntity, TimeSpan.FromMinutes(1)))
         {
-            if (criticalSection.LockAcquired && expectedEntity.LockedUntil.IsNotLocked())
+            if (criticalSection.IsLockAcquired && expectedEntity.LockedUntil.IsNotLocked())
             {
                 throw new ApplicationException("The entity is NOT locked");
             }
@@ -48,6 +48,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
     public async Task BeginCriticalSection_Concurrency()
     {
         //Arrange
+        const int noOfTasks = 10;
         var expectedEntity = new MyLockableEntity
         {
             TestParameterGuid = Guid.NewGuid()
@@ -57,25 +58,29 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         
         //Act
         var databaseFactory = new DatabaseContextFactory();
-        var tasks = Enumerable.Range(0, 10).Select(changeParamToValue =>
+        List<int> concurrencyHandledForTasks = [];
+        var tasks = Enumerable.Range(0, noOfTasks).Select(taskIndex =>
         {
-            var db = databaseFactory.CreateDbContext([]);
-            return LockEntityAndChangeParam(db, expectedEntity, changeParamToValue.ToString());
+            var dbContext = databaseFactory.CreateDbContext([]);
+            return LockEntityAndChangeParam(dbContext, expectedEntity, taskIndex, concurrencyHandledForTasks);
         });
+        
         var response = (await Task.WhenAll(tasks)).ToList();
-        var numberShouldBe = response.FindIndex(lockWasAcquired => lockWasAcquired);
-        logger.WriteLine($"Lock acquired for task on index {numberShouldBe}");
+        var taskIndexThatAcquiredLock = response.FindIndex(lockWasAcquired => lockWasAcquired);
+        logger.WriteLine($"Lock acquired for task on index {taskIndexThatAcquiredLock}");
         
         //Assert
+        Assert.Single(response, lockWasAcquired =>lockWasAcquired);
+        Assert.Equal(noOfTasks-1, response.Count(lockAcquired => lockAcquired == false));
+        
         var actualEntity = await databaseFactory.CreateDbContext([]).MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
         Assert.NotNull(actualEntity.LockedUntil);
-        Assert.Single(response, lockWasAcquired =>lockWasAcquired);
         Assert.Equal(expectedEntity.Id, actualEntity.Id);
-        Assert.Equal(expectedEntity.TestParameterString, numberShouldBe.ToString());
+        Assert.Equal(expectedEntity.TestParameterString, taskIndexThatAcquiredLock.ToString());
     }
 
     private async Task<bool> LockEntityAndChangeParam(DatabaseContext db,
-        MyLockableEntity expectedEntity, string testParam)
+        MyLockableEntity expectedEntity, int testParam, List<int> concurrencyHandledForTasks)
     {
         await Task.Delay(new Random().Next(10, 20));
         var criticalSectionService = new CriticalSectionService<DatabaseContext>(db);
@@ -86,17 +91,21 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         var opts = (CriticalSectionOptions x) =>
         {
             x.AutoUnlockOnCriticalSectionExit = false;
+            x.OnConcurrencyResolutionHandle = _ =>
+            {
+                concurrencyHandledForTasks.Add(testParam);
+            };
         };
         
         await using (var criticalSection = await criticalSectionService.BeginCriticalSectionAndCommitAsync(entityToLock, TimeSpan.FromMinutes(1), opts))
         {
-            if (criticalSection.LockAcquired == false)
+            if (criticalSection.IsLockAcquired == false)
             {
                 return false;
             }
 
             logger.WriteLine($"Writing value {testParam}. {DateTimeOffset.Now:o}");
-            expectedEntity.TestParameterString = testParam;
+            expectedEntity.TestParameterString = testParam.ToString();
 
             await db.SaveChangesAsync();
         }
