@@ -7,7 +7,7 @@ namespace IntegrationTests.Database;
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
     public DbSet<MyDbVersioning> MyDbEntities { get; init; }
-    public DbSet<MyHasTimeLock> MyLockableEntities { get; init; }
+    public DbSet<MyLockableEntity> MyLockableEntities { get; init; }
     
     /// <inheritdoc />
     public DatabaseContext() : this(new DbContextOptions<DatabaseContext>())
@@ -30,7 +30,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             entityBuilder.HasIndex(refundEntity => refundEntity.MyUniqueKey).IsUnique();
         });
         
-        modelBuilder.Entity<MyHasTimeLock>(entityBuilder =>
+        modelBuilder.Entity<MyLockableEntity>(entityBuilder =>
         {
             entityBuilder.ToTable("MyLockableEntities");
             entityBuilder.HasKey(refundEntity => refundEntity.Id);

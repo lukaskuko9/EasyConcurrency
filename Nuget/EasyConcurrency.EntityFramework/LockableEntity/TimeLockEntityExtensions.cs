@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using EasyConcurrency.Abstractions;
+﻿using System.Linq.Expressions;
 using EasyConcurrency.Abstractions.HasTimeLock;
 using EasyConcurrency.Abstractions.TimeLock;
 
@@ -29,8 +26,8 @@ public static class TimeLockEntityExtensions
     public static IQueryable<TLockableEntity> WhereIsNotLocked<TLockableEntity>(this IQueryable<TLockableEntity> queryable, DateTimeOffset now) where TLockableEntity: IHasTimeLock
     {
         return queryable.Where(IsNotLocked<TLockableEntity>(now));
-    }
-    
+    } 
+
     /// <summary>
     /// Filters out the entities that are not locked using <see cref="DateTimeOffset.UtcNow"/> as current time.
     /// </summary>

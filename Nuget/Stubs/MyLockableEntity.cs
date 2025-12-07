@@ -4,10 +4,13 @@ using EasyConcurrency.Abstractions.TimeLock;
 
 namespace Stubs;
 
-public class MyHasTimeLock : IHasTimeLock
+public class MyLockableEntity : IHasTimeLock
 {
     public long Id { get; init; }
     
     [ConcurrencyCheck]
     public TimeLock? LockedUntil { get; set; }
+
+    public string? TestParameterString { get; set; } = null;
+    public Guid? TestParameterGuid { get; set; } = null;
 }

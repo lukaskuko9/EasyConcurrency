@@ -25,6 +25,7 @@ public static class TimeLockExtensions
     {
         return propBuilder
             .HasConversion<TimeLockConverter>()
+            .IsConcurrencyToken()
             .IsRequired(false);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using IntegrationTests.Database;
 using Microsoft.EntityFrameworkCore;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace IntegrationTests;
 
@@ -15,7 +17,6 @@ public class DatabaseFixture : IDisposable
         Context = factory.CreateDbContext([connectionString]);
         Context.Database.EnsureDeleted();
         Context.Database.Migrate();
-        
         Repository = new MyConcurrentRepository(Context);
     }
 

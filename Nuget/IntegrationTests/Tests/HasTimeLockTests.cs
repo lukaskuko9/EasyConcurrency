@@ -13,7 +13,7 @@ public class HasTimeLockTests : DatabaseFixture
     [Fact]
     public async Task ConcurrencyTokenTakesEffect()
     {
-        var entity = new MyHasTimeLock
+        var entity = new MyLockableEntity
         {
             LockedUntil = null
         };
@@ -36,7 +36,7 @@ public class HasTimeLockTests : DatabaseFixture
         Assert.False(lockedEntity.IsNotLocked());
     }
 
-    private static async Task<MyHasTimeLock?> GetAndLockEntity(DatabaseContext dbContext)
+    private static async Task<MyLockableEntity?> GetAndLockEntity(DatabaseContext dbContext)
     {
         try
         {
