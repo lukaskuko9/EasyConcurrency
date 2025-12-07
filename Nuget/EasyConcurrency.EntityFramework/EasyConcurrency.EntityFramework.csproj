@@ -5,9 +5,9 @@
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <Version>0.2.2</Version>
-        <FileVersion>0.2.2</FileVersion>
-        <AssemblyVersion>0.2.2</AssemblyVersion>
+        <Version>1.0.0</Version>
+        <FileVersion>1.0.0</FileVersion>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
         <Authors>Lukáš Machajdík</Authors>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -30,7 +30,8 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>EntityFramework;Concurrency;EntityFrameworkCore;EntityFrameworkConcurrency;Database;EasyConcurrency;</PackageTags>
         <PackageReleaseNotes>
-            1.0.0 - First stable version with full implementations for optimistic and pessimistic scenario solutions
+            1.0.0 - First stable version with full implementations for mostly pessimistic but also optimistic scenario solutions
+            0.2.2 - Proof of concept version
         </PackageReleaseNotes>
         <Description>
             EasyConcurrency.EntityFramework is designed to simplify the implementation of concurrency control in Entity Framework. 

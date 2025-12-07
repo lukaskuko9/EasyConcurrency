@@ -13,7 +13,9 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     [Fact]
     public async Task ExceptionOnUniqueViolationIsHandled()
     {
+        var repository = new MyConcurrentRepository(Context);
         var uniqueKey = Guid.NewGuid();
+        
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
         var newEntityLocked = new MyDbVersioning
         {
@@ -21,7 +23,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
             LockedUntil = lockedUntil
         };
 
-        var inserted = await Repository.InsertAndSaveAsync(newEntityLocked);
+        var inserted = await repository.InsertAndSaveAsync(newEntityLocked);
         Assert.True(inserted);
         
         var newEntityLocked2 = new MyDbVersioning
@@ -30,13 +32,14 @@ public class ConcurrentRepositoryTests : DatabaseFixture
             LockedUntil = lockedUntil
         };
 
-        var insertedEntities = await Repository.InsertAndSaveAsync([newEntityLocked2]);
+        var insertedEntities = await repository.InsertAndSaveAsync([newEntityLocked2]);
         Assert.Empty(insertedEntities);
     }
 
     [Fact]
     public async Task NotLockedEntityCanBeLocked()
     {
+        var repository = new MyConcurrentRepository(Context);
         var uniqueKey = Guid.NewGuid();
         var newEntityLocked = new MyDbVersioning
         {
@@ -44,10 +47,10 @@ public class ConcurrentRepositoryTests : DatabaseFixture
             LockedUntil = null
         };
         
-        var inserted = await Repository.InsertAndSaveAsync(newEntityLocked);
+        var inserted = await repository.InsertAndSaveAsync(newEntityLocked);
         Assert.True(inserted);
         
-        var dbEntity = await Repository.LockAndSaveAsync(newEntityLocked, TimeSpan.FromMinutes(5));
+        var dbEntity = await repository.LockAndSaveAsync(newEntityLocked, TimeSpan.FromMinutes(5));
         Assert.NotNull(dbEntity);
         
         Assert.True(dbEntity.MyUniqueKey == uniqueKey);
@@ -57,6 +60,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
     [Fact]
     public async Task AllEntitiesCanBeInserted()
     {
+        var repository = new MyConcurrentRepository(Context);
         var newEntities = Enumerable
             .Range(0, 10)
             .Select(_ => new MyDbVersioning
@@ -67,7 +71,7 @@ public class ConcurrentRepositoryTests : DatabaseFixture
             )
             .ToList();
 
-        var insertedEntities = await Repository.InsertAndSaveAsync(newEntities);
+        var insertedEntities = await repository.InsertAndSaveAsync(newEntities);
         Assert.NotNull(insertedEntities);
         Assert.True(insertedEntities.SequenceEqual(newEntities));
     }

@@ -6,7 +6,6 @@ namespace EasyConcurrency.IntegrationTests;
 public class DatabaseFixture : IDisposable
 {
     protected readonly DatabaseContext Context;
-    protected readonly MyConcurrentRepository Repository;
 
     protected DatabaseFixture()
     {
@@ -14,8 +13,6 @@ public class DatabaseFixture : IDisposable
         Context = factory.CreateDbContext([]);
         Context.Database.EnsureDeleted();
         Context.Database.EnsureCreated();
-
-        Repository = new MyConcurrentRepository(Context);
     }
 
     public void Dispose()

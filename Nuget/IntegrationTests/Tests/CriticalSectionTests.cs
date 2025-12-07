@@ -32,12 +32,12 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
                 throw new ApplicationException("The entity is NOT locked");
             }
             
-            var c = await Context.MyLockableEntities.FindAsync(expectedEntity.Id);
+            var c = await Context.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
             Assert.NotNull(c?.LockedUntil);
         }
         
         //Assert
-        var actualEntity = await Context.MyLockableEntities.FindAsync(expectedEntity.Id);
+        var actualEntity = await Context.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
         Assert.Null(actualEntity?.LockedUntil);
         Assert.Equal(expectedEntity.Id, actualEntity?.Id);
         Assert.Equal(expectedEntity.TestParameterGuid, actualEntity?.TestParameterGuid);
@@ -83,7 +83,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
     {
         //introduce a random delay; this is to randomize the task that will succeed in acquiring the lock,
         //thus moving a bit closer to real life scenarios
-        await Task.Delay(new Random().Next(0, 10));
+        await Task.Delay(new Random().Next(0, 20));
         var criticalSectionService = new CriticalSectionService<DatabaseContext>(db);
         
         var entityToLock = await db.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
