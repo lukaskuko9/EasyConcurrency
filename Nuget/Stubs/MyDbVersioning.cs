@@ -6,12 +6,11 @@ namespace Stubs;
 
 public class MyDbVersioning : IHasTimeLock
 {
-    public long Id { get; set; }
-    public required Guid MyUniqueKey { get; set; }
+    public long Id { get; init; }
+    public required Guid MyUniqueKey { get; init; }
     
     [ConcurrencyCheck]
     public TimeLock? LockedUntil { get; set; }
-    
-    [Timestamp]
-    public byte[] Version { get; init; }
+
+    [Timestamp] public byte[] Version { get; init; }
 }

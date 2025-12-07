@@ -36,7 +36,7 @@
         <Description>
             EasyConcurrency.EntityFramework is designed to simplify the implementation of concurrency control in Entity Framework. 
             Entity Framework doesn't provide built-in support for pessimistic concurrency, 
-            but EasyConcurrency fills this gap by offering an easy-to-use interface.
+            but EasyConcurrency fills this gap by offering an easy-to-use interface with minimal effort. 
         </Description>
     </PropertyGroup>
 
@@ -45,7 +45,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.6" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
       <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
         <PrivateAssets>all</PrivateAssets>
@@ -55,10 +54,6 @@
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Experimental\" />
     </ItemGroup>
 
 </Project>
