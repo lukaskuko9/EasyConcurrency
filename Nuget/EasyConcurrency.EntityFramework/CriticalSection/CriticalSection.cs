@@ -25,7 +25,7 @@ public class CriticalSection<TDbContext>(
     /// If true, lock was successfully acquired, and it is safe to continue critical section code.
     /// If false, lock was not acquired successfully and critical section code should not usually continue.
     /// </summary>
-    public bool IsLockAcquired { get; init; } = isLockAcquired;
+    public bool IsLockAcquired { get; } = isLockAcquired;
     
     /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose()

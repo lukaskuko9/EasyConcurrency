@@ -32,16 +32,18 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
                 throw new ApplicationException("The entity is NOT locked");
             }
             
-            var c = await Context.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
-            Assert.NotNull(c?.LockedUntil);
+            var entity = await Context.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
+            Assert.NotNull(entity.LockedUntil);
         }
         
         //Assert
         var actualEntity = await Context.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
-        Assert.Null(actualEntity?.LockedUntil);
-        Assert.Equal(expectedEntity.Id, actualEntity?.Id);
-        Assert.Equal(expectedEntity.TestParameterGuid, actualEntity?.TestParameterGuid);
-        Assert.Equal(expectedEntity.TestParameterString, actualEntity?.TestParameterString);
+        Assert.Null(actualEntity.LockedUntil);
+        Assert.True(actualEntity.IsNotLocked());
+        Assert.False(actualEntity.IsLocked());
+        Assert.Equal(expectedEntity.Id, actualEntity.Id);
+        Assert.Equal(expectedEntity.TestParameterGuid, actualEntity.TestParameterGuid);
+        Assert.Equal(expectedEntity.TestParameterString, actualEntity.TestParameterString);
     }
     
     [Fact]
@@ -68,12 +70,17 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         var taskIndexThatAcquiredLock = response.FindIndex(lockWasAcquired => lockWasAcquired);
         logger.WriteLine($"Lock acquired for task on index {taskIndexThatAcquiredLock}");
         
-        //Assert
+        //Assertions
+        //Assert only a single task claimed the lock
         Assert.Single(response, lockWasAcquired =>lockWasAcquired);
+        
+        //Assert that all other tasks did not claim the lock
         Assert.Equal(noOfTasks-1, response.Count(lockAcquired => lockAcquired == false));
         
         var actualEntity = await databaseFactory.CreateDbContext([]).MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
         Assert.NotNull(actualEntity.LockedUntil);
+        Assert.True(actualEntity.IsLocked());
+        Assert.False(actualEntity.IsNotLocked());
         Assert.Equal(expectedEntity.Id, actualEntity.Id);
         Assert.Equal(expectedEntity.TestParameterString, taskIndexThatAcquiredLock.ToString());
     }
