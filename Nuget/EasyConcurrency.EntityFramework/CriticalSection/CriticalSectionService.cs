@@ -13,7 +13,11 @@ public sealed class CriticalSectionService<TDbContext>(TDbContext dbContext, Tim
     public async Task<CriticalSection<TDbContext>> BeginCriticalSectionAndCommitAsync<TTimeLockEntity>(TTimeLockEntity entityWithLock, TimeSpan lockForTime, Action<CriticalSectionOptions>? criticalSectionOptions = null, CancellationToken token = default)
         where TTimeLockEntity : IHasTimeLock
     {
-        var opts = new CriticalSectionOptions();
+        var opts = new CriticalSectionOptions
+        {
+            AutoUnlockOnCriticalSectionExit = true
+        };
+        
         //try lock the entity
         try
         {
@@ -27,10 +31,13 @@ public sealed class CriticalSectionService<TDbContext>(TDbContext dbContext, Tim
             
             return new CriticalSection<TDbContext>(entityWithLock, dbContext, true, opts.AutoUnlockOnCriticalSectionExit, token);
         }
-        catch (DbUpdateConcurrencyException entry)
+        catch (DbUpdateConcurrencyException entry) //handle db update concurrency exception that occured when locking
         {
-            //handle db update concurrency exception that occured when locking
-            opts.OnConcurrencyResolutionHandle?.Invoke(entry);
+            //invoke custom concurrency resolution
+            var concurrencyResolutionTask = opts.OnConcurrencyResolutionHandle?.Invoke(entry);
+            if (concurrencyResolutionTask is not null)
+                await concurrencyResolutionTask;
+            
             return new CriticalSection<TDbContext>(entityWithLock, dbContext, false, false, token);
         }
     }

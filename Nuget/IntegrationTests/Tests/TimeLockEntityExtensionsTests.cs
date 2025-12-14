@@ -6,6 +6,7 @@ using Xunit;
 
 namespace EasyConcurrency.IntegrationTests.Tests;
 
+[Collection(DatabaseCollection.CollectionName)]
 public class TimeLockEntityExtensionsTests : DatabaseFixture
 {
     [Fact]

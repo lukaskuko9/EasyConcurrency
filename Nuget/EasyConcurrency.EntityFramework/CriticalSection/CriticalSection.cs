@@ -57,11 +57,11 @@ public record CriticalSectionOptions
     /// <summary>
     /// If true, releases a lock when exiting / disposing critical section.
     /// </summary>
-    public bool AutoUnlockOnCriticalSectionExit { get; set; } = true;
+    public bool AutoUnlockOnCriticalSectionExit { get; set; }
     
     /// <summary>
-    /// Specifies custom action to be executed when a concurrency happens when acquiring a lock.
+    /// Specifies custom asynchronous action to be executed when a concurrency happens when acquiring a lock.
     /// This can be used to resolve the concurrency conflict  
     /// </summary>
-    public Action<DbUpdateConcurrencyException>? OnConcurrencyResolutionHandle { get; set; }
+    public Func<DbUpdateConcurrencyException, Task>? OnConcurrencyResolutionHandle { get; set; }
 }

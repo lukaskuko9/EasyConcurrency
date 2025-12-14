@@ -101,6 +101,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
             x.OnConcurrencyResolutionHandle = _ =>
             {
                 logger.WriteLine($"Concurrency handled for task: {testParam}");
+                return Task.CompletedTask;
             };
         };
         
