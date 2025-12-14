@@ -22,7 +22,20 @@ public interface IIsTimeLock
     /// <returns>Returns true if entity is not locked and therefore free to be claimed,
     /// otherwise false.
     /// </returns>
+    /// 
     public bool IsNotLocked(DateTimeOffset now);
+    /// <summary>
+    /// Checks whether this entity is locked using <see cref="DateTimeOffset.UtcNow"/> as current time.
+    /// </summary>
+    /// <returns>Returns true if entity is locked and therefore already claimed, otherwise false.</returns>
+    public bool IsLocked();
+    
+    /// <summary>
+    /// Checks whether this entity is locked at specified time.
+    /// </summary>
+    /// <param name="now">Specifies the current time to be used when comparing if the entity is locked or not.</param>
+    /// <returns>Returns true if entity is locked and therefore already claimed, otherwise false.</returns>
+    public bool IsLocked(DateTimeOffset now);
     
     /// <summary>
     /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked for <paramref name="lockTimeDuration"/> duration.

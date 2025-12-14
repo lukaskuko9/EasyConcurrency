@@ -1,5 +1,5 @@
 ﻿using EasyConcurrency.Abstractions.Extensions;
-using EasyConcurrency.EntityFramework.Entities;
+using EasyConcurrency.EntityFramework.CriticalSection;
 using EasyConcurrency.IntegrationTests.Database;
 using Microsoft.EntityFrameworkCore;
 using Stubs;

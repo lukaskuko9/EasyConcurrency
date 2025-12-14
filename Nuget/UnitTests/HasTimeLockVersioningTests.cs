@@ -9,28 +9,32 @@ public class HasTimeLockVersioningTests
     [Fact]
     public void MyDbEntityIsAssignableToLockableEntity()
     {
-        var entity = new MyDbVersioning { MyUniqueKey = Guid.NewGuid() };
+        var entity = new HasTimeLockEntityStub { MyUniqueKey = Guid.NewGuid() };
         Assert.IsAssignableFrom<IHasTimeLock>(entity);
     }
 
     [Fact]
     public void IsLockedTests()
     {
-        var entity = new MyDbVersioning
+        var entity = new HasTimeLockEntityStub
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(10)
         };
-        
+        var now = DateTimeOffset.UtcNow;
         Assert.False(entity.IsNotLocked());
-        Assert.False(entity.IsNotLocked(DateTimeOffset.UtcNow));
+        Assert.False(entity.IsNotLocked(now));
         Assert.False(entity.LockedUntil.IsNotLocked());
+        
+        Assert.True(entity.IsLocked());
+        Assert.True(entity.IsLocked(now));
+        Assert.True(entity.LockedUntil.IsLocked());
     }
     
     [Fact]
     public void IsNotLockedTests()
     {
-        var entity = new MyDbVersioning
+        var entity = new HasTimeLockEntityStub
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
@@ -39,12 +43,16 @@ public class HasTimeLockVersioningTests
         Assert.True(entity.IsNotLocked());
         Assert.True(entity.IsNotLocked(DateTimeOffset.UtcNow));
         Assert.True(entity.LockedUntil.IsNotLocked());
+        
+        Assert.False(entity.IsLocked());
+        Assert.False(entity.IsLocked(DateTimeOffset.UtcNow));
+        Assert.False(entity.LockedUntil.IsLocked());
     }
     
     [Fact]
     public void SetLockedLocksWhenNotLocked()
     {
-        var entity = new MyDbVersioning
+        var entity = new HasTimeLockEntityStub
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = null
@@ -63,7 +71,7 @@ public class HasTimeLockVersioningTests
     [Fact]
     public void SetLockedDoesNotLockWhenLocked()
     {
-        var entity = new MyDbVersioning
+        var entity = new HasTimeLockEntityStub
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(5)
@@ -77,7 +85,7 @@ public class HasTimeLockVersioningTests
     [Fact]
     public void UnlockSetsLockedUntilToNull()
     {
-        var entity = new MyDbVersioning
+        var entity = new HasTimeLockEntityStub
         {
             MyUniqueKey = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(5)

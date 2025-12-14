@@ -54,13 +54,25 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     /// <inheritdoc />
     public bool IsNotLocked()
     {
-        return IsNotLocked(DateTimeOffset.UtcNow);
+        return IsLocked() == false;
     }
     
     /// <inheritdoc />
     public bool IsNotLocked(DateTimeOffset now)
     {
-        return Value == null || Value < now;
+        return IsLocked(now) == false;
+    }
+
+    /// <inheritdoc />
+    public bool IsLocked()
+    {
+        return IsLocked(DateTimeOffset.UtcNow);
+    }
+
+    /// <inheritdoc />
+    public bool IsLocked(DateTimeOffset now)
+    {
+        return Value >= now;
     }
 
     /// <inheritdoc />

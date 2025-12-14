@@ -16,6 +16,8 @@ public partial class TimeLockTests
         var timeLock2 = TimeLock.Create(now, TimeSpan.FromMinutes(lockedForMinutes));
         Assert.False(timeLock.IsNotLocked(now));
         Assert.False(timeLock2.IsNotLocked(now));
+        Assert.True(timeLock.IsLocked(now));
+        Assert.True(timeLock2.IsLocked(now));
         Assert.Equal(timeLock.Value, timeLock2.Value);
     }
     
@@ -30,6 +32,8 @@ public partial class TimeLockTests
         var timeLock2 = TimeLock.Create(now, TimeSpan.FromMinutes(lockedForMinutes));
         Assert.True(timeLock.IsNotLocked(now));
         Assert.True(timeLock2.IsNotLocked(now));
+        Assert.False(timeLock.IsLocked(now));
+        Assert.False(timeLock2.IsLocked(now));
         Assert.Equal(timeLock.Value, timeLock2.Value);
     }
     
@@ -38,13 +42,16 @@ public partial class TimeLockTests
     {
         TimeLock? timeLock = null;
         Assert.True(timeLock.IsNotLocked());
+        Assert.False(timeLock.IsLocked());
     }
     
     [Fact]
     public void IsNotLockedWhenTimeLockIsNullAndTimeIsProvided()
     {
         TimeLock? timeLock = null;
-        Assert.True(timeLock.IsNotLocked(DateTimeOffset.UtcNow));
+        var now = DateTimeOffset.UtcNow;
+        Assert.True(timeLock.IsNotLocked(now));
+        Assert.False(timeLock.IsLocked(now));
     }
     
     [Fact]
@@ -52,9 +59,12 @@ public partial class TimeLockTests
     {
         var timeLock = TimeLock.Create(DateTimeOffset.UtcNow.AddMinutes(10));
         Assert.False(timeLock.IsNotLocked());
+        Assert.True(timeLock.IsLocked());
         
         timeLock.Unlock();
+        
         Assert.True(timeLock.IsNotLocked());
+        Assert.False(timeLock.IsLocked());
     }
         
     [Fact]
@@ -65,6 +75,7 @@ public partial class TimeLockTests
         
         timeLock.Value = DateTimeOffset.UtcNow.AddMinutes(10);
         Assert.False(timeLock.IsNotLocked());
+        Assert.True(timeLock.IsLocked());
     }
     
     [Fact]
@@ -72,9 +83,11 @@ public partial class TimeLockTests
     {
         var timeLock = TimeLock.Create(null);
         Assert.True(timeLock.IsNotLocked());
+        Assert.False(timeLock.IsLocked());
 
         timeLock.SetLock(new TimeLock(DateTimeOffset.UtcNow.AddMinutes(10)));
         Assert.False(timeLock.IsNotLocked());
+        Assert.True(timeLock.IsLocked());
     }
     
     [Fact]
@@ -92,9 +105,11 @@ public partial class TimeLockTests
     {
         var timeLock = TimeLock.Create(null);
         Assert.True(timeLock.IsNotLocked());
+        Assert.False(timeLock.IsLocked());
 
         timeLock.SetLock(TimeSpan.FromMinutes(10));
         Assert.False(timeLock.IsNotLocked());
+        Assert.True(timeLock.IsLocked());
     }
     
     [Fact]
@@ -102,9 +117,11 @@ public partial class TimeLockTests
     {
         var timeLock = TimeLock.Create(null);
         Assert.True(timeLock.IsNotLocked());
+        Assert.False(timeLock.IsLocked());
 
         timeLock.SetLock(10);
         Assert.False(timeLock.IsNotLocked());
+        Assert.True(timeLock.IsLocked());
     }
     
     [Fact]
@@ -112,7 +129,8 @@ public partial class TimeLockTests
     {
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
         TimeLock timeLock = lockedUntil;
-        Assert.False(timeLock.IsNotLocked());        
+        Assert.False(timeLock.IsNotLocked()); 
+        Assert.True(timeLock.IsLocked());       
     }
     
     [Fact]
@@ -123,7 +141,9 @@ public partial class TimeLockTests
         DateTimeOffset? lockedUntilTakenFromTimeLock = timeLock;
         Assert.Equal(lockedUntil, lockedUntilTakenFromTimeLock);
         TimeLock? timeLock2 = lockedUntilTakenFromTimeLock;
+        
         Assert.False(timeLock2.IsNotLocked());
+        Assert.True(timeLock2.IsLocked());
     }
     
     [Theory]
@@ -133,7 +153,8 @@ public partial class TimeLockTests
     {
         DateTimeOffset? lockedUntil = lockForMinutes == null ? null : DateTimeOffset.UtcNow.AddMinutes(lockForMinutes.Value);
         TimeLock? timeLock = lockedUntil;
-        Assert.True(timeLock.IsNotLocked());        
+        Assert.True(timeLock.IsNotLocked());      
+        Assert.False(timeLock.IsLocked());  
     }
 
     [Fact]
