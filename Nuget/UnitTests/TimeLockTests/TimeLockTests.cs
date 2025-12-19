@@ -119,7 +119,7 @@ public partial class TimeLockTests
         Assert.True(timeLock.IsNotLocked());
         Assert.False(timeLock.IsLocked());
 
-        timeLock.SetLock(10);
+        timeLock.SetLock(DateTimeOffset.UtcNow.AddMinutes(10));
         Assert.False(timeLock.IsNotLocked());
         Assert.True(timeLock.IsLocked());
     }

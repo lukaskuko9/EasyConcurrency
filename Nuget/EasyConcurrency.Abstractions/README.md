@@ -19,32 +19,11 @@ or is unlocked / released before that can happen.
 
 It provides functionality to manipulate with time until which the *TimeLock* should be locked, such as:
 
-`IsNotLocked` - for checking if this *TimeLock* is not locked / is available for locking
+`IsLocked` / `IsNotLocked` - for checking if this *TimeLock* is not locked / is available for locking
 
 `SetLock` - for setting the date and time until which the entity is locked. When the lock naturally expires,
-the entity will be unlocked. Important thing to note is that this does not lock all the entities,
-only the single row for a single entity that is locked.
+the entity will be unlocked.
 
 `Unlock` - for unlocking the time lock before it naturally expires.
 E.g. we have locked an entity to do write operations on it, but are finished working with it.
 We can unlock the *TimeLock* so that other processes can claim it for write changes.
-
-
-### ITimeLockEntity
-*ITimeLockEntity* is an interface providing various methods for locking and unlocking
-entity. This is the entity you'd want to lock before reaching critical section.
-
-Naturally this interface also provides `LockedUntil` property of type *TimeLock*,
-that has [Concurrency check attribute](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/data-annotations#concurrencycheck).
-
-#### TimeLockEntity
-Implementations methods from `ITimeLockEntity` interface.
-
-#### TimeLockVersioningEntity
-`TimeLockVersioningEntity` inherits from `TimeLockEntity`, providing also `Version`
-property with [Timestamp attribute](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/data-annotations#timestamp).
-
-Both of these types can be used for pessimistic concurrency control.
-The difference between `TimeLockEntity` and `TimeLockVersioningEntity`
-is that the former reacts to concurrences only on the `LockedUntil` property to lock it properly,
-while the latter reacts to concurrences on any of the properties on that entity.

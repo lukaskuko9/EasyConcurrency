@@ -44,7 +44,7 @@ public class HasTimeLockTests : DatabaseFixture
             if (entityToLock is null)
                 return null;
 
-            entityToLock.SetLock(5);
+            entityToLock.SetLock(DateTimeOffset.UtcNow.AddMinutes(5));
             await dbContext.SaveChangesAsync();
             return entityToLock;
         }

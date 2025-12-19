@@ -58,7 +58,7 @@ public class HasTimeLockVersioningTests
             LockedUntil = null
         };
 
-        Assert.True(entity.SetLock(5));
+        Assert.True(entity.SetLock(DateTimeOffset.UtcNow.AddMinutes(5)));
         entity.LockedUntil = null;
         
         Assert.True(entity.SetLock(TimeSpan.FromMinutes(5)));
@@ -77,7 +77,7 @@ public class HasTimeLockVersioningTests
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(5)
         };
         
-        Assert.False(entity.SetLock(5));
+        Assert.False(entity.SetLock(DateTimeOffset.UtcNow.AddMinutes(5)));
         Assert.False(entity.SetLock(TimeSpan.FromMinutes(5)));
         Assert.False(entity.SetLock(DateTimeOffset.UtcNow.AddMinutes(5)));
     }

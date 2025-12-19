@@ -6,7 +6,7 @@ namespace EasyConcurrency.Abstractions.TimeLock;
 /// Represents a time lock to be held on an entity that naturally expires.
 /// </summary>
 /// <param name="Value">Time when the lock expires</param>
-public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<DateTimeOffset>, IComparable<TimeLock>, IComparable<DateTimeOffset?>, IComparable<TimeLock?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
+public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<TimeLock?>, IComparable<TimeLock>
 {
     /// <summary>
     /// Implicit operator for <see cref="DateTimeOffset"/> and <see cref="TimeLock"/> conversion
@@ -44,6 +44,13 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     public static TimeLock Create(DateTimeOffset? lockedUntil) => new(lockedUntil);
     
     /// <summary>
+    /// Creates a <see cref="TimeLock"/> instance. 
+    /// </summary>
+    /// <param name="timeLock"><see cref="IIsTimeLock"/> to create a time lock from.</param>
+    /// <returns>New TimeLock instance specifying date and time until which the lock takes effect</returns>
+    public static TimeLock CreateFrom(IIsTimeLock? timeLock) => new(timeLock?.Value);
+    
+    /// <summary>
     /// Creates a <see cref="TimeLock"/> instance with <paramref name="now"/> as current time
     /// </summary>
     /// <param name="now">Current date and time</param>
@@ -76,13 +83,19 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     }
 
     /// <inheritdoc />
-    public bool SetLock(TimeLock timeLock)
+    public bool SetLock(DateTimeOffset? lockUntil)
     {
         if (IsNotLocked() == false)
             return false;
 
-        Value = timeLock.Value;
+        Value = lockUntil;
         return true;
+    }
+
+    /// <inheritdoc />
+    public bool SetLockFrom(IIsTimeLock timeLock)
+    {
+        return SetLock(timeLock.Value);
     }
     
     /// <inheritdoc />
@@ -93,13 +106,6 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
 
         Value = DateTimeOffset.UtcNow.Add(lockTimeDuration);
         return true;
-    }
-    
-    /// <inheritdoc />
-    public bool SetLock(int minutes)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegative(minutes);
-        return SetLock(TimeSpan.FromMinutes(minutes));
     }
 
     /// <inheritdoc />
@@ -113,6 +119,13 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     {
         return Nullable.Compare(Value, other);
     }
+        
+    /// <inheritdoc />
+    public int CompareTo(DateTimeOffset? other)
+    {
+        return Nullable.Compare(Value, other);
+    }
+
     
     /// <inheritdoc />
     public int CompareTo(TimeLock other)
@@ -121,13 +134,13 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     }
     
     /// <inheritdoc />
-    public int CompareTo(DateTimeOffset? other)
+    public int CompareTo(TimeLock? other)
     {
-        return Nullable.Compare(Value, other);
+        return CompareTo((IIsTimeLock?)other);
     }
     
     /// <inheritdoc />
-    public int CompareTo(TimeLock? other)
+    public int CompareTo(IIsTimeLock? other)
     {
         return Nullable.Compare(Value, other?.Value);
     }
@@ -139,9 +152,9 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     }
 
     /// <inheritdoc />
-    public bool Equals(TimeLock other)
+    public readonly bool Equals(TimeLock other)
     {
-        return Value.Equals(other.Value);
+        return Nullable.Equals(Value, other.Value);
     }
 
     /// <inheritdoc />
@@ -151,7 +164,13 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     }
 
     /// <inheritdoc />
-    public override int GetHashCode()
+    public bool Equals(IIsTimeLock? other)
+    {
+        return Nullable.Equals(Value, other?.Value);
+    }
+
+    /// <inheritdoc />
+    public readonly override int GetHashCode()
     {
         return Value.GetHashCode();
     }

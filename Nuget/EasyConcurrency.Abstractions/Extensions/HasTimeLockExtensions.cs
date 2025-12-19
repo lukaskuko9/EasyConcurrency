@@ -66,8 +66,11 @@ public static class HasTimeLockExtensions
     /// Request to save changes needs to be sent to the data source for this lock to take effect.</remarks>
     /// <returns>True, if this entity was successfully locked,
     /// false if entity cannot be locked now, as there is already lock present on this entity.</returns>
-    public static bool SetLock(this IHasTimeLock entity, TimeLock.TimeLock lockTimeDuration)
+    public static bool SetLock(this IHasTimeLock? entity, DateTimeOffset lockTimeDuration)
     {
+        if (entity == null)
+            return false;
+        
         if (entity.LockedUntil != null) 
             return entity.LockedUntil.Value.SetLock(lockTimeDuration);
         
@@ -85,8 +88,11 @@ public static class HasTimeLockExtensions
     /// Request to save changes needs to be sent to the data source for this lock to take effect.</remarks>
     /// <returns>True, if this entity was successfully locked,
     /// false if entity cannot be locked now, as there is already lock present on this entity.</returns>
-    public static bool SetLock(this IHasTimeLock entity, TimeSpan lockTimeDuration)
+    public static bool SetLock(this IHasTimeLock? entity, TimeSpan lockTimeDuration)
     {
+        if (entity == null)
+            return false;
+        
         if (entity.LockedUntil != null) 
             return entity.LockedUntil.Value.SetLock(lockTimeDuration);
         
@@ -95,22 +101,20 @@ public static class HasTimeLockExtensions
     }
         
     /// <summary>
-    /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked for specified amount of <paramref name="minutes"/>.
+    /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked for specified amount of <paramref name="lockUntil"/>.
     /// </summary>
     /// <param name="entity">Entity instance with<see cref="TimeLock"/> to set the lock for</param>
-    /// <param name="minutes">How long to lock the entity for in minutes when using <see cref="DateTimeOffset.UtcNow"/> as current date and time.</param>
-    /// <exception cref="ArgumentOutOfRangeException">Throws this exception if the <paramref name="minutes"/> argument is negative.</exception>
+    /// <param name="lockUntil">Time when time lock on entity will expire.</param>
     /// <remarks>This does not persist changes in data source where the entity should be locked.
     /// Request to save changes needs to be sent to the data source for this lock to take effect.</remarks>
     /// <returns>True, if this entity was successfully locked,
     /// false if entity cannot be locked now, as there is already lock present on this entity.</returns>
-
-    public static bool SetLock(this IHasTimeLock entity, int minutes)
+    public static bool SetLock(this IHasTimeLock entity, DateTimeOffset? lockUntil)
     {
         if (entity.LockedUntil != null)
-            return entity.LockedUntil.Value.SetLock(minutes);
+            return entity.LockedUntil.Value.SetLock(lockUntil);
         
-        entity.LockedUntil = TimeLock.TimeLock.Create(DateTimeOffset.UtcNow.AddMinutes(minutes));
+        entity.LockedUntil = TimeLock.TimeLock.Create(lockUntil);
         return true;
     }
     
