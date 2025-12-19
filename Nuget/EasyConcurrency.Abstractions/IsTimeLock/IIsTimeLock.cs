@@ -5,8 +5,15 @@ namespace EasyConcurrency.Abstractions.IsTimeLock;
 /// <summary>
 /// Provides basic interface for determining, if an instance is locked or not.
 /// </summary>
-public interface IIsTimeLock : IComparable<DateTimeOffset>, IComparable<IIsTimeLock>, IComparable<DateTimeOffset?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>, IEquatable<IIsTimeLock>
+public interface IIsTimeLock : IComparable<DateTimeOffset>, IComparable<DateTimeOffset?>, IEquatable<DateTimeOffset?>, IEquatable<DateTimeOffset>
 {
+    /// <summary>
+    /// Creates a <see cref="TimeLock"/> instance. 
+    /// </summary>
+    /// <param name="lockedUntil">The date and time expiration of the lock</param>
+    /// <returns>New TimeLock instance specifying date and time until which the lock takes effect</returns>
+    public static abstract IIsTimeLock Create(DateTimeOffset? lockedUntil);
+    
     /// <summary>
     /// DatetimeOffset as a point in time, indicating when the lock expires. Null if lock is not set.
     /// </summary>
@@ -40,44 +47,4 @@ public interface IIsTimeLock : IComparable<DateTimeOffset>, IComparable<IIsTimeL
     /// <param name="now">Specifies the current time to be used when comparing if the entity is locked or not.</param>
     /// <returns>Returns true if entity is locked and therefore already claimed, otherwise false.</returns>
     public bool IsLocked(DateTimeOffset now);
-    
-    /// <summary>
-    /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked for <paramref name="lockTimeDuration"/> duration.
-    /// </summary>
-    /// <param name="lockTimeDuration">How long to lock the entity for when using <see cref="DateTimeOffset"/> as current date and time.</param>
-    /// <remarks>This does not persist changes in data source where the entity should be locked.
-    /// Request to save changes needs to be sent to the data source for this lock to take effect.</remarks>
-    /// <returns>True, if this entity was successfully locked,
-    /// false if entity cannot be locked now, as there is already lock present on this entity.</returns>
-    public bool SetLock(TimeSpan lockTimeDuration);
-    
-    /// <summary>
-    /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked until <paramref name="lockUntil"/>.
-    /// </summary>
-    /// <param name="lockUntil">Locks the entity until this time</param>
-    /// <remarks>This does not persist changes in data source where the entity should be locked.
-    /// Request to save changes needs to be sent to the data source for this lock to take effect.</remarks>
-    /// <returns>True, if this entity was successfully locked,
-    /// false if entity cannot be locked now, as there is already lock present on this entity.</returns>
-    public bool SetLock(DateTimeOffset? lockUntil);
-
-    /// <summary>
-    /// Sets the <see cref="TimeLock"/> on the entity. This entity will be locked until <paramref name="timeLock"/> does not expire or is not unlocked
-    /// </summary>
-    /// <param name="timeLock"><paramref name="timeLock"/> value to set</param>
-    /// <remarks>This does not persist changes in data source where the entity should be locked.
-    /// Request to save changes needs to be sent to the data source for this lock to take effect.</remarks>
-    /// <returns>True, if this entity was successfully locked,
-    /// false if entity cannot be locked now, as there is already lock present on this entity.</returns>
-    /// 
-    public bool SetLockFrom(IIsTimeLock timeLock);
-    /// <summary>
-    /// Unlocks the <see cref="IIsTimeLock"/> on the entity by setting it to null value.
-    /// Useful for when the entity was claimed by current process which has finished operating on it.
-    /// Calling this method and persisting changes will make it available for other processes.
-    /// </summary>
-    /// <remarks>This does not persist changes in data source where the entity should be locked.
-    /// Request to save changes needs to be sent to the data source for this lock to take effect.</remarks>
-    public void Unlock();
-
 }

@@ -36,60 +36,18 @@ public partial class TimeLockTests
         Assert.False(timeLock2.IsLocked(now));
         Assert.Equal(timeLock.Value, timeLock2.Value);
     }
-    
-    [Fact]
-    public void IsNotLockedWhenTimeLockIsNull()
-    {
-        TimeLock? timeLock = null;
-        Assert.True(timeLock.IsNotLocked());
-        Assert.False(timeLock.IsLocked());
-    }
-    
-    [Fact]
-    public void IsNotLockedWhenTimeLockIsNullAndTimeIsProvided()
-    {
-        TimeLock? timeLock = null;
-        var now = DateTimeOffset.UtcNow;
-        Assert.True(timeLock.IsNotLocked(now));
-        Assert.False(timeLock.IsLocked(now));
-    }
-    
-    [Fact]
-    public void UnlockTest()
-    {
-        var timeLock = TimeLock.Create(DateTimeOffset.UtcNow.AddMinutes(10));
-        Assert.False(timeLock.IsNotLocked());
-        Assert.True(timeLock.IsLocked());
-        
-        timeLock.Unlock();
-        
-        Assert.True(timeLock.IsNotLocked());
-        Assert.False(timeLock.IsLocked());
-    }
-        
+
     [Fact]
     public void ValueSetTest()
     {
         var timeLock = new TimeLock();
         Assert.Null(timeLock.Value);
-        
+
         timeLock.Value = DateTimeOffset.UtcNow.AddMinutes(10);
         Assert.False(timeLock.IsNotLocked());
         Assert.True(timeLock.IsLocked());
     }
-    
-    [Fact]
-    public void SetLockTestUsingAnotherTimeLock()
-    {
-        var timeLock = TimeLock.Create(null);
-        Assert.True(timeLock.IsNotLocked());
-        Assert.False(timeLock.IsLocked());
 
-        timeLock.SetLock(new TimeLock(DateTimeOffset.UtcNow.AddMinutes(10)));
-        Assert.False(timeLock.IsNotLocked());
-        Assert.True(timeLock.IsLocked());
-    }
-    
     [Fact]
     public void SetLockTestUsingImplicitConversionFromNullableDateTimeOffset()
     {
@@ -97,31 +55,6 @@ public partial class TimeLockTests
         TimeLock? timeLock = lockedUntil;
         DateTimeOffset? lockedUntilTakenFromTimeLock = timeLock;
         Assert.Equal(lockedUntil, lockedUntilTakenFromTimeLock);
-    }
-    
-    
-    [Fact]
-    public void SetLockTestUsingTimeSpan()
-    {
-        var timeLock = TimeLock.Create(null);
-        Assert.True(timeLock.IsNotLocked());
-        Assert.False(timeLock.IsLocked());
-
-        timeLock.SetLock(TimeSpan.FromMinutes(10));
-        Assert.False(timeLock.IsNotLocked());
-        Assert.True(timeLock.IsLocked());
-    }
-    
-    [Fact]
-    public void SetLockTestUsingMinutesArgument()
-    {
-        var timeLock = TimeLock.Create(null);
-        Assert.True(timeLock.IsNotLocked());
-        Assert.False(timeLock.IsLocked());
-
-        timeLock.SetLock(DateTimeOffset.UtcNow.AddMinutes(10));
-        Assert.False(timeLock.IsNotLocked());
-        Assert.True(timeLock.IsLocked());
     }
     
     [Fact]

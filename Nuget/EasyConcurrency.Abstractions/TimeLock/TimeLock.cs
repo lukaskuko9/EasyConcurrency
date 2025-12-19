@@ -1,4 +1,5 @@
-﻿using EasyConcurrency.Abstractions.IsTimeLock;
+﻿using System.Runtime.CompilerServices;
+using EasyConcurrency.Abstractions.IsTimeLock;
 
 namespace EasyConcurrency.Abstractions.TimeLock;
 
@@ -43,12 +44,11 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     /// <returns>New TimeLock instance specifying date and time until which the lock takes effect</returns>
     public static TimeLock Create(DateTimeOffset? lockedUntil) => new(lockedUntil);
     
-    /// <summary>
-    /// Creates a <see cref="TimeLock"/> instance. 
-    /// </summary>
-    /// <param name="timeLock"><see cref="IIsTimeLock"/> to create a time lock from.</param>
-    /// <returns>New TimeLock instance specifying date and time until which the lock takes effect</returns>
-    public static TimeLock CreateFrom(IIsTimeLock? timeLock) => new(timeLock?.Value);
+    /// <inheritdoc/>
+    static IIsTimeLock IIsTimeLock.Create(DateTimeOffset? lockedUntil)
+    {
+        return Create(lockedUntil);
+    }
     
     /// <summary>
     /// Creates a <see cref="TimeLock"/> instance with <paramref name="now"/> as current time
@@ -82,38 +82,6 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
         return Value >= now;
     }
 
-    /// <inheritdoc />
-    public bool SetLock(DateTimeOffset? lockUntil)
-    {
-        if (IsNotLocked() == false)
-            return false;
-
-        Value = lockUntil;
-        return true;
-    }
-
-    /// <inheritdoc />
-    public bool SetLockFrom(IIsTimeLock timeLock)
-    {
-        return SetLock(timeLock.Value);
-    }
-    
-    /// <inheritdoc />
-    public bool SetLock(TimeSpan lockTimeDuration)
-    {
-        if (IsNotLocked() == false)
-            return false;
-
-        Value = DateTimeOffset.UtcNow.Add(lockTimeDuration);
-        return true;
-    }
-
-    /// <inheritdoc />
-    public void Unlock()
-    { 
-        Value = null;
-    }
-    
     /// <inheritdoc />
     public int CompareTo(DateTimeOffset other)
     {

@@ -44,9 +44,9 @@ public class TimeLockEntityExtensionsTests : DatabaseFixture
             )
             .ToList();
         
-        Assert.True(lockedEntities1Minute.All(entity=>entity.IsLocked()));
-        Assert.True(lockedEntities5Minutes.All(entity=>entity.IsLocked()));
-        Assert.True(unlockedEntities.All(entity=>entity.IsNotLocked()));
+        Assert.True(lockedEntities1Minute.All(entity=>entity.LockedUntil?.IsLocked() == true));
+        Assert.True(lockedEntities5Minutes.All(entity=>entity.LockedUntil?.IsLocked() == true));
+        Assert.True(unlockedEntities.All(entity=>entity.LockedUntil.IsNotLocked()));
         await Context.MyLockableEntities.AddRangeAsync(unlockedEntities);
         await Context.MyLockableEntities.AddRangeAsync(lockedEntities1Minute);
         await Context.MyLockableEntities.AddRangeAsync(lockedEntities5Minutes);
@@ -63,9 +63,9 @@ public class TimeLockEntityExtensionsTests : DatabaseFixture
         //Assertions
         
         //Assert all collections unlocked set correctly
-        Assert.True(dbNotLockedWithImplicitNow.All(entity => entity.IsNotLocked()));
-        Assert.True(dbNotLockedWithExplicitNow.All(entity => entity.IsNotLocked()));
-        Assert.True(dbNotLockedIn2Minutes.All(entity => entity.IsNotLocked(DateTimeOffset.UtcNow.AddMinutes(2))));
+        Assert.True(dbNotLockedWithImplicitNow.All(entity => entity.LockedUntil.IsNotLocked()));
+        Assert.True(dbNotLockedWithExplicitNow.All(entity => entity.LockedUntil.IsNotLocked()));
+        Assert.True(dbNotLockedIn2Minutes.All(entity => entity.LockedUntil.IsNotLocked(DateTimeOffset.UtcNow.AddMinutes(2))));
         Assert.True(dbNotLockedIn6Minutes.Count.Equals(totalNumberOfEntities));
         
         //Assert number of items in each collection is correct

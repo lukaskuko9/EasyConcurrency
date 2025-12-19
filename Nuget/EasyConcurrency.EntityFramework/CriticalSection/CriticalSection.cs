@@ -33,7 +33,7 @@ public class CriticalSection<TDbContext>(
         if (autoReleaseLockOnSectionExit == false) 
             return;
         
-        hasTimeLock.Unlock();
+        hasTimeLock.LockedUntil = null;
         dbContext.SaveChanges();
     }
 
@@ -42,8 +42,8 @@ public class CriticalSection<TDbContext>(
     {
         if (autoReleaseLockOnSectionExit == false) 
             return;
-        
-        hasTimeLock.Unlock();
+
+        hasTimeLock.LockedUntil = null;
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

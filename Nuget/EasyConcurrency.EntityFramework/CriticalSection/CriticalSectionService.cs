@@ -21,7 +21,7 @@ public sealed class CriticalSectionService<TDbContext>(TDbContext dbContext, Tim
         //try lock the entity
         try
         {
-            if (entityWithLock.IsNotLocked(Now) == false)
+            if (entityWithLock.LockedUntil?.IsNotLocked(Now) == false)
                 return new CriticalSection<TDbContext>(entityWithLock, dbContext, false, false, token);
             
             criticalSectionOptions?.Invoke(opts);

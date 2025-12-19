@@ -27,7 +27,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         //Act
         await using (var criticalSection = await criticalSectionService.BeginCriticalSectionAndCommitAsync(expectedEntity, TimeSpan.FromMinutes(1)))
         {
-            if (criticalSection.IsLockAcquired && expectedEntity.LockedUntil.IsNotLocked())
+            if (criticalSection.IsLockAcquired && expectedEntity.LockedUntil?.IsNotLocked() == true)
             {
                 throw new ApplicationException("The entity is NOT locked");
             }
@@ -39,8 +39,8 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         //Assert
         var actualEntity = await Context.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
         Assert.Null(actualEntity.LockedUntil);
-        Assert.True(actualEntity.IsNotLocked());
-        Assert.False(actualEntity.IsLocked());
+        Assert.True(actualEntity.LockedUntil.IsNotLocked());
+        Assert.False(actualEntity.LockedUntil.IsLocked());
         Assert.Equal(expectedEntity.Id, actualEntity.Id);
         Assert.Equal(expectedEntity.TestParameterGuid, actualEntity.TestParameterGuid);
         Assert.Equal(expectedEntity.TestParameterString, actualEntity.TestParameterString);
@@ -79,8 +79,8 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         
         var actualEntity = await databaseFactory.CreateDbContext([]).MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
         Assert.NotNull(actualEntity.LockedUntil);
-        Assert.True(actualEntity.IsLocked());
-        Assert.False(actualEntity.IsNotLocked());
+        Assert.True(actualEntity.LockedUntil?.IsLocked());
+        Assert.False(actualEntity.LockedUntil?.IsNotLocked());
         Assert.Equal(expectedEntity.Id, actualEntity.Id);
         Assert.Equal(expectedEntity.TestParameterString, taskIndexThatAcquiredLock.ToString());
     }

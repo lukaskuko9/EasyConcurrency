@@ -33,7 +33,7 @@ public class HasTimeLockTests : DatabaseFixture
         
         //verify exactly 1 entity is locked
         var lockedEntity = Assert.Single(lockedEntities);
-        Assert.False(lockedEntity.IsNotLocked());
+        Assert.False(lockedEntity.LockedUntil?.IsNotLocked());
     }
 
     private static async Task<MyLockableEntity?> GetAndLockEntity(DatabaseContext dbContext)
@@ -44,7 +44,7 @@ public class HasTimeLockTests : DatabaseFixture
             if (entityToLock is null)
                 return null;
 
-            entityToLock.SetLock(DateTimeOffset.UtcNow.AddMinutes(5));
+            entityToLock.LockedUntil = DateTimeOffset.UtcNow.AddMinutes(5);
             await dbContext.SaveChangesAsync();
             return entityToLock;
         }

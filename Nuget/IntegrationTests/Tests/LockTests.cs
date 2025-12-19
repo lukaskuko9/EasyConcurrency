@@ -31,10 +31,10 @@ public class LockTests : DatabaseFixture
         await Context.SaveChangesAsync();
         
         var dbEntityNotLocked = await Context.MyDbEntities.SingleAsync(myDbEntity => myDbEntity.MyUniqueKey == newEntityNotLocked.MyUniqueKey);
-        Assert.True(dbEntityNotLocked.IsNotLocked());
+        Assert.True(dbEntityNotLocked.LockedUntil.IsNotLocked());
         
         var dbEntityLocked = await Context.MyDbEntities.SingleAsync(myDbEntity => myDbEntity.MyUniqueKey == newEntityLocked.MyUniqueKey);
-        Assert.False(dbEntityLocked.IsNotLocked());
+        Assert.False(dbEntityLocked.LockedUntil.IsNotLocked());
         Assert.Equal(dbEntityLocked.LockedUntil, lockedUntil);
     }
 
@@ -71,7 +71,7 @@ public class LockTests : DatabaseFixture
             .SingleOrDefaultAsync(myDbEntity => myDbEntity.MyUniqueKey == newEntityLocked.MyUniqueKey);
         
         //not locked entity can be fetched and is not locked
-        Assert.True(dbEntityNotLocked.IsNotLocked());
+        Assert.True(dbEntityNotLocked.LockedUntil.IsNotLocked());
 
         //locked entity cannot be fetched as it is locked
         Assert.Null(dbEntityLocked);
@@ -115,10 +115,10 @@ public class LockTests : DatabaseFixture
         await Context.MyDbEntities.AddAsync(newEntity4);
         await Context.SaveChangesAsync();
 
-        var isLocked = newEntity3.SetLock(lockedUntil);
-        var isLocked2 = newEntity4.SetLock(TimeSpan.FromMinutes(10));
-        Assert.True(isLocked);
-        Assert.True(isLocked2);
+        var isLocked = newEntity3.LockedUntil = lockedUntil;
+        var isLocked2 = newEntity4.LockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
+        Assert.True(isLocked.IsLocked());
+        Assert.True(isLocked2.IsLocked());
         await Context.SaveChangesAsync();
 
         var notLockedItems = await Context.MyDbEntities
@@ -140,9 +140,13 @@ public class LockTests : DatabaseFixture
         await Context.MyDbEntities.AddAsync(newEntity);
         await Context.SaveChangesAsync();
 
-        newEntity.Unlock();
+        newEntity.LockedUntil = null;
         await Context.SaveChangesAsync();
         
-        Assert.True(newEntity.IsNotLocked());
+        Assert.True(newEntity.LockedUntil.IsNotLocked());
+        Assert.False(newEntity.LockedUntil.IsLocked());
+        
+        Assert.True(newEntity.LockedUntil?.IsNotLocked() == null);
+        Assert.True(newEntity.LockedUntil?.IsLocked() == null);
     }
 }
