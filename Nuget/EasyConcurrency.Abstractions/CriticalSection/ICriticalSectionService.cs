@@ -14,7 +14,7 @@ public interface ICriticalSectionService<out TOptions> where TOptions: CriticalS
     /// <param name="entity">Entity with a time lock approaching critical section</param>
     /// <param name="lockForTime">How long will lock be acquired for</param>
     /// <param name="criticalSectionOptions">Options to configure behavior</param>
-    /// <param name="token">Cancellation token to cancel the operation</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation</param>
     /// <remarks>You should always check if the lock was acquired. See <see cref="CriticalSection.IsLockAcquired"/></remarks>
     /// <code>
     /// await using (var criticalSection = await criticalSectionService.BeginCriticalSectionAndCommitAsync(entityToLock, TimeSpan.FromMinutes(1), opts))
@@ -30,5 +30,5 @@ public interface ICriticalSectionService<out TOptions> where TOptions: CriticalS
     /// <returns><see cref="CriticalSection"/> instance</returns>
     Task<CriticalSection> BeginCriticalSectionAndCommitAsync<TTimeLock>(IHasTimeLock<TTimeLock> entity,
         TimeSpan lockForTime, Action<TOptions>? criticalSectionOptions = null,
-        CancellationToken token = default) where TTimeLock : struct, ITimeLock;
+        CancellationToken cancellationToken = default) where TTimeLock : struct, ITimeLock;
 }
