@@ -10,7 +10,7 @@ public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvid
     private DateTimeOffset Now => timeProvider?.GetUtcNow() ?? DateTimeOffset.UtcNow;
     
     /// <inheritdoc/>
-    public async Task<Abstractions.CriticalSection.CriticalSection> BeginCriticalSectionAndCommitAsync<TTimeLock>(IHasTimeLock<TTimeLock> entityWithLock, TimeSpan lockForTime,
+    public async Task<Abstractions.CriticalSection.CriticalSection> BeginCriticalSectionAndCommitAsync<TTimeLock>(IHasTimeLock<TTimeLock> entity, TimeSpan lockForTime,
         Action<CriticalSectionOptions>? criticalSectionOptions = null, CancellationToken token = default) where TTimeLock : struct, ITimeLock
     {
         var opts = new CriticalSectionOptions
@@ -18,15 +18,16 @@ public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvid
             AutoUnlockOnCriticalSectionExit = true
         };
         
-        //try lock the entity
         try
         {
-            if (entityWithLock.LockedUntil?.IsNotLocked(Now) == false)
-                return new Abstractions.CriticalSection.CriticalSection( UnlockFunc, false, opts);
+            //if entity is already locked we cannot proceed
+            if (entity.LockedUntil?.IsNotLocked(Now) == false)
+                return new Abstractions.CriticalSection.CriticalSection(UnlockFunc, false, opts);
             
             criticalSectionOptions?.Invoke(opts);
 
-            entityWithLock.LockedUntil = (TTimeLock)TTimeLock.Create(Now.Add(lockForTime));
+            //try lock the entity
+            entity.LockedUntil = (TTimeLock)TTimeLock.Create(Now.Add(lockForTime));
             await dbContext.SaveChangesAsync(token);
             
             return new Abstractions.CriticalSection.CriticalSection(UnlockFunc, true, opts);
@@ -43,7 +44,7 @@ public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvid
         
         async Task UnlockFunc()
         {
-            entityWithLock.LockedUntil = null;
+            entity.LockedUntil = null;
             await dbContext.SaveChangesAsync(token);
         }
     }
