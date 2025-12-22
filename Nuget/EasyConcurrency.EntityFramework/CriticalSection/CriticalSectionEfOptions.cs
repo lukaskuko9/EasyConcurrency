@@ -6,7 +6,7 @@ namespace EasyConcurrency.EntityFramework.CriticalSection;
 /// <summary>
 /// Options to configure critical section behavior
 /// </summary>
-public record CriticalSectionOptions : CriticalSectionOptionsBase
+public record CriticalSectionEfOptions : CriticalSectionOptionsBase
 {
     /// <summary>
     /// Specifies custom asynchronous action to be executed when a concurrency happens when acquiring a lock.

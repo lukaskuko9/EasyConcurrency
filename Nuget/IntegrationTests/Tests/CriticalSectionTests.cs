@@ -96,7 +96,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         
         var entityToLock = await db.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
 
-        var opts = (CriticalSectionOptions x) =>
+        var opts = (CriticalSectionEfOptions x) =>
         {
             x.AutoUnlockOnCriticalSectionExit = false;
             x.OnConcurrencyResolutionHandle = _ =>

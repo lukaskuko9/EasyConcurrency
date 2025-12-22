@@ -1,4 +1,5 @@
-﻿using EasyConcurrency.EntityFramework.TimeLock;
+﻿using EasyConcurrency.Abstractions.TimeLock;
+using EasyConcurrency.EntityFramework.ValueConverter;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EasyConcurrency.EntityFramework.Extensions;
@@ -22,7 +23,7 @@ public static class PropertyBuilderExtensions
     ///}
     /// </code>
     /// <returns>The same builder instance so that multiple configuration calls can be chained.</returns>
-    public static PropertyBuilder<Abstractions.TimeLock.TimeLock?> AddTimeLockConversion(this PropertyBuilder<Abstractions.TimeLock.TimeLock?> propBuilder)
+    public static PropertyBuilder<TimeLock?> AddTimeLockConversion(this PropertyBuilder<TimeLock?> propBuilder)
     {
         return propBuilder
             .HasConversion<TimeLockConverter>()

@@ -6,35 +6,13 @@ namespace EasyConcurrency.EntityFramework.CriticalSection;
 
 /// <inheritdoc/>
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvider? timeProvider = null) : ICriticalSectionService<CriticalSectionOptions> where TDbContext : DbContext
+public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvider? timeProvider = null) : ICriticalSectionService<CriticalSectionEfOptions> where TDbContext : DbContext
 {
-    /// <summary>
-    /// Gets current time
-    /// </summary>
-    /// <returns></returns>
-    protected virtual DateTimeOffset GetCurrentTime() => timeProvider?.GetUtcNow() ?? DateTimeOffset.UtcNow;
-
-    /// <summary>
-    /// Persists changes using provided <typeparamref name="TDbContext"/>
-    /// </summary>
-    protected virtual async Task PersistChanges(CancellationToken cancellationToken = default)
-    {
-        await dbContext.SaveChangesAsync(cancellationToken);
-    }
-    
-    /// <summary>
-    /// Resets the lock on an <paramref name="entity"/>
-    /// </summary>
-    protected virtual void UnlockEntity<TTimeLock>(IHasTimeLock<TTimeLock> entity) where TTimeLock : struct, ITimeLock
-    {
-        entity.LockedUntil = null;
-    }
-    
     /// <inheritdoc/>
     public virtual async Task<Abstractions.CriticalSection.CriticalSection> BeginCriticalSectionAndCommitAsync<TTimeLock>(IHasTimeLock<TTimeLock> entity, TimeSpan lockForTime,
-        Action<CriticalSectionOptions>? criticalSectionOptions = null, CancellationToken cancellationToken = default) where TTimeLock : struct, ITimeLock
+        Action<CriticalSectionEfOptions>? criticalSectionOptions = null, CancellationToken cancellationToken = default) where TTimeLock : struct, ITimeLock
     {
-        var opts = new CriticalSectionOptions
+        var opts = new CriticalSectionEfOptions
         {
             AutoUnlockOnCriticalSectionExit = true
         };
@@ -42,9 +20,10 @@ public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvid
         try
         {
             //if entity is already locked we cannot proceed
-            if (entity.LockedUntil?.IsNotLocked(GetCurrentTime()) == false)
+            if (IsUnlocked(entity, GetCurrentTime()) == false)
                 return new Abstractions.CriticalSection.CriticalSection( UnlockFunc, false, opts);
             
+            //override options
             criticalSectionOptions?.Invoke(opts);
 
             //try lock the entity
@@ -68,5 +47,38 @@ public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvid
             UnlockEntity(entity);
             await PersistChanges(cancellationToken);
         }
+    }
+    
+    
+    /// <summary>
+    /// Gets current time
+    /// </summary>
+    /// <returns></returns>
+    protected virtual DateTimeOffset GetCurrentTime() => timeProvider?.GetUtcNow() ?? DateTimeOffset.UtcNow;
+
+    /// <summary>
+    /// Persists changes using provided <typeparamref name="TDbContext"/>
+    /// </summary>
+    protected virtual async Task PersistChanges(CancellationToken cancellationToken = default)
+    {
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+    
+    /// <summary>
+    /// Resets the lock on an <paramref name="entity"/>
+    /// </summary>
+    protected virtual void UnlockEntity<TTimeLock>(IHasTimeLock<TTimeLock> entity) where TTimeLock : struct, ITimeLock
+    {
+        entity.LockedUntil = null;
+    }
+
+    /// <summary>
+    /// Checks if <paramref name="entity"/> is locked at <paramref name="currentTime"/>
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="currentTime"></param>
+    protected virtual bool IsUnlocked<TTimeLock>(IHasTimeLock<TTimeLock> entity, DateTimeOffset currentTime) where TTimeLock : struct, ITimeLock
+    {
+        return entity.LockedUntil?.IsNotLocked(currentTime) == false;
     }
 }
