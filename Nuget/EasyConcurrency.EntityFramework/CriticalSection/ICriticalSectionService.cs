@@ -1,5 +1,4 @@
-﻿using EasyConcurrency.Abstractions.PessimisticLock;
-using EasyConcurrency.Abstractions.TimeLock;
+﻿using EasyConcurrency.Abstractions.TimeLock;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyConcurrency.EntityFramework.CriticalSection;

@@ -1,5 +1,4 @@
 ﻿using EasyConcurrency.Abstractions.PessimisticLock;
-using EasyConcurrency.Abstractions.TimeLock;
 
 namespace EasyConcurrency.Abstractions.Extensions;
 
