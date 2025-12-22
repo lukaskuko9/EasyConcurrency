@@ -6,7 +6,6 @@ namespace EasyConcurrency.IntegrationTests.Database;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
-    public DbSet<HasTimeLockEntityStub> MyDbEntities { get; init; }
     public DbSet<MyLockableEntity> MyLockableEntities { get; init; }
     
     /// <inheritdoc />
@@ -19,17 +18,6 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<HasTimeLockEntityStub>(entityBuilder =>
-        {
-            entityBuilder.ToTable("MyDbEntities");
-            entityBuilder.HasKey(refundEntity => refundEntity.Id);
-
-            entityBuilder.Property(refundEntity => refundEntity.LockedUntil).AddTimeLockConversion();
-            
-            entityBuilder.HasIndex(myDbEntity => myDbEntity.LockedUntil);
-            entityBuilder.HasIndex(refundEntity => refundEntity.MyUniqueKey).IsUnique();
-        });
-        
         modelBuilder.Entity<MyLockableEntity>(entityBuilder =>
         {
             entityBuilder.ToTable("MyLockableEntities");

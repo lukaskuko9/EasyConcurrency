@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using EasyConcurrency.Abstractions.IsTimeLock;
+﻿using EasyConcurrency.Abstractions.IsTimeLock;
 
 namespace EasyConcurrency.Abstractions.TimeLock;
 
@@ -104,15 +103,9 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     /// <inheritdoc />
     public int CompareTo(TimeLock? other)
     {
-        return CompareTo((IIsTimeLock?)other);
-    }
-    
-    /// <inheritdoc />
-    public int CompareTo(IIsTimeLock? other)
-    {
         return Nullable.Compare(Value, other?.Value);
     }
-    
+
     /// <inheritdoc />
     public bool Equals(DateTimeOffset? other)
     {
@@ -129,12 +122,6 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     public bool Equals(DateTimeOffset other)
     {
         return Value.Equals(other);
-    }
-
-    /// <inheritdoc />
-    public bool Equals(IIsTimeLock? other)
-    {
-        return Nullable.Equals(Value, other?.Value);
     }
 
     /// <inheritdoc />

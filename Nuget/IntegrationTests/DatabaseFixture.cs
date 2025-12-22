@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyConcurrency.IntegrationTests;
 
-public class DatabaseFixture : IDisposable
+public class DatabaseFixture : IDisposable, IAsyncDisposable
 {
     protected readonly DatabaseContext Context;
 
@@ -17,8 +17,11 @@ public class DatabaseFixture : IDisposable
 
     public void Dispose()
     {
-        Context.MyDbEntities.ExecuteDelete();
+        Context.Dispose();
     }
-
     
+    public async ValueTask DisposeAsync()
+    {
+        await Context.DisposeAsync();
+    }
 }
