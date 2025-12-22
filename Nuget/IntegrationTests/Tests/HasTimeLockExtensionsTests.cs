@@ -1,5 +1,4 @@
 ﻿using EasyConcurrency.Abstractions.Extensions;
-using EasyConcurrency.EntityFramework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Stubs;
 using Xunit;
@@ -7,7 +6,7 @@ using Xunit;
 namespace EasyConcurrency.IntegrationTests.Tests;
 
 [Collection(DatabaseCollection.CollectionName)]
-public class TimeLockEntityExtensionsTests : DatabaseFixture
+public class HasTimeLockExtensionsTests : DatabaseFixture
 {
     [Fact]
     public async Task WhereIsNotLocked_WorksAsIntended()

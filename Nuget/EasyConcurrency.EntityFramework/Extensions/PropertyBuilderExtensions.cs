@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using EasyConcurrency.EntityFramework.TimeLock;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EasyConcurrency.EntityFramework.TimeLock;
+namespace EasyConcurrency.EntityFramework.Extensions;
 
 /// <summary>
 /// Extension methods for <see cref="Abstractions.TimeLock.TimeLock"/> types
 /// </summary>
-public static class TimeLockExtensions
+public static class PropertyBuilderExtensions
 {
     /// <summary>
     /// Configures the <see cref="TimeLock"/> property so that the property value is converted to <see cref="DateTimeOffset"/>

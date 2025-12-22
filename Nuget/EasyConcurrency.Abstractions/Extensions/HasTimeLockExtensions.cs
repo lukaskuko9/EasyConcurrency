@@ -1,13 +1,12 @@
 ﻿using System.Linq.Expressions;
-using EasyConcurrency.Abstractions.HasTimeLock;
 using EasyConcurrency.Abstractions.TimeLock;
 
-namespace EasyConcurrency.EntityFramework.LockableEntity;
+namespace EasyConcurrency.Abstractions.Extensions;
 
 /// <summary>
 /// A set of extensions for <see cref="IHasTimeLock"/> implementation types
 /// </summary>
-public static class TimeLockEntityExtensions
+public static class HasTimeLockExtensions
 {
     /// <summary>
     /// Filters out the entities that are not locked.
@@ -25,7 +24,7 @@ public static class TimeLockEntityExtensions
     /// </returns>
     public static IQueryable<TLockableEntity> WhereIsNotLocked<TLockableEntity>(this IQueryable<TLockableEntity> queryable, DateTimeOffset now) where TLockableEntity: IHasTimeLock
     {
-        return queryable.Where(IsNotLocked<TLockableEntity>(now));
+        return queryable.Where(IsNotLockedAsExpression<TLockableEntity>(now));
     } 
 
     /// <summary>
@@ -44,11 +43,11 @@ public static class TimeLockEntityExtensions
     public static IQueryable<TLockableEntity> WhereIsNotLocked<TLockableEntity>(this IQueryable<TLockableEntity> queryable) where TLockableEntity: IHasTimeLock
     {
         var now = DateTimeOffset.UtcNow;
-        return queryable.Where(IsNotLocked<TLockableEntity>(now));
+        return queryable.Where(IsNotLockedAsExpression<TLockableEntity>(now));
     }
 
-    private static Expression<Func<TLockableEntity, bool>> IsNotLocked<TLockableEntity>(DateTimeOffset now) where TLockableEntity: IHasTimeLock
+    private static Expression<Func<T, bool>> IsNotLockedAsExpression<T>(DateTimeOffset now) where T : IHasTimeLock
     {
-         return TimeLockEntityMethods.IsNotLockedAsExpression<TLockableEntity>(now);
+        return lockableEntity => lockableEntity.LockedUntil == null || lockableEntity.LockedUntil < now;
     }
 }

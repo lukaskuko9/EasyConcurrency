@@ -1,5 +1,5 @@
 ﻿using EasyConcurrency.Abstractions.Extensions;
-using EasyConcurrency.Abstractions.HasTimeLock;
+using EasyConcurrency.Abstractions.TimeLock;
 using Stubs;
 
 namespace UnitTests;
@@ -9,7 +9,7 @@ public class HasTimeLockVersioningTests
     [Fact]
     public void MyDbEntityIsAssignableToLockableEntity()
     {
-        var entity = new MyLockableEntity() { TestParameterGuid = Guid.NewGuid() };
+        var entity = new MyLockableEntity { TestParameterGuid = Guid.NewGuid() };
         Assert.IsAssignableFrom<IHasTimeLock>(entity);
     }
 

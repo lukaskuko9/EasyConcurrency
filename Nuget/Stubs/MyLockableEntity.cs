@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EasyConcurrency.Abstractions.HasTimeLock;
 using EasyConcurrency.Abstractions.TimeLock;
 
 namespace Stubs;

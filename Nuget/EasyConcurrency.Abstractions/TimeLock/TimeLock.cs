@@ -1,13 +1,19 @@
-﻿using EasyConcurrency.Abstractions.IsTimeLock;
-
-namespace EasyConcurrency.Abstractions.TimeLock;
+﻿namespace EasyConcurrency.Abstractions.TimeLock;
 
 /// <summary>
 /// Represents a time lock to be held on an entity that naturally expires.
 /// </summary>
-/// <param name="Value">Time when the lock expires</param>
-public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<TimeLock?>, IComparable<TimeLock>
+public record struct TimeLock : ITimeLock, IComparable<TimeLock?>, IComparable<TimeLock>
 {
+    /// <summary>
+    /// Represents a time lock to be held on an entity that naturally expires.
+    /// </summary>
+    /// <param name="Value">DatetimeOffset as a point in time, indicating when the lock expires. Null if lock is not set.</param>
+    public TimeLock(DateTimeOffset? Value) => this.Value = Value;
+
+    /// <summary>DatetimeOffset as a point in time, indicating when the lock expires. Null if lock is not set.</summary>
+    public DateTimeOffset? Value { get; set; }
+
     /// <summary>
     /// Implicit operator for <see cref="DateTimeOffset"/> and <see cref="TimeLock"/> conversion
     /// </summary>
@@ -35,7 +41,7 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     /// <param name="lockedUntil"><paramref name="lockedUntil"/> value</param>
     /// <returns>New <see cref="TimeLock"/> value</returns>
     public static implicit operator TimeLock(DateTimeOffset lockedUntil) => new(lockedUntil);
-    
+
     /// <summary>
     /// Creates a <see cref="TimeLock"/> instance. 
     /// </summary>
@@ -44,7 +50,7 @@ public record struct TimeLock(DateTimeOffset? Value) : IIsTimeLock, IComparable<
     public static TimeLock Create(DateTimeOffset? lockedUntil) => new(lockedUntil);
     
     /// <inheritdoc/>
-    static IIsTimeLock IIsTimeLock.Create(DateTimeOffset? lockedUntil)
+    static ITimeLock ITimeLock.Create(DateTimeOffset? lockedUntil)
     {
         return Create(lockedUntil);
     }

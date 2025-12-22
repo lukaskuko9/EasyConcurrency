@@ -1,4 +1,5 @@
-﻿using EasyConcurrency.EntityFramework.TimeLock;
+﻿using EasyConcurrency.EntityFramework.Extensions;
+using EasyConcurrency.EntityFramework.TimeLock;
 using Microsoft.EntityFrameworkCore;
 using Stubs;
 
@@ -23,7 +24,9 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             entityBuilder.ToTable("MyLockableEntities");
             entityBuilder.HasKey(refundEntity => refundEntity.Id);
 
-            entityBuilder.Property(refundEntity => refundEntity.LockedUntil).AddTimeLockConversion();
+            entityBuilder.Property(refundEntity => refundEntity.LockedUntil)
+                .AddTimeLockConversion()
+                .ValueGeneratedNever();
             
             entityBuilder.HasIndex(myDbEntity => myDbEntity.LockedUntil);
         });

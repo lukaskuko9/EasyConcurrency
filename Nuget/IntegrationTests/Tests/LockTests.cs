@@ -1,6 +1,5 @@
 using EasyConcurrency.Abstractions.Extensions;
 using EasyConcurrency.Abstractions.TimeLock;
-using EasyConcurrency.EntityFramework.LockableEntity;
 using Microsoft.EntityFrameworkCore;
 using Stubs;
 using Xunit;
