@@ -1,4 +1,5 @@
-﻿using EasyConcurrency.Abstractions.TimeLock;
+﻿using EasyConcurrency.Abstractions.PessimisticLock;
+using EasyConcurrency.Abstractions.TimeLock;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyConcurrency.EntityFramework.CriticalSection;
@@ -18,8 +19,7 @@ public interface ICriticalSectionService<TDbContext> where TDbContext : DbContex
     /// <param name="lockForTime">How long will lock be acquired for</param>
     /// <param name="criticalSectionOptions">Options to configure behavior</param>
     /// <param name="token">Cancellation token to cancel the operation</param>
-    /// <typeparam name="TTimeLockEntity">Entity with a time lock</typeparam>
-    /// <remarks>You should always check if the lock was acquired. See <see cref="CriticalSection{TDbContext}.IsLockAcquired"/></remarks>
+    /// <remarks>You should always check if the lock was acquired. See <see cref="CriticalSection{TDbContext, TTimeLock}.IsLockAcquired"/></remarks>
     /// <code>
     /// await using (var criticalSection = await criticalSectionService.BeginCriticalSectionAndCommitAsync(entityToLock, TimeSpan.FromMinutes(1), opts))
     /// {
@@ -32,8 +32,8 @@ public interface ICriticalSectionService<TDbContext> where TDbContext : DbContex
     ///     await db.SaveChangesAsync(); //optionally persist database changes before exiting critical section
     /// }
     /// </code>
-    /// <returns><see cref="CriticalSection{TDbContext}"/> instance</returns>
-    Task<CriticalSection<TDbContext>> BeginCriticalSectionAndCommitAsync<TTimeLockEntity>(TTimeLockEntity entityWithLock,
-        TimeSpan lockForTime, Action<CriticalSectionOptions>? criticalSectionOptions = null, CancellationToken token = default)
-        where TTimeLockEntity : IHasTimeLock;
+    /// <returns><see cref="CriticalSection{TDbContext, TTimeLock}"/> instance</returns>
+    Task<CriticalSection<TDbContext, TTimeLock>> BeginCriticalSectionAndCommitAsync<TTimeLock>(IHasTimeLock<TTimeLock> entityWithLock,
+        TimeSpan lockForTime, Action<CriticalSectionOptions>? criticalSectionOptions = null,
+        CancellationToken token = default) where TTimeLock : struct, ITimeLock;
 }

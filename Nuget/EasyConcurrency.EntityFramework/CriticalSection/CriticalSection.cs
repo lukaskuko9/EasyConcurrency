@@ -1,6 +1,7 @@
 ﻿using EasyConcurrency.Abstractions.Extensions;
 using Microsoft.EntityFrameworkCore;
 using IHasTimeLock = EasyConcurrency.Abstractions.TimeLock.IHasTimeLock;
+using ITimeLock = EasyConcurrency.Abstractions.TimeLock.ITimeLock;
 
 namespace EasyConcurrency.EntityFramework.CriticalSection;
 
@@ -13,13 +14,16 @@ namespace EasyConcurrency.EntityFramework.CriticalSection;
 /// <param name="dbContext">Database context</param>
 /// <param name="cancellationToken">Cancellation token to cancel the operation</param>
 /// <typeparam name="TDbContext">Database context</typeparam>
-public class CriticalSection<TDbContext>(
-    IHasTimeLock hasTimeLock,
+/// <typeparam name="TTimeLock">Type of time lock</typeparam>
+public class CriticalSection<TDbContext, TTimeLock>(
+    Abstractions.TimeLock.IHasTimeLock<TTimeLock> hasTimeLock,
     TDbContext dbContext,
     bool isLockAcquired,
     bool autoReleaseLockOnSectionExit,
     CancellationToken cancellationToken) : IDisposable, IAsyncDisposable
     where TDbContext : DbContext
+    where TTimeLock : struct, ITimeLock
+
 {
     /// <summary>
     /// If true, lock was successfully acquired, and it is safe to continue critical section code.
