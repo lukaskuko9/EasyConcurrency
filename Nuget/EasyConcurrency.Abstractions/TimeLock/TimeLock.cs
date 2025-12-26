@@ -11,7 +11,7 @@ public record struct TimeLock : ITimeLock, IComparable<TimeLock?>, IComparable<T
     /// <param name="Value">DatetimeOffset as a point in time, indicating when the lock expires. Null if lock is not set.</param>
     public TimeLock(DateTimeOffset? Value) => this.Value = Value;
 
-    /// <summary>DatetimeOffset as a point in time, indicating when the lock expires. Null if lock is not set.</summary>
+    ///<inheritdoc />
     public DateTimeOffset? Value { get; set; }
 
     /// <summary>
