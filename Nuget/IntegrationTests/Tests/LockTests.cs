@@ -1,10 +1,10 @@
 using EasyConcurrency.Abstractions.Extensions;
 using EasyConcurrency.Abstractions.TimeLock;
+using EasyConcurrency.Tests.Shared;
 using Microsoft.EntityFrameworkCore;
-using Stubs;
 using Xunit;
 
-namespace EasyConcurrency.IntegrationTests.Tests;
+namespace EasyConcurrency.Tests.IntegrationTests.Tests;
 
 [Collection(DatabaseCollection.CollectionName)]
 public class LockTests : DatabaseFixture

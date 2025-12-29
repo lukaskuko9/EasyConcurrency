@@ -1,7 +1,6 @@
-﻿using EasyConcurrency.IntegrationTests.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using EasyConcurrency.Tests.IntegrationTests.Database;
 
-namespace EasyConcurrency.IntegrationTests;
+namespace EasyConcurrency.Tests.IntegrationTests;
 
 public class DatabaseFixture : IDisposable, IAsyncDisposable
 {

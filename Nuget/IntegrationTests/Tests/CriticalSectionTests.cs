@@ -1,13 +1,12 @@
-﻿using EasyConcurrency.Abstractions.CriticalSection;
-using EasyConcurrency.Abstractions.Extensions;
+﻿using EasyConcurrency.Abstractions.Extensions;
 using EasyConcurrency.EntityFramework.CriticalSection;
-using EasyConcurrency.IntegrationTests.Database;
+using EasyConcurrency.Tests.IntegrationTests.Database;
+using EasyConcurrency.Tests.Shared;
 using Microsoft.EntityFrameworkCore;
-using Stubs;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace EasyConcurrency.IntegrationTests.Tests;
+namespace EasyConcurrency.Tests.IntegrationTests.Tests;
 
 [Collection(DatabaseCollection.CollectionName)]
 public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture

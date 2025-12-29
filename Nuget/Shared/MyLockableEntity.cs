@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EasyConcurrency.Abstractions.TimeLock;
 
-namespace Stubs;
+namespace EasyConcurrency.Tests.Shared;
 
 public class MyLockableEntity : IHasTimeLock
 {

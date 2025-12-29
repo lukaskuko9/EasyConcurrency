@@ -5,7 +5,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <IsTestProject>true</IsTestProject>
+        <IsTestProject>true</IsTestProject>      
+        <RootNamespace>EasyConcurrency.Tests.UnitTests</RootNamespace>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,7 +26,7 @@
     <ItemGroup>
       <ProjectReference Include="..\EasyConcurrency.Abstractions\EasyConcurrency.Abstractions.csproj" />
       <ProjectReference Include="..\EasyConcurrency.EntityFramework\EasyConcurrency.EntityFramework.csproj" />
-      <ProjectReference Include="..\Stubs\Stubs.csproj" />
+      <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using EasyConcurrency.Abstractions.Extensions;
 using EasyConcurrency.Abstractions.TimeLock;
 
-namespace UnitTests.TimeLockTests;
+namespace EasyConcurrency.Tests.UnitTests.TimeLockTests;
 
 public partial class TimeLockTests
 {

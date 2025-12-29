@@ -1,8 +1,8 @@
 ﻿using EasyConcurrency.Abstractions.Extensions;
 using EasyConcurrency.Abstractions.TimeLock;
-using Stubs;
+using EasyConcurrency.Tests.Shared;
 
-namespace UnitTests;
+namespace EasyConcurrency.Tests.UnitTests;
 
 public class HasTimeLockVersioningTests
 {

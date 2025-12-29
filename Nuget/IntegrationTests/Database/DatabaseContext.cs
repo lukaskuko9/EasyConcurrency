@@ -1,8 +1,8 @@
 ﻿using EasyConcurrency.EntityFramework.Extensions;
+using EasyConcurrency.Tests.Shared;
 using Microsoft.EntityFrameworkCore;
-using Stubs;
 
-namespace EasyConcurrency.IntegrationTests.Database;
+namespace EasyConcurrency.Tests.IntegrationTests.Database;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
