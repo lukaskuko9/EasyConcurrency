@@ -9,16 +9,15 @@ public class HasTimeLockVersioningTests
     [Fact]
     public void MyDbEntityIsAssignableToLockableEntity()
     {
-        var entity = new MyLockableEntity { TestParameterGuid = Guid.NewGuid() };
+        var entity = new HasTimeLockEntity();
         Assert.IsAssignableFrom<IHasTimeLock>(entity);
     }
 
     [Fact]
     public void IsLockedTests()
     {
-        var entity = new MyLockableEntity
+        var entity = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
             LockedUntil = DateTimeOffset.UtcNow.AddMinutes(10)
         };
         var now = DateTimeOffset.UtcNow;
@@ -32,9 +31,8 @@ public class HasTimeLockVersioningTests
     [Fact]
     public void IsNotLockedTests()
     {
-        var entity = new MyLockableEntity
+        var entity = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
             LockedUntil = null
         };
 

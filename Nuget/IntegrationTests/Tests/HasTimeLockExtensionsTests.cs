@@ -14,9 +14,8 @@ public class HasTimeLockExtensionsTests : DatabaseFixture
         //Arrange
         const int eachCollectionCount = 20;
         var unlockedEntities = Enumerable.Range(0, eachCollectionCount)
-            .Select(i => new MyLockableEntity
+            .Select(i => new HasTimeLockEntity
                 {
-                    TestParameterGuid = Guid.NewGuid(),
                     TestParameterString = i.ToString(),
                     LockedUntil = null
                 }
@@ -24,9 +23,8 @@ public class HasTimeLockExtensionsTests : DatabaseFixture
             .ToList();
 
         var lockedEntities1Minute = Enumerable.Range(1 * eachCollectionCount, eachCollectionCount)
-            .Select(i => new MyLockableEntity
+            .Select(i => new HasTimeLockEntity
                 {
-                    TestParameterGuid = Guid.NewGuid(),
                     TestParameterString = i.ToString(),
                     LockedUntil = DateTimeOffset.UtcNow.AddMinutes(1)
                 }
@@ -34,9 +32,8 @@ public class HasTimeLockExtensionsTests : DatabaseFixture
             .ToList();
 
         var lockedEntities5Minutes = Enumerable.Range(2 * eachCollectionCount, eachCollectionCount)
-            .Select(i => new MyLockableEntity
+            .Select(i => new HasTimeLockEntity
                 {
-                    TestParameterGuid = Guid.NewGuid(),
                     TestParameterString = i.ToString(),
                     LockedUntil = DateTimeOffset.UtcNow.AddMinutes(5)
                 }

@@ -12,16 +12,16 @@ public class LockTests : DatabaseFixture
     [Fact]
     public async Task LockedUntilTranslatesCorrectly()
     {
-        var newEntityNotLocked = new MyLockableEntity
+        var newEntityNotLocked = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
+            TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = null
         };
         
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
-        var newEntityLocked = new MyLockableEntity
+        var newEntityLocked = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
+            TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = lockedUntil
         };
         
@@ -29,10 +29,10 @@ public class LockTests : DatabaseFixture
         await Context.MyLockableEntities.AddAsync(newEntityLocked);
         await Context.SaveChangesAsync();
         
-        var dbEntityNotLocked = await Context.MyLockableEntities.SingleAsync(myDbEntity => myDbEntity.TestParameterGuid == newEntityNotLocked.TestParameterGuid);
+        var dbEntityNotLocked = await Context.MyLockableEntities.SingleAsync(myDbEntity => myDbEntity.TestParameterString == newEntityNotLocked.TestParameterString);
         Assert.True(dbEntityNotLocked.LockedUntil.IsNotLocked());
         
-        var dbEntityLocked = await Context.MyLockableEntities.SingleAsync(myDbEntity => myDbEntity.TestParameterGuid == newEntityLocked.TestParameterGuid);
+        var dbEntityLocked = await Context.MyLockableEntities.SingleAsync(myDbEntity => myDbEntity.TestParameterString == newEntityLocked.TestParameterString);
         Assert.False(dbEntityLocked.LockedUntil.IsNotLocked());
         Assert.Equal(dbEntityLocked.LockedUntil, lockedUntil);
     }
@@ -40,16 +40,16 @@ public class LockTests : DatabaseFixture
     [Fact]
     public async Task LockIsRespected()
     {
-        var newEntityNotLocked = new MyLockableEntity
+        var newEntityNotLocked = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
+            TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = null
         };
         
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
-        var newEntityLocked = new MyLockableEntity
+        var newEntityLocked = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
+            TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = lockedUntil
         };
         
@@ -59,15 +59,15 @@ public class LockTests : DatabaseFixture
         
         var dbEntityNotLocked = await Context.MyLockableEntities
             .WhereIsNotLocked()
-            .SingleAsync(myDbEntity => myDbEntity.TestParameterGuid == newEntityNotLocked.TestParameterGuid);
+            .SingleAsync(myDbEntity => myDbEntity.TestParameterString == newEntityNotLocked.TestParameterString);
         
         var dbEntityLockExpired = await Context.MyLockableEntities
             .WhereIsNotLocked(DateTimeOffset.UtcNow.AddMinutes(30))
-            .SingleOrDefaultAsync(myDbEntity => myDbEntity.TestParameterGuid == newEntityLocked.TestParameterGuid);
+            .SingleOrDefaultAsync(myDbEntity => myDbEntity.TestParameterString == newEntityLocked.TestParameterString);
         
         var dbEntityLocked = await Context.MyLockableEntities
             .WhereIsNotLocked()
-            .SingleOrDefaultAsync(myDbEntity => myDbEntity.TestParameterGuid == newEntityLocked.TestParameterGuid);
+            .SingleOrDefaultAsync(myDbEntity => myDbEntity.TestParameterString == newEntityLocked.TestParameterString);
         
         //not locked entity can be fetched and is not locked
         Assert.True(dbEntityNotLocked.LockedUntil.IsNotLocked());
@@ -84,27 +84,27 @@ public class LockTests : DatabaseFixture
     public async Task CanBeLocked()
     {
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(10);
-        var newEntity1 = new MyLockableEntity
+        var newEntity1 = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
+            TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = new TimeLock(lockedUntil)
         };
         
-        var newEntity2 = new MyLockableEntity
+        var newEntity2 = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
+            TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = lockedUntil
         };
         
-        var newEntity3 = new MyLockableEntity
+        var newEntity3 = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
+            TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = null
         };
         
-        var newEntity4 = new MyLockableEntity
+        var newEntity4 = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
+            TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = null
         };
         
@@ -131,9 +131,9 @@ public class LockTests : DatabaseFixture
     public async Task LockCanBeUnlocked()
     {
         var lockedUntil = DateTimeOffset.UtcNow.AddMinutes(-10);
-        var newEntity = new MyLockableEntity
+        var newEntity = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
+            TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = new TimeLock(lockedUntil)
         };
         await Context.MyLockableEntities.AddAsync(newEntity);

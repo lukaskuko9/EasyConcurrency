@@ -6,7 +6,7 @@ namespace EasyConcurrency.Tests.IntegrationTests.Database;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
-    public DbSet<MyLockableEntity> MyLockableEntities { get; init; }
+    public DbSet<HasTimeLockEntity> MyLockableEntities { get; init; }
     
     /// <inheritdoc />
     public DatabaseContext() : this(new DbContextOptions<DatabaseContext>())
@@ -18,7 +18,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MyLockableEntity>(entityBuilder =>
+        modelBuilder.Entity<HasTimeLockEntity>(entityBuilder =>
         {
             entityBuilder.ToTable("MyLockableEntities");
             entityBuilder.HasKey(refundEntity => refundEntity.Id);

@@ -3,7 +3,7 @@ using EasyConcurrency.Abstractions.TimeLock;
 
 namespace EasyConcurrency.Tests.Shared;
 
-public class MyLockableEntity : IHasTimeLock
+public class HasTimeLockEntity : IHasTimeLock
 {
     public long Id { get; init; }
     
@@ -13,6 +13,6 @@ public class MyLockableEntity : IHasTimeLock
     [ConcurrencyCheck]
     public DateTimeOffset? Asd { get; set; }
 
-    public string? TestParameterString { get; set; } = null;
-    public Guid? TestParameterGuid { get; set; } = null;
+    public string? TestParameterString { get; set; }
+    
 }

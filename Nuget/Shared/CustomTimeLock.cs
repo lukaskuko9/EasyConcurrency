@@ -2,18 +2,28 @@
 
 namespace EasyConcurrency.Tests.Shared;
 
-public record struct MyTimeLock : ITimeLock
+public record struct CustomTimeLock : ITimeLock
 {
     public DateTimeOffset? Value { get; set; }
     
     public bool IsNotLocked()
     {
-        return IsLocked() == false;
+        return IsLocked(DateTimeOffset.UtcNow) == false;
     }
 
     public bool IsLocked()
     {
-        return DateTimeOffset.Now >= Value;
+        return IsLocked(DateTimeOffset.UtcNow);
+    }
+
+    public bool IsNotLocked(DateTimeOffset now)
+    {
+        return IsLocked(now) == false;
+    }
+
+    public bool IsLocked(DateTimeOffset now)
+    {
+        return now >= Value;
     }
 
     public int CompareTo(DateTimeOffset other)
@@ -28,26 +38,19 @@ public record struct MyTimeLock : ITimeLock
 
     public bool Equals(DateTimeOffset? other)
     {
-        throw new NotImplementedException();
+        return other.Equals(Value);
     }
 
     public bool Equals(DateTimeOffset other)
     {
-        throw new NotImplementedException();
+        return other.Equals(Value);
     }
 
     public static ITimeLock Create(DateTimeOffset? lockedUntil)
     {
-        throw new NotImplementedException();
-    }
-
-    public bool IsNotLocked(DateTimeOffset now)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool IsLocked(DateTimeOffset now)
-    {
-        throw new NotImplementedException();
+        return new CustomTimeLock
+        {
+            Value = lockedUntil
+        };
     }
 }

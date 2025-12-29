@@ -16,10 +16,9 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
     {
         //Arrange
         var criticalSectionService = new CriticalSectionService<DatabaseContext>(Context);
-        var expectedEntity = new MyLockableEntity
+        var expectedEntity = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid(),
-            TestParameterString = "TestValue"
+            TestParameterString = Guid.NewGuid().ToString()
         };
         await Context.MyLockableEntities.AddAsync(expectedEntity);
         await Context.SaveChangesAsync();
@@ -42,7 +41,6 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         Assert.True(actualEntity.LockedUntil.IsNotLocked());
         Assert.False(actualEntity.LockedUntil.IsLocked());
         Assert.Equal(expectedEntity.Id, actualEntity.Id);
-        Assert.Equal(expectedEntity.TestParameterGuid, actualEntity.TestParameterGuid);
         Assert.Equal(expectedEntity.TestParameterString, actualEntity.TestParameterString);
     }
     
@@ -51,9 +49,9 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
     {
         //Arrange
         const int noOfTasks = 10;
-        var expectedEntity = new MyLockableEntity
+        var expectedEntity = new HasTimeLockEntity
         {
-            TestParameterGuid = Guid.NewGuid()
+            TestParameterString = Guid.NewGuid().ToString()
         };
         await Context.MyLockableEntities.AddAsync(expectedEntity);
         await Context.SaveChangesAsync();
@@ -86,7 +84,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
     }
 
     private async Task<bool> LockEntityAndChangeParam(DatabaseContext db,
-        MyLockableEntity expectedEntity, int testParam)
+        HasTimeLockEntity expectedEntity, int testParam)
     {
         //introduce a random delay; this is to randomize the task that will succeed in acquiring the lock,
         //thus moving a bit closer to real life scenarios

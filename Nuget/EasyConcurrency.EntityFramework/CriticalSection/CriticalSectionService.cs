@@ -12,6 +12,8 @@ public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvid
     public virtual async Task<Abstractions.CriticalSection.CriticalSection> BeginCriticalSectionAndCommitAsync<TTimeLock>(IHasTimeLock<TTimeLock> entity, TimeSpan lockForTime,
         Action<CriticalSectionEfOptions>? criticalSectionOptions = null, CancellationToken cancellationToken = default) where TTimeLock : struct, ITimeLock
     {
+        ArgumentNullException.ThrowIfNull(entity);
+        
         var opts = new CriticalSectionEfOptions
         {
             AutoUnlockOnCriticalSectionExit = true
@@ -27,7 +29,8 @@ public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvid
             criticalSectionOptions?.Invoke(opts);
 
             //try lock the entity
-            entity.LockedUntil = (TTimeLock)TTimeLock.Create(GetCurrentTime().Add(lockForTime));
+            var lockUntil = GetCurrentTime().Add(lockForTime);
+            entity.LockedUntil = (TTimeLock)TTimeLock.Create(lockUntil);
             await PersistChanges(cancellationToken);
             
             return new Abstractions.CriticalSection.CriticalSection(UnlockFunc, true, opts);
@@ -79,6 +82,6 @@ public class CriticalSectionService<TDbContext>(TDbContext dbContext, TimeProvid
     /// <param name="currentTime"></param>
     protected virtual bool IsUnlocked<TTimeLock>(IHasTimeLock<TTimeLock> entity, DateTimeOffset currentTime) where TTimeLock : struct, ITimeLock
     {
-        return entity.LockedUntil?.IsNotLocked(currentTime) == false;
+        return entity.LockedUntil == null || entity.LockedUntil.Value.IsNotLocked(currentTime);
     }
 }
