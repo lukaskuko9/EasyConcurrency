@@ -22,30 +22,32 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         };
         await Context.HasTimeLockEntities.AddAsync(expectedEntity);
         await Context.SaveChangesAsync();
-        
+
         //Act
-        await using (var criticalSection = await criticalSectionService.BeginCriticalSectionAndCommitAsync(expectedEntity, TimeSpan.FromMinutes(1)))
+        await using (var criticalSection =
+                     await criticalSectionService.BeginCriticalSectionAndCommitAsync(expectedEntity,
+                         TimeSpan.FromMinutes(1)))
         {
             if (criticalSection.IsLockAcquired == false || expectedEntity.LockedUntil?.IsLocked() == false)
             {
                 Assert.Fail("The entity is NOT locked");
             }
-            
+
             //Assert that entity should be locked here
-            var entity = await Context.HasTimeLockEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
+            var entity = await Context.HasTimeLockEntities.SingleAsync(x => x.Id == expectedEntity.Id);
             Assert.NotNull(entity.LockedUntil);
             Assert.True(entity.LockedUntil.Value.Value > DateTimeOffset.Now);
         }
-        
+
         //Assert
-        var actualEntity = await Context.HasTimeLockEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
+        var actualEntity = await Context.HasTimeLockEntities.SingleAsync(x => x.Id == expectedEntity.Id);
         Assert.Null(actualEntity.LockedUntil);
         Assert.True(actualEntity.LockedUntil.IsNotLocked());
         Assert.False(actualEntity.LockedUntil.IsLocked());
         Assert.Equal(expectedEntity.Id, actualEntity.Id);
         Assert.Equal(expectedEntity.TestParameterString, actualEntity.TestParameterString);
     }
-    
+
     [Fact]
     public async Task BeginCriticalSection_Concurrency()
     {
