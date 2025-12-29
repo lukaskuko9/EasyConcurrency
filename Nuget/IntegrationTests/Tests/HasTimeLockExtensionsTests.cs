@@ -43,18 +43,18 @@ public class HasTimeLockExtensionsTests : DatabaseFixture
         Assert.True(lockedEntities1Minute.All(entity=>entity.LockedUntil?.IsLocked() == true));
         Assert.True(lockedEntities5Minutes.All(entity=>entity.LockedUntil?.IsLocked() == true));
         Assert.True(unlockedEntities.All(entity=>entity.LockedUntil.IsNotLocked()));
-        await Context.MyLockableEntities.AddRangeAsync(unlockedEntities);
-        await Context.MyLockableEntities.AddRangeAsync(lockedEntities1Minute);
-        await Context.MyLockableEntities.AddRangeAsync(lockedEntities5Minutes);
+        await Context.HasTimeLockEntities.AddRangeAsync(unlockedEntities);
+        await Context.HasTimeLockEntities.AddRangeAsync(lockedEntities1Minute);
+        await Context.HasTimeLockEntities.AddRangeAsync(lockedEntities5Minutes);
         await Context.SaveChangesAsync();
         
         //Act
-        var totalNumberOfEntities = await Context.MyLockableEntities.CountAsync();
-        var dbNotLockedWithImplicitNow = await Context.MyLockableEntities.WhereIsNotLocked().ToListAsync();
-        var dbNotLockedWithExplicitNow = await Context.MyLockableEntities.WhereIsNotLocked(DateTimeOffset.UtcNow).ToListAsync();
-        var dbNotLockedIn2Minutes = await Context.MyLockableEntities.WhereIsNotLocked(DateTimeOffset.UtcNow.AddMinutes(2)).ToListAsync();
+        var totalNumberOfEntities = await Context.HasTimeLockEntities.CountAsync();
+        var dbNotLockedWithImplicitNow = await Context.HasTimeLockEntities.WhereIsNotLocked().ToListAsync();
+        var dbNotLockedWithExplicitNow = await Context.HasTimeLockEntities.WhereIsNotLocked(DateTimeOffset.UtcNow).ToListAsync();
+        var dbNotLockedIn2Minutes = await Context.HasTimeLockEntities.WhereIsNotLocked(DateTimeOffset.UtcNow.AddMinutes(2)).ToListAsync();
         //every item should be here as in 6 minutes every lock we set should have expired
-        var dbNotLockedIn6Minutes = await Context.MyLockableEntities.WhereIsNotLocked(DateTimeOffset.UtcNow.AddMinutes(6)).ToListAsync();
+        var dbNotLockedIn6Minutes = await Context.HasTimeLockEntities.WhereIsNotLocked(DateTimeOffset.UtcNow.AddMinutes(6)).ToListAsync();
         
         //Assertions
         

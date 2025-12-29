@@ -11,5 +11,4 @@ public class CustomTimeLockEntity : IHasTimeLock<CustomTimeLock>
     public CustomTimeLock? LockedUntil { get; set; }
 
     public string? TestParameterString { get; set; } = null;
-    public Guid? TestParameterGuid { get; set; } = null;
 }

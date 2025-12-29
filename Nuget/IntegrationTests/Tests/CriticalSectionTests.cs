@@ -20,23 +20,25 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         {
             TestParameterString = Guid.NewGuid().ToString()
         };
-        await Context.MyLockableEntities.AddAsync(expectedEntity);
+        await Context.HasTimeLockEntities.AddAsync(expectedEntity);
         await Context.SaveChangesAsync();
         
         //Act
         await using (var criticalSection = await criticalSectionService.BeginCriticalSectionAndCommitAsync(expectedEntity, TimeSpan.FromMinutes(1)))
         {
-            if (criticalSection.IsLockAcquired && expectedEntity.LockedUntil?.IsNotLocked() == true)
+            if (criticalSection.IsLockAcquired == false || expectedEntity.LockedUntil?.IsLocked() == false)
             {
-                throw new ApplicationException("The entity is NOT locked");
+                Assert.Fail("The entity is NOT locked");
             }
             
-            var entity = await Context.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
+            //Assert that entity should be locked here
+            var entity = await Context.HasTimeLockEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
             Assert.NotNull(entity.LockedUntil);
+            Assert.True(entity.LockedUntil.Value.Value > DateTimeOffset.Now);
         }
         
         //Assert
-        var actualEntity = await Context.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
+        var actualEntity = await Context.HasTimeLockEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
         Assert.Null(actualEntity.LockedUntil);
         Assert.True(actualEntity.LockedUntil.IsNotLocked());
         Assert.False(actualEntity.LockedUntil.IsLocked());
@@ -53,7 +55,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         {
             TestParameterString = Guid.NewGuid().ToString()
         };
-        await Context.MyLockableEntities.AddAsync(expectedEntity);
+        await Context.HasTimeLockEntities.AddAsync(expectedEntity);
         await Context.SaveChangesAsync();
         
         //Act
@@ -75,7 +77,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         //Assert that all other tasks did not claim the lock
         Assert.Equal(noOfTasks-1, response.Count(lockAcquired => lockAcquired == false));
         
-        var actualEntity = await databaseFactory.CreateDbContext([]).MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
+        var actualEntity = await databaseFactory.CreateDbContext([]).HasTimeLockEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
         Assert.NotNull(actualEntity.LockedUntil);
         Assert.True(actualEntity.LockedUntil?.IsLocked());
         Assert.False(actualEntity.LockedUntil?.IsNotLocked());
@@ -91,7 +93,7 @@ public class CriticalSectionTests(ITestOutputHelper logger) : DatabaseFixture
         await Task.Delay(new Random().Next(0, 20));
         var criticalSectionService = new CriticalSectionService<DatabaseContext>(db);
         
-        var entityToLock = await db.MyLockableEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
+        var entityToLock = await db.HasTimeLockEntities.SingleAsync(x=>x.Id == expectedEntity.Id);
 
         var opts = (CriticalSectionEfOptions x) =>
         {

@@ -25,14 +25,14 @@ public class LockTests : DatabaseFixture
             LockedUntil = lockedUntil
         };
         
-        await Context.MyLockableEntities.AddAsync(newEntityNotLocked);
-        await Context.MyLockableEntities.AddAsync(newEntityLocked);
+        await Context.HasTimeLockEntities.AddAsync(newEntityNotLocked);
+        await Context.HasTimeLockEntities.AddAsync(newEntityLocked);
         await Context.SaveChangesAsync();
         
-        var dbEntityNotLocked = await Context.MyLockableEntities.SingleAsync(myDbEntity => myDbEntity.TestParameterString == newEntityNotLocked.TestParameterString);
+        var dbEntityNotLocked = await Context.HasTimeLockEntities.SingleAsync(myDbEntity => myDbEntity.TestParameterString == newEntityNotLocked.TestParameterString);
         Assert.True(dbEntityNotLocked.LockedUntil.IsNotLocked());
         
-        var dbEntityLocked = await Context.MyLockableEntities.SingleAsync(myDbEntity => myDbEntity.TestParameterString == newEntityLocked.TestParameterString);
+        var dbEntityLocked = await Context.HasTimeLockEntities.SingleAsync(myDbEntity => myDbEntity.TestParameterString == newEntityLocked.TestParameterString);
         Assert.False(dbEntityLocked.LockedUntil.IsNotLocked());
         Assert.Equal(dbEntityLocked.LockedUntil, lockedUntil);
     }
@@ -53,19 +53,19 @@ public class LockTests : DatabaseFixture
             LockedUntil = lockedUntil
         };
         
-        await Context.MyLockableEntities.AddAsync(newEntityNotLocked);
-        await Context.MyLockableEntities.AddAsync(newEntityLocked);
+        await Context.HasTimeLockEntities.AddAsync(newEntityNotLocked);
+        await Context.HasTimeLockEntities.AddAsync(newEntityLocked);
         await Context.SaveChangesAsync();
         
-        var dbEntityNotLocked = await Context.MyLockableEntities
+        var dbEntityNotLocked = await Context.HasTimeLockEntities
             .WhereIsNotLocked()
             .SingleAsync(myDbEntity => myDbEntity.TestParameterString == newEntityNotLocked.TestParameterString);
         
-        var dbEntityLockExpired = await Context.MyLockableEntities
+        var dbEntityLockExpired = await Context.HasTimeLockEntities
             .WhereIsNotLocked(DateTimeOffset.UtcNow.AddMinutes(30))
             .SingleOrDefaultAsync(myDbEntity => myDbEntity.TestParameterString == newEntityLocked.TestParameterString);
         
-        var dbEntityLocked = await Context.MyLockableEntities
+        var dbEntityLocked = await Context.HasTimeLockEntities
             .WhereIsNotLocked()
             .SingleOrDefaultAsync(myDbEntity => myDbEntity.TestParameterString == newEntityLocked.TestParameterString);
         
@@ -108,10 +108,10 @@ public class LockTests : DatabaseFixture
             LockedUntil = null
         };
         
-        await Context.MyLockableEntities.AddAsync(newEntity1);
-        await Context.MyLockableEntities.AddAsync(newEntity2);
-        await Context.MyLockableEntities.AddAsync(newEntity3);
-        await Context.MyLockableEntities.AddAsync(newEntity4);
+        await Context.HasTimeLockEntities.AddAsync(newEntity1);
+        await Context.HasTimeLockEntities.AddAsync(newEntity2);
+        await Context.HasTimeLockEntities.AddAsync(newEntity3);
+        await Context.HasTimeLockEntities.AddAsync(newEntity4);
         await Context.SaveChangesAsync();
 
         var isLocked = newEntity3.LockedUntil = lockedUntil;
@@ -120,7 +120,7 @@ public class LockTests : DatabaseFixture
         Assert.True(isLocked2.IsLocked());
         await Context.SaveChangesAsync();
 
-        var notLockedItems = await Context.MyLockableEntities
+        var notLockedItems = await Context.HasTimeLockEntities
             .WhereIsNotLocked()
             .ToListAsync();
         
@@ -136,7 +136,7 @@ public class LockTests : DatabaseFixture
             TestParameterString = Guid.NewGuid().ToString(),
             LockedUntil = new TimeLock(lockedUntil)
         };
-        await Context.MyLockableEntities.AddAsync(newEntity);
+        await Context.HasTimeLockEntities.AddAsync(newEntity);
         await Context.SaveChangesAsync();
 
         newEntity.LockedUntil = null;

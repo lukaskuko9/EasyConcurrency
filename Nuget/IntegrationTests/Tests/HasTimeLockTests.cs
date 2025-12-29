@@ -17,7 +17,7 @@ public class HasTimeLockTests : DatabaseFixture
             LockedUntil = null
         };
 
-        await Context.MyLockableEntities.AddAsync(entity);
+        await Context.HasTimeLockEntities.AddAsync(entity);
         await Context.SaveChangesAsync();
 
         var databaseFactory = new DatabaseContextFactory();
@@ -39,7 +39,7 @@ public class HasTimeLockTests : DatabaseFixture
     {
         try
         {
-            var entityToLock = await dbContext.MyLockableEntities.WhereIsNotLocked().SingleOrDefaultAsync();
+            var entityToLock = await dbContext.HasTimeLockEntities.WhereIsNotLocked().SingleOrDefaultAsync();
             if (entityToLock is null)
                 return null;
 
